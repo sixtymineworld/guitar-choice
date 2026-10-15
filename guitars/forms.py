@@ -1,5 +1,5 @@
 from django import forms
-from .models import Feedback, Guitar, GuitarOrder
+from .models import Feedback, GuitarOrder
 
 
 class FeedbackForm(forms.ModelForm):

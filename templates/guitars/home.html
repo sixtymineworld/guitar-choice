@@ -23,21 +23,12 @@
 
 
 
-      <!-- =========================================================================
-           ПІДКАЗКА: ЯК ЗМІНИТИ ФОРМУ ГІТАРИ АБО ПОСТАВИТИ СВОЮ КАРТИНКУ
-           1) Як поставити фото (PNG / WebP / SVG файл):
-              Покладіть файл у static/images/ (наприклад, my_guitar.png)
-              і замініть вміст <div class="guitar-wrapper"> на:
-              <img src="{% static 'images/my_guitar.png' %}" alt="Гітара" class="hero-guitar-img">
-           2) Як змінити форму корпусу у векторі:
-              Змініть контур 'd' у тегу <path id="guitar-body-shape" d="..."> нижче.
-           ========================================================================= -->
       <div class="guitar-wrapper" id="guitar-stage-wrapper" title="Натисніть на гітару, щоб забриніли струни!">
         <img src="{% static 'images/my_guitar.png' %}" alt="Fender Stratocaster" class="hero-guitar-img" id="hero-guitar-img">
       </div>
     </div>
 
-    <!-- Панель керування покриттям та звуком -->
+    <!-- Панель керування звуком -->
     <div class="stage-controls">
       <span class="stage-model-name">Fender Stratocaster Black &amp; Gold</span>
       <button type="button" class="strum-btn" id="strum-guitar-btn" title="Прослухати звучання інструмента">
@@ -91,27 +82,8 @@
 
 <script>
   (function () {
-      // 1. Зміна кольору корпусу
-      const bodyShape = document.querySelector('#guitar-body-shape');
-      const finishBtns = document.querySelectorAll('.finish-btn');
-
-      finishBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-              finishBtns.forEach(b => b.classList.remove('active'));
-              btn.classList.add('active');
-
-              const finish = btn.dataset.finish;
-
-              if (finish && bodyShape) {
-                  bodyShape.setAttribute('fill', finish);
-              }
-          });
-      });
-
-
-      // 2. Анімація струн і звукової хвилі
+      // 1. Анімація звукової хвилі
       const soundwave = document.querySelector('#soundwave-pulse');
-      const guitarStrings = document.querySelectorAll('.guitar-strings line');
 
       function animateStrum() {
           if (soundwave) {
@@ -119,16 +91,9 @@
               void soundwave.offsetWidth;
               soundwave.classList.add('active');
           }
-
-          guitarStrings.forEach(string => {
-              string.classList.remove('vibrating');
-              void string.offsetWidth;
-              string.classList.add('vibrating');
-          });
       }
 
-
-      // 3. Відтворення акорду
+      // 2. Відтворення акорду
       function playChord() {
           const AudioCtx = window.AudioContext || window.webkitAudioContext;
 
@@ -173,7 +138,7 @@
       }
 
 
-      // 4. Бринчання гітари
+      // 3. Бринчання гітари
       function strumGuitar() {
           animateStrum();
           playChord();
