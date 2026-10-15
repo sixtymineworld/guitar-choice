@@ -1,0 +1,335 @@
+{% extends 'guitars/base.html' %}
+{% block title %}Про сервіс — GuitarChoice{% endblock %}
+
+{% block content %}
+<!-- 1. Головний Hero-банер з візуалом та статистикою -->
+<div class="about-container">
+  <section class="about-hero-card">
+    <span class="hero-tag-pill">СППР &amp; Онлайн-конфігуратор</span>
+    <h1>Мистецтво гітарного звуку &amp;<br><em>точність інтелектуального вибору</em></h1>
+    <p class="hero-lead-text">
+      GuitarChoice об’єднує пристрасть до музики з науковою точністю Системи Підтримки Прийняття Рішень. Ми допомагаємо знайти, налаштувати та замовити інструмент, що звучить по-вашому — без довгих пошуків та помилок.
+    </p>
+    <div class="about-hero-actions">
+      <button class="button open-dss-modal" type="button">Підібрати через СППР <span>→</span></button>
+      <a class="button button-ghost" href="{% url 'configurator' %}">Скласти в конфігураторі</a>
+      <a class="button button-ghost" href="{% url 'catalog' %}">Переглянути каталог</a>
+    </div>
+
+    <!-- Статистичні лічильники -->
+    <div class="hero-stats-strip">
+      <div class="hero-stat-box">
+        <span class="hero-stat-val">4</span>
+        <div class="hero-stat-title">Класи інструментів</div>
+        <p class="hero-stat-sub">Електро, акустика, бас та класика</p>
+      </div>
+      <div class="hero-stat-box">
+        <span class="hero-stat-val">15+</span>
+        <div class="hero-stat-title">Опцій кастомізації</div>
+        <p class="hero-stat-sub">Дерево, датчики, гриф, кейси</p>
+      </div>
+      <div class="hero-stat-box">
+        <span class="hero-stat-val">3</span>
+        <div class="hero-stat-title">Кроки підбору</div>
+        <p class="hero-stat-sub">Швидкий аналіз жанру та бюджету</p>
+      </div>
+      <div class="hero-stat-box">
+        <span class="hero-stat-val">100%</span>
+        <div class="hero-stat-title">Чесний розрахунок</div>
+        <p class="hero-stat-sub">Фіксована прозора ціна без комісій</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 2. Місія та філософія майстерні -->
+<div class="about-container">
+  <div class="about-head-center">
+    <span class="about-badge">Наша місія</span>
+    <h2>Чому вибір гітари не повинен бути лотереєю</h2>
+    <p>Поєднуємо багатовікові традиції гітарних майстрів із сучасним алгоритмічним аналізом характеристик.</p>
+  </div>
+
+  <div class="mission-grid">
+    <div class="mission-card">
+      <div>
+        <span class="about-badge" style="margin-bottom: 12px;">Проблема вибору</span>
+        <h3>Звук, який не треба шукати роками</h3>
+        <p>
+          Вибір гітари — це не просто купівля деревини зі струнами. Це пошук вашого власного музичного голосу. Проте музикант стикається з десятками параметрів: <em>мензура, радіус накладки, сингли проти хамбакерів, щільність вільхи та сустейн червоного дерева</em>.
+        </p>
+        <p>
+          Початківці губляться у специфікаціях, а досвідчені виконавці витрачають тижні на підбір комплектуючих. <strong>GuitarChoice</strong> формалізує цей процес: алгоритм СППР враховує резонансні властивості матеріалів і зіставляє їх із вашим стилем виконання.
+        </p>
+      </div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-mark">“</div>
+      <blockquote>
+        Справжній інструмент не змушує вас боротися з ним. Він стає природним продовженням ваших рук та ідей.
+      </blockquote>
+      <cite>— Майстерня GuitarChoice</cite>
+      <div class="quote-footer">
+        <span class="quote-location">Київська студія · 2026</span>
+        <span class="quote-stars">★★★★★</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 4 принципи сервісу -->
+<div class="about-container">
+  <div class="about-head-center">
+    <span class="about-badge">Фундамент</span>
+    <h2>4 принципи платформи GuitarChoice</h2>
+    <p>Кожен етап розроблено так, щоб ви отримали максимум задоволення від першого знайомства з інструментом.</p>
+  </div>
+
+  <div class="principles-grid">
+    <article class="principle-item">
+      <span class="principle-num">01</span>
+      <h3>Інтелектуальний СППР-підбір</h3>
+      <p>Багатокритеріальний алгоритм оцінює тембральні характеристики дерева, вихідну потужність датчиків та діапазон під ваш жанр.</p>
+    </article>
+    <article class="principle-item">
+      <span class="principle-num">02</span>
+      <h3>Живий онлайн-конфігуратор</h3>
+      <p>Обирайте покриття корпусу, матеріал накладки грифа, звукознімачі, струни та чохли з миттєвим розрахунком доплат.</p>
+    </article>
+    <article class="principle-item">
+      <span class="principle-num">03</span>
+      <h3>Атомарність та безпека замовлень</h3>
+      <p>Сесійне збереження обраних конфігурацій, блокування ціни від коливань, перевірка фактичної наявності та захист транзакцій.</p>
+    </article>
+    <article class="principle-item">
+      <span class="principle-num">04</span>
+      <h3>Передпродажний сетап майстра</h3>
+      <p>Кожне замовлення проходить фінальну перевірку: відбудова мензури, регулювання анкера, висота струн над ладами та тест електроніки.</p>
+    </article>
+  </div>
+</div>
+
+<!-- 4. Демонстрація СППР + Анімований спектрограф частот -->
+<div class="about-container">
+  <div class="about-head-center">
+    <span class="about-badge">DSS Engine</span>
+    <h2>Як працює наш інтелектуальний помічник</h2>
+    <p>Евристична модель замінює години читання форумів на 3 прості та точні кроки вибору.</p>
+  </div>
+
+  <div class="dss-console-card">
+    <div class="dss-console-info">
+      <div class="dss-status-row">
+        <span class="dss-badge-gold">Алгоритм DSS v2.4</span>
+        <span class="dss-live-indicator"><span class="pulse-dot-gold"></span> Модуль активний</span>
+      </div>
+      <h2>Система підтримки прийняття рішень</h2>
+      <p>
+        СППР знімає когнітивне перевантаження під час шопінгу. Система ставить 3 швидкі запитання (стиль, форма, бюджет) та вираховує оптимальну гітару на основі матриці ваг:
+      </p>
+
+      <!-- Анімований еквалайзер тембрального аналізу -->
+      <div class="dss-soundwave-block">
+        <div class="soundwave-label">
+          <span>● Акустичний спектральний аналіз тембру</span>
+          <span>20 Hz – 20 kHz</span>
+        </div>
+        <div class="soundwave-bars">
+          <span class="bar b1"></span><span class="bar b2"></span><span class="bar b3"></span>
+          <span class="bar b4"></span><span class="bar b5"></span><span class="bar b6"></span>
+          <span class="bar b7"></span><span class="bar b8"></span><span class="bar b9"></span>
+          <span class="bar b10"></span><span class="bar b11"></span><span class="bar b12"></span>
+          <span class="bar b13"></span><span class="bar b14"></span><span class="bar b15"></span>
+          <span class="bar b16"></span><span class="bar b17"></span><span class="bar b18"></span>
+          <span class="bar b19"></span><span class="bar b20"></span>
+        </div>
+      </div>
+
+      <ul class="dss-feature-bullets">
+        <li><strong>Жанрові профілі:</strong> щільний дисторшн для металу, тванг для блюзу чи чистий резонанс для інді.</li>
+        <li><strong>Бюджетний коридор:</strong> оптимізація віддачі у категоріях до 15 000 грн, 15 000–30 000 грн та преміум.</li>
+        <li><strong>Прозорий вердикт:</strong> детальне пояснення, чому саме ця модель найкраща для ваших задач.</li>
+      </ul>
+      <div class="dss-button-row">
+        <button class="button open-dss-modal" type="button">Запустити СППР-помічника <span>→</span></button>
+        <a class="button button-ghost" href="{% url 'configurator' %}">Скласти конфігурацію</a>
+      </div>
+    </div>
+
+    <!-- Права панель конвеєра -->
+    <div class="dss-steps-panel">
+      <div class="dss-pipe-step">
+        <div class="step-bubble">1</div>
+        <div class="step-text">
+          <h4>Аналіз жанру</h4>
+          <p>Рок, метал, блюз, акустика, класика або бас — вибір формує звуковий профіль.</p>
+        </div>
+      </div>
+      <div class="dss-pipe-step">
+        <div class="step-bubble">2</div>
+        <div class="step-text">
+          <h4>Фільтрація форм</h4>
+          <p>Ергономіка Strat, вестерн-дредноут, класичний корпус чи 4-струнний бас.</p>
+        </div>
+      </div>
+      <div class="dss-pipe-step">
+        <div class="step-bubble">3</div>
+        <div class="step-text">
+          <h4>Бюджетний коридор</h4>
+          <p>Відсікання моделей за межами комфортного фінансового діапазону.</p>
+        </div>
+      </div>
+      <div class="dss-pipe-step dss-pipe-highlight">
+        <div class="step-bubble">✓</div>
+        <div class="step-text">
+          <h4>Готова рекомендація</h4>
+          <p>Найкраща відповідність із прямим переходом у конфігуратор.</p>
+        </div>
+      </div>
+
+      <div class="dss-metric-box">
+        <div class="metric-header">
+          <span>Точність рекомендацій СППР:</span>
+          <strong>98.7%</strong>
+        </div>
+        <div class="metric-track">
+          <div class="metric-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. Гід по кастомізації (3 картки) -->
+<div class="about-container">
+  <div class="about-head-center">
+    <span class="about-badge">Конфігуратор</span>
+    <h2>Гнучкість до найдрібніших деталей</h2>
+    <p>Ви самі визначаєте характер звучання та візуальний стиль вашого майбутнього інструмента.</p>
+  </div>
+
+  <div class="custom-grid">
+    <div class="custom-card">
+      <h3>Покриття корпусу</h3>
+      <p>Обирайте естетику під сценічний образ: витриманий <strong>натуральний лак</strong>, глибокий <strong>бордовий глянець</strong>, класичний <strong>санберст</strong> або стильний <strong>чорний матовий</strong> фініш.</p>
+      <div class="custom-tags">
+        <span class="tag-pill">Натуральний</span>
+        <span class="tag-pill">Санберст</span>
+        <span class="tag-pill">Винний глянець</span>
+        <span class="tag-pill">Чорний мат</span>
+      </div>
+    </div>
+
+    <div class="custom-card">
+      <h3>Гриф та електроніка</h3>
+      <p>Накладки з теплого <strong>палісандра</strong>, дзвінкого <strong>клена</strong> чи твердого <strong>ебену</strong>. Датчики від вінтажних <strong>синглів (SSS)</strong> до потужних <strong>хамбакерів (HH)</strong> та п’єзоелементів.</p>
+      <div class="custom-tags">
+        <span class="tag-pill">Палісандр</span>
+        <span class="tag-pill">Клен</span>
+        <span class="tag-pill">Ебен</span>
+        <span class="tag-pill">Сингли (SSS)</span>
+        <span class="tag-pill">Хамбакери (HH)</span>
+      </div>
+    </div>
+
+    <div class="custom-card">
+      <h3>Струни та кейси</h3>
+      <p>Струни з полімерним захисним покриттям проти зносу або плоска джазова обмотка. Для транспортування — від легкого <strong>м’якого чохла</strong> до ударостійкого <strong>Hardcase</strong>.</p>
+      <div class="custom-tags">
+        <span class="tag-pill">Coated Strings</span>
+        <span class="tag-pill">Flatwound</span>
+        <span class="tag-pill">Gigbag</span>
+        <span class="tag-pill">Hardcase</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. Технологічна архітектура (4 картки) -->
+<div class="about-container">
+  <div class="about-head-center">
+    <span class="about-badge">Архітектура</span>
+    <h2>Інженерна надійність платформи</h2>
+    <p>Надійний стек технологій гарантує безпеку замовлень, миттєвий відгук та цілісність даних.</p>
+  </div>
+
+  <div class="tech-grid-4">
+    <div class="tech-card">
+      <span class="tech-badge-code">Django 6.1</span>
+      <h4>Python-бекенд</h4>
+      <p>Безпечні сесії, захист від CSRF/XSS, валідація на рівні моделей та ORM-запитів.</p>
+    </div>
+    <div class="tech-card">
+      <span class="tech-badge-code">ACID Locks</span>
+      <h4>Атомарний кошик</h4>
+      <p>Блокування рядків у базі через <code>select_for_update</code> унеможливлює подвійне списання.</p>
+    </div>
+    <div class="tech-card">
+      <span class="tech-badge-code">MySQL Exchange</span>
+      <h4>Синхронізація даних</h4>
+      <p>Підтримка SQLite для розробки та консольні команди обміну для промислової MySQL.</p>
+    </div>
+    <div class="tech-card">
+      <span class="tech-badge-code">Zero Dependencies</span>
+      <h4>Чистий та швидкий UI</h4>
+      <p>Семантичний HTML5, CSS змінні та нативний JavaScript без важких бібліотек.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 7. Часті запитання (FAQ) -->
+<div class="about-container">
+  <div class="about-head-center">
+    <span class="about-badge">FAQ</span>
+    <h2>Часті запитання покупців</h2>
+    <p>Зібрали відповіді на найпопулярніші запитання щодо роботи системи та замовлення.</p>
+  </div>
+
+  <div class="faq-accordion">
+    <details class="faq-panel" open>
+      <summary><span>Як саме СППР підбирає гітару під мій стиль?</span><span class="faq-arrow">+</span></summary>
+      <div class="faq-content">
+        <p>СППР співвідносить обраний музичний жанр із резонансними властивостями деревини корпусу, типом датчиків (сингли/хамбакери) та натягом струн. Якщо ви вказуєте бюджет, система пріоритезує інструменти з найкращим співвідношенням ціни та акустичних характеристик.</p>
+      </div>
+    </details>
+
+    <details class="faq-panel">
+      <summary><span>Чи можу я змінити комплектацію в кошику?</span><span class="faq-arrow">+</span></summary>
+      <div class="faq-content">
+        <p>Так! У кошику ви можете в будь-який момент змінити кількість, видалити позицію або повернутися до конфігуратора, щоб створити іншу варіацію інструмента. Ціна фіксується лише після натискання «Оформити замовлення».</p>
+      </div>
+    </details>
+
+    <details class="faq-panel">
+      <summary><span>Чи проходять гітари передпродажну підготовку?</span><span class="faq-arrow">+</span></summary>
+      <div class="faq-content">
+        <p>Безумовно. Кожна замовлена гітара проходить огляд майстра: полірування ладів, регулювання анкерного стрижня, відбудову висоти струн над грифом та перевірку електроніки на відсутність фонового шуму.</p>
+      </div>
+    </details>
+
+    <details class="faq-panel">
+      <summary><span>Що робити, якщо я початківець і не знаю, що обрати?</span><span class="faq-arrow">+</span></summary>
+      <div class="faq-content">
+        <p>Рекомендуємо натиснути круглу кнопку СППР-асистента у правому нижньому кутку екрана. Всього за 3 запитання помічник підбере безпомилковий стартовий варіант. Також ви завжди можете замовити персональну консультацію на сторінці «Консультація».</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- 8. Фінальний Call to Action -->
+<div class="about-container">
+  <section class="about-cta-card">
+    <span class="hero-tag-pill">Готові зробити вибір?</span>
+    <h2>Знайдіть інструмент,<br>який надихатиме щодня</h2>
+    <p class="cta-lead">
+      Довірте підбір інтелектуальному СППР-помічнику або створіть власну ексклюзивну комплектацію в онлайн-конфігураторі.
+    </p>
+    <div class="about-cta-actions">
+      <button class="button open-dss-modal" type="button">Підібрати через СППР <span>→</span></button>
+      <a class="button button-ghost cta-ghost-btn" href="{% url 'configurator' %}">До конфігуратора</a>
+      <a class="button button-ghost cta-ghost-btn" href="{% url 'feedback' %}">Замовити консультацію</a>
+    </div>
+  </section>
+</div>
+{% endblock %}

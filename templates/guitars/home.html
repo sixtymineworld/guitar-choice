@@ -1,0 +1,194 @@
+{% extends 'guitars/base.html' %}
+{% load static %}
+{% block title %}GuitarChoice — ваша гітара без сумнівів{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">Система підтримки вибору</p>
+    <h1>Знайдіть гітару,<br><em>що звучить як ви.</em></h1>
+    <p class="lead">Порівнюйте моделі за типом, матеріалом, кількістю струн і бюджетом. Зважене рішення — до першого акорду.</p>
+    <div class="hero-actions">
+      <a class="button" href="{% url 'catalog' %}">Переглянути каталог <span>→</span></a>
+      <button class="button button-ghost open-dss-modal" type="button">СППР-підбір</button>
+    </div>
+  </div>
+
+  <div class="hero-art" aria-label="Інтерактивна модель Fender Stratocaster">
+    <span class="hero-model-tag">Classic Stratocaster</span>
+
+    <div class="hero-guitar-stage">
+      <div class="guitar-halo"></div>
+      <div class="soundwave-pulse" id="soundwave-pulse"></div>
+
+
+
+      <!-- =========================================================================
+           ПІДКАЗКА: ЯК ЗМІНИТИ ФОРМУ ГІТАРИ АБО ПОСТАВИТИ СВОЮ КАРТИНКУ
+           1) Як поставити фото (PNG / WebP / SVG файл):
+              Покладіть файл у static/images/ (наприклад, my_guitar.png)
+              і замініть вміст <div class="guitar-wrapper"> на:
+              <img src="{% static 'images/my_guitar.png' %}" alt="Гітара" class="hero-guitar-img">
+           2) Як змінити форму корпусу у векторі:
+              Змініть контур 'd' у тегу <path id="guitar-body-shape" d="..."> нижче.
+           ========================================================================= -->
+      <div class="guitar-wrapper" id="guitar-stage-wrapper" title="Натисніть на гітару, щоб забриніли струни!">
+        <img src="{% static 'images/my_guitar.png' %}" alt="Fender Stratocaster" class="hero-guitar-img" id="hero-guitar-img">
+      </div>
+    </div>
+
+    <!-- Панель керування покриттям та звуком -->
+    <div class="stage-controls">
+      <span class="stage-model-name">Fender Stratocaster Black &amp; Gold</span>
+      <button type="button" class="strum-btn" id="strum-guitar-btn" title="Прослухати звучання інструмента">
+        Прослухати звучання
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="section feature-section">
+  <div class="section-heading"><div><p class="eyebrow">Рекомендовані зараз</p><h2>Інструменти для натхнення</h2></div><a href="{% url 'catalog' %}">Увесь каталог →</a></div>
+  <div class="cards">
+    {% for guitar in featured %}
+      <article class="card">
+        <div class="card-visual">
+          {% if guitar.image_url %}
+            <img src="{{ guitar.image_url }}" alt="{{ guitar.name }}" loading="lazy">
+          {% endif %}
+          <span>{{ guitar.get_guitar_type_display }}</span>
+        </div>
+        <div class="card-body">
+          <p class="muted">{{ guitar.brand }}</p>
+          <h3>{{ guitar.name }}</h3>
+          <p>{{ guitar.price|floatformat:0 }} грн</p>
+          <a href="{{ guitar.get_absolute_url }}">Детальніше →</a>
+        </div>
+      </article>
+    {% empty %}
+      <p>Каталог поки що порожній. Додайте моделі в адмін-панелі або виконайте команду <code>seed_guitars</code>.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="process">
+  <article class="process-step">
+    <span class="process-num">01</span>
+    <h3>Звузьте вибір</h3>
+    <p>Фільтруйте моделі за типом та ключовими характеристиками.</p>
+  </article>
+  <article class="process-step">
+    <span class="process-num">02</span>
+    <h3>Перевірте деталі</h3>
+    <p>Відкрийте картку, щоб оцінити специфікацію й доступність.</p>
+  </article>
+  <article class="process-step">
+    <span class="process-num">03</span>
+    <h3>Замовте консультацію</h3>
+    <p>Ми допоможемо скласти фінальну конфігурацію.</p>
+  </article>
+</section>
+
+<script>
+  (function () {
+      // 1. Зміна кольору корпусу
+      const bodyShape = document.querySelector('#guitar-body-shape');
+      const finishBtns = document.querySelectorAll('.finish-btn');
+
+      finishBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+              finishBtns.forEach(b => b.classList.remove('active'));
+              btn.classList.add('active');
+
+              const finish = btn.dataset.finish;
+
+              if (finish && bodyShape) {
+                  bodyShape.setAttribute('fill', finish);
+              }
+          });
+      });
+
+
+      // 2. Анімація струн і звукової хвилі
+      const soundwave = document.querySelector('#soundwave-pulse');
+      const guitarStrings = document.querySelectorAll('.guitar-strings line');
+
+      function animateStrum() {
+          if (soundwave) {
+              soundwave.classList.remove('active');
+              void soundwave.offsetWidth;
+              soundwave.classList.add('active');
+          }
+
+          guitarStrings.forEach(string => {
+              string.classList.remove('vibrating');
+              void string.offsetWidth;
+              string.classList.add('vibrating');
+          });
+      }
+
+
+      // 3. Відтворення акорду
+      function playChord() {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+
+          if (!AudioCtx) return;
+
+          try {
+              const ctx = new AudioCtx();
+              const chord = [110, 164.81, 220, 261.63, 329.63];
+              const now = ctx.currentTime;
+
+              if (ctx.state === 'suspended') {
+                  ctx.resume();
+              }
+
+              chord.forEach((freq, i) => {
+                  const osc = ctx.createOscillator();
+                  const gain = ctx.createGain();
+                  const filter = ctx.createBiquadFilter();
+                  const start = now + i * 0.042;
+
+                  osc.type = i < 2 ? 'triangle' : 'sawtooth';
+                  osc.frequency.setValueAtTime(freq, start);
+
+                  filter.type = 'lowpass';
+                  filter.frequency.setValueAtTime(3200, start);
+                  filter.frequency.exponentialRampToValueAtTime(340, start + 2.2);
+
+                  gain.gain.setValueAtTime(0, start);
+                  gain.gain.linearRampToValueAtTime(0.22, start + 0.008);
+                  gain.gain.exponentialRampToValueAtTime(0.0001, start + 2.3);
+
+                  osc.connect(filter);
+                  filter.connect(gain);
+                  gain.connect(ctx.destination);
+
+                  osc.start(start);
+                  osc.stop(start + 2.4);
+              });
+          } catch (error) {
+              console.error('Помилка відтворення звуку:', error);
+          }
+      }
+
+
+      // 4. Бринчання гітари
+      function strumGuitar() {
+          animateStrum();
+          playChord();
+      }
+
+      const strumBtn = document.querySelector('#strum-guitar-btn');
+      const guitarWrapper = document.querySelector('#guitar-stage-wrapper');
+
+      if (strumBtn) {
+          strumBtn.addEventListener('click', strumGuitar);
+      }
+
+      if (guitarWrapper) {
+          guitarWrapper.addEventListener('click', strumGuitar);
+      }
+  })();
+</script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'guitars/base.html' %}
+{% block title %}Каталог — GuitarChoice{% endblock %}
+{% block content %}
+<section class="page-title">
+  <p class="eyebrow">Каталог</p>
+  <h1>Оберіть свій характер звучання</h1>
+  <p>Використовуйте пошук і фільтр, щоб швидше знайти потрібну модель.</p>
+</section>
+<section class="catalog-layout">
+  <form class="filters" method="get">
+    <label>Пошук<input type="search" name="q" value="{{ query }}" placeholder="Бренд, модель або матеріал"></label>
+    <label>Тип гітари<select name="type"><option value="">Усі типи</option>{% for value, label in types %}<option value="{{ value }}" {% if value == selected_type %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+    <button class="button" type="submit">Застосувати</button><a href="{% url 'catalog' %}">Очистити фільтри</a>
+  </form>
+  <div>
+    <p class="results">Знайдено: {{ guitars|length }}</p>
+    <div class="cards catalog-cards">
+      {% for guitar in guitars %}
+        <article class="card">
+          <div class="card-visual">
+            {% if guitar.image_url %}
+              <img src="{{ guitar.image_url }}" alt="{{ guitar.name }}" loading="lazy">
+            {% endif %}
+            <span>{{ guitar.get_guitar_type_display }}</span>
+          </div>
+          <div class="card-body">
+            <p class="muted">{{ guitar.brand }} · {{ guitar.material }}</p>
+            <h3>{{ guitar.name }}</h3>
+            <p>{{ guitar.price|floatformat:0 }} грн</p>
+            <a href="{{ guitar.get_absolute_url }}">Переглянути модель →</a>
+          </div>
+        </article>
+      {% empty %}
+        <p>За вашим запитом моделей не знайдено.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

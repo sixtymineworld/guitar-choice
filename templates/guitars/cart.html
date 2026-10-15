@@ -1,0 +1,74 @@
+{% extends 'guitars/base.html' %}
+{% block title %}Кошик — GuitarChoice{% endblock %}
+{% block content %}
+<section class="page-title">
+  <p class="eyebrow">Кошик</p>
+  <h1>Ваші конфігурації</h1>
+  <p>Перевірте обрані налаштування, змініть кількість або оформіть замовлення.</p>
+</section>
+
+<section class="cart-layout">
+  {% if items %}
+    <div class="cart-items">
+      {% for item in items %}
+        <article class="cart-item">
+          <div class="cart-item-visual"><span>{% if item.guitar %}{{ item.guitar.get_guitar_type_display }}{% else %}Custom Shop{% endif %}</span></div>
+          <div class="cart-item-body">
+            <p class="muted">{% if item.guitar %}{{ item.guitar.brand }} · {% else %}Індивідуальне складання · {% endif %}замовлення №{{ item.pk }}</p>
+            <h3>
+              {% if item.guitar %}
+                <a href="{{ item.guitar.get_absolute_url }}">{{ item.guitar.name }}</a>
+              {% else %}
+                <span>Кастом {{ item.get_body_shape_display }}</span>
+              {% endif %}
+            </h3>
+            <ul class="cart-options">
+              <li><span>Форма</span>{{ item.get_body_shape_display }}</li>
+              <li><span>Дерево</span>{{ item.get_wood_display }}</li>
+              <li><span>Колір</span>{{ item.get_color_display }}</li>
+              <li><span>Лади</span>{{ item.get_frets_count_display }}</li>
+              <li><span>Струни</span>{{ item.get_strings_count_display }}</li>
+              <li><span>Датчики</span>{{ item.get_pickups_set_display }}</li>
+            </ul>
+          </div>
+          <div class="cart-item-side">
+            <p class="cart-price">{{ item.total_price|floatformat:0 }} грн</p>
+            <p class="muted">{{ item.unit_price|floatformat:0 }} грн × {{ item.quantity }}</p>
+            <form class="cart-qty" method="post" action="{% url 'cart_update' item.pk %}">
+              {% csrf_token %}
+              <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="10" aria-label="Кількість">
+              <button type="submit">Оновити</button>
+            </form>
+            <form method="post" action="{% url 'cart_remove' item.pk %}">
+              {% csrf_token %}
+              <button class="cart-remove" type="submit">Видалити</button>
+            </form>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <aside class="config-summary cart-summary">
+      <p class="eyebrow">Разом</p>
+      <h2>Підсумок замовлення</h2>
+      <dl>
+        <div><dt>Позицій</dt><dd>{{ items|length }}</dd></div>
+        <div><dt>Гітар</dt><dd>{{ items_count }}</dd></div>
+      </dl>
+      <p class="config-total"><span>До сплати</span><strong>{{ total|floatformat:0 }} грн</strong></p>
+      <form method="post" action="{% url 'cart_checkout' %}">
+        {% csrf_token %}
+        <button class="button" type="submit">Оформити замовлення <span>→</span></button>
+      </form>
+      <a class="back" href="{% url 'configurator' %}">+ Додати ще конфігурацію</a>
+    </aside>
+  {% else %}
+    <div class="cart-empty">
+      <h2>Кошик порожній</h2>
+      <p class="lead">Створіть власну конфігурацію гітари — і вона з’явиться тут.</p>
+      <a class="button" href="{% url 'configurator' %}">До конфігуратора <span>→</span></a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}
+

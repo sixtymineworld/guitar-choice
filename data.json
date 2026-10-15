@@ -1,0 +1,365 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$Oa1JjF5H4fPFRBTWmcWDvy$okt6AHBh3Q7N34W+OcHLZWKCVOHH9TIXlyWGL8u/1UA=",
+    "last_login": "2026-10-15T09:26:05.722Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@example.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-10-15T09:24:59.563Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "4iv4uk7lm3d0ov8d8jfnlxyxrikvev3x",
+  "fields": {
+    "session_data": "e30:1xHHRN:rn6M_e95LhDYz0FMoZ4299iT5TuoRigI6mBjZcXifd0",
+    "expire_date": "2026-10-29T09:07:57.247Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "53ke4vhs3h5jv4qeowhpnntcjk7a8cn4",
+  "fields": {
+    "session_data": "e30:1xGtXt:6PTwkAFyX55PtR9E6GWxDGyS4uQELRK9WWOlr1z9Hkk",
+    "expire_date": "2026-10-28T07:37:05.890Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "6rxy2jsz0nuoi2dodwt1wryxc62w6wxy",
+  "fields": {
+    "session_data": "e30:1xGuk1:W6n5Id2GRMDB94eDnD3b-SjnAnzvZVoWLw5lEaejhzQ",
+    "expire_date": "2026-10-28T08:53:41.524Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "fkyq7etm1r5wlzwd5qtydv7zwwqtteyc",
+  "fields": {
+    "session_data": "e30:1xHHYY:cxiQNSwy-Ig65CTOAN1NFU1wKqP1nivOUQDrY_N07V0",
+    "expire_date": "2026-10-29T09:15:22.323Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "gr8t09mwx01zl68z8iqq2q4b36i2nw98",
+  "fields": {
+    "session_data": "e30:1xGx2y:wiHau5JY2WOauCD0rtZLc8PixzSj1pPpO6lvUDNXeLo",
+    "expire_date": "2026-10-28T11:21:24.640Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "iuez2fiioh5e0amykmenaiskw5vnp43k",
+  "fields": {
+    "session_data": "e30:1xGueY:7Fr05cI6_l9DjeUcnQU98YGZcJIHCBbzZgDlBZFhqlw",
+    "expire_date": "2026-10-28T08:48:02.562Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "j0sfv7ske4f0rv46f8yqo4p24hxzleju",
+  "fields": {
+    "session_data": "e30:1xHHg8:6CyIi-KmBhJIsoqqqRbg8n3ZxqDBGXgz3j85t9cfDU8",
+    "expire_date": "2026-10-29T09:23:12.525Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "kcykc125dzvt42u4yuirvnnbemabz3lx",
+  "fields": {
+    "session_data": "e30:1xGv1p:Wz50JixvgRoB8XyAIq7vX4gSQ7eKLPfoXsPNuHZ0DuM",
+    "expire_date": "2026-10-28T09:12:05.367Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "lnwgxm8skz5yx9csdpyvc6hcfxml8muh",
+  "fields": {
+    "session_data": "e30:1xHHeD:EKpX6zPvKYJXf4_uGBPaKqQlOenLBDnhXjmY6XcCm6w",
+    "expire_date": "2026-10-29T09:21:13.128Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "pnzcpw1fsjosixlj78lupz2tizjr4hoj",
+  "fields": {
+    "session_data": "e30:1xGtVL:mFXDjeWJKrutPBb0gxWDAubW9AXHBEUzhBnDlLTNXso",
+    "expire_date": "2026-10-28T07:34:27.999Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "vnollnkng30fiumkxw4gwuny6s2mzapg",
+  "fields": {
+    "session_data": ".eJxVjDkOwjAUBe_iGlmfxHihpOcMkf-GAyiW4qRC3B0ipYD2zbx5mSGvSxnWJvMwsjmbozn8bpjpIdMG-J6nW7VUp2Ue0W6K3Wmz18ryvOzuX6DkVrbsSRUxEDKgfm_qBGNkCkzScULplMGT86FPCuB7D9Q7BckxOY5k3h87lDmD:1xHHiv:tfRHnYJbi7Gy4-P-MqWz4SwjgvGRDw1yIn-sWxPesro",
+    "expire_date": "2026-10-29T09:26:05.723Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "wa8yp3fcefvcng01nakq5uafompflhji",
+  "fields": {
+    "session_data": "e30:1xGtVM:qT1I31J8lUSgS7kQU8qzwIdyVBYa9m-C82m_2RQgLSU",
+    "expire_date": "2026-10-28T07:34:28.007Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "xepj9kobb33v7sh24ie8x7jsigobejsc",
+  "fields": {
+    "session_data": ".eJxVjDkOwjAUBe_iGlmfxHihpOcMkf-GAyiW4qRC3B0ipYD2zbx5mSGvSxnWJvMwsjmbozn8bpjpIdMG-J6nW7VUp2Ue0W6K3Wmz18ryvOzuX6DkVrbsSRUxEDKgfm_qBGNkCkzScULplMGT86FPCuB7D9Q7BckxOY5k3h87lDmD:1xHHi5:3STd41vMYRS_4PDwPoFrWBVr8dTt-VzOEhxRlr_1BIc",
+    "expire_date": "2026-10-29T09:25:13.238Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "yeeix9wfhm0ug67m95jcmfn8jif18t25",
+  "fields": {
+    "session_data": "e30:1xGuue:5ZeNqhJ3Zxxop-QgmyLT8AQz4DyHAIX6ls4jIxIQEVw",
+    "expire_date": "2026-10-28T09:04:40.796Z"
+  }
+},
+{
+  "model": "guitars.guitar",
+  "pk": 1,
+  "fields": {
+    "name": "LX1 Little Martin",
+    "brand": "Martin",
+    "guitar_type": "acoustic",
+    "price": "28500.00",
+    "description": "Компактна тревел-гітара з виразним, збалансованим звучанням. Добре підходить для навчання, подорожей та домашнього запису.",
+    "material": "червоне дерево HPL",
+    "strings_count": 6,
+    "is_available": true,
+    "image_url": "",
+    "created_at": "2026-10-14T07:15:47.997Z"
+  }
+},
+{
+  "model": "guitars.guitar",
+  "pk": 2,
+  "fields": {
+    "name": "Player II Stratocaster",
+    "brand": "Fender",
+    "guitar_type": "electric",
+    "price": "38900.00",
+    "description": "Універсальна електрогітара з трьома синглами, комфортним грифом і знайомим характером Stratocaster.",
+    "material": "вільха",
+    "strings_count": 6,
+    "is_available": true,
+    "image_url": "",
+    "created_at": "2026-10-14T07:15:47.998Z"
+  }
+},
+{
+  "model": "guitars.guitar",
+  "pk": 3,
+  "fields": {
+    "name": "SR300E",
+    "brand": "Ibanez",
+    "guitar_type": "bass",
+    "price": "21900.00",
+    "description": "Легка бас-гітара з активною електронікою та широкими можливостями корекції тембру.",
+    "material": "ньятон",
+    "strings_count": 4,
+    "is_available": true,
+    "image_url": "",
+    "created_at": "2026-10-14T07:15:47.999Z"
+  }
+},
+{
+  "model": "guitars.guitar",
+  "pk": 4,
+  "fields": {
+    "name": "C40",
+    "brand": "Yamaha",
+    "guitar_type": "classical",
+    "price": "8900.00",
+    "description": "Зручна класична модель із нейлоновими струнами для перших кроків у музиці.",
+    "material": "ялина та меранті",
+    "strings_count": 6,
+    "is_available": false,
+    "image_url": "",
+    "created_at": "2026-10-14T07:15:47.999Z"
+  }
+},
+{
+  "model": "guitars.guitar",
+  "pk": 5,
+  "fields": {
+    "name": "test",
+    "brand": "test",
+    "guitar_type": "classical",
+    "price": "1488.00",
+    "description": "qwerty",
+    "material": "test",
+    "strings_count": 6,
+    "is_available": true,
+    "image_url": "https://www.sweelee.com.my/cdn/shop/products/F03-097-0160-506_1558592429055.jpg?v=1569230076&width=2048",
+    "created_at": "2026-10-15T09:27:22.052Z"
+  }
+},
+{
+  "model": "guitars.feedback",
+  "pk": 1,
+  "fields": {
+    "name": "Тест",
+    "email": "test@example.com",
+    "message": "Потрібна електрогітара",
+    "created_at": "2026-10-14T07:17:07.477Z"
+  }
+},
+{
+  "model": "guitars.guitarorder",
+  "pk": 2,
+  "fields": {
+    "guitar": 1,
+    "body_shape": "stratocaster",
+    "wood": "alder",
+    "color": "black",
+    "frets_count": "22",
+    "strings_count": "6",
+    "pickups_set": "sss",
+    "quantity": 1,
+    "unit_price": "36900.00",
+    "session_key": "z2xhlirfay00lnufpeaoacnfbvuq8klo",
+    "status": "placed",
+    "created_at": "2026-10-14T07:35:27.175Z"
+  }
+},
+{
+  "model": "guitars.guitarorder",
+  "pk": 3,
+  "fields": {
+    "guitar": 3,
+    "body_shape": "stratocaster",
+    "wood": "alder",
+    "color": "black",
+    "frets_count": "22",
+    "strings_count": "6",
+    "pickups_set": "sss",
+    "quantity": 5,
+    "unit_price": "30100.00",
+    "session_key": "z2xhlirfay00lnufpeaoacnfbvuq8klo",
+    "status": "placed",
+    "created_at": "2026-10-14T08:46:56.286Z"
+  }
+},
+{
+  "model": "guitars.guitarorder",
+  "pk": 4,
+  "fields": {
+    "guitar": 1,
+    "body_shape": "stratocaster",
+    "wood": "alder",
+    "color": "black",
+    "frets_count": "22",
+    "strings_count": "6",
+    "pickups_set": "sss",
+    "quantity": 6,
+    "unit_price": "39000.00",
+    "session_key": "z2xhlirfay00lnufpeaoacnfbvuq8klo",
+    "status": "placed",
+    "created_at": "2026-10-15T09:09:42.954Z"
+  }
+},
+{
+  "model": "guitars.guitarorder",
+  "pk": 5,
+  "fields": {
+    "guitar": 2,
+    "body_shape": "stratocaster",
+    "wood": "alder",
+    "color": "sunburst",
+    "frets_count": "22",
+    "strings_count": "6",
+    "pickups_set": "sss",
+    "quantity": 1,
+    "unit_price": "40500.00",
+    "session_key": "fkyq7etm1r5wlzwd5qtydv7zwwqtteyc",
+    "status": "cart",
+    "created_at": "2026-10-15T09:15:22.322Z"
+  }
+},
+{
+  "model": "guitars.guitarorder",
+  "pk": 7,
+  "fields": {
+    "guitar": null,
+    "body_shape": "superstrat",
+    "wood": "mahogany",
+    "color": "white",
+    "frets_count": "22",
+    "strings_count": "7",
+    "pickups_set": "hh",
+    "quantity": 1,
+    "unit_price": "42900.00",
+    "session_key": "z2xhlirfay00lnufpeaoacnfbvuq8klo",
+    "status": "placed",
+    "created_at": "2026-10-15T09:22:08.204Z"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-10-15T09:27:22.053Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "guitars",
+      "guitar"
+    ],
+    "object_id": "5",
+    "object_repr": "test test",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2026-10-15T09:29:11.569Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "guitars",
+      "guitar"
+    ],
+    "object_id": "5",
+    "object_repr": "test test",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u041f\\u043e\\u0441\\u0438\\u043b\\u0430\\u043d\\u043d\\u044f \\u043d\\u0430 \\u0437\\u043e\\u0431\\u0440\\u0430\\u0436\\u0435\\u043d\\u043d\\u044f\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2026-10-15T09:29:43.732Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "guitars",
+      "guitar"
+    ],
+    "object_id": "5",
+    "object_repr": "test test",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u041f\\u043e\\u0441\\u0438\\u043b\\u0430\\u043d\\u043d\\u044f \\u043d\\u0430 \\u0437\\u043e\\u0431\\u0440\\u0430\\u0436\\u0435\\u043d\\u043d\\u044f\"]}}]"
+  }
+}
+]

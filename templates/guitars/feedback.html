@@ -1,0 +1,31 @@
+{% extends 'guitars/base.html' %}
+{% block title %}Консультація — GuitarChoice{% endblock %}
+{% block content %}
+<section class="feedback-page">
+  <div>
+    <p class="eyebrow">Зворотний зв’язок</p>
+    <h1>Підберемо гітару разом.</h1>
+    <p class="lead">Опишіть свій стиль, досвід та орієнтовний бюджет — ми допоможемо визначити найкращу конфігурацію.</p>
+  </div>
+  <form class="feedback-form" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      {% if field.name == "website" %}
+        <div style="display:none !important; position:absolute; left:-9999px;" aria-hidden="true">
+          {{ field }}
+        </div>
+      {% else %}
+        <label>
+          {{ field.label }}
+          {{ field }}
+          {% for error in field.errors %}
+            <small class="error">{{ error }}</small>
+          {% endfor %}
+        </label>
+      {% endif %}
+    {% endfor %}
+    <button class="button" type="submit">Надіслати запит <span>→</span></button>
+  </form>
+</section>
+{% endblock %}
+

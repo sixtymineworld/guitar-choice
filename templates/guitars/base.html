@@ -1,0 +1,511 @@
+{% load static %}
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}GuitarChoice{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=10.0">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="{% url 'home' %}">GuitarChoice</a>
+    <div class="header-actions">
+      {% if user.is_authenticated %}
+        <div class="mobile-user-pill" title="Ви увійшли як {{ user.username }}">
+          <span class="user-avatar-pill">{{ user.username|make_list|first|upper }}</span>
+        </div>
+      {% else %}
+        <button type="button" class="header-auth-btn-mobile open-auth-btn" aria-label="Вхід" onclick="if(window.openAuthModal){window.openAuthModal('login');}else{document.getElementById('auth-modal')?.classList.add('is-open');}">Вхід</button>
+      {% endif %}
+      <a class="nav-cart header-cart-mobile" href="{% url 'cart' %}" aria-label="Кошик">
+        <span>Кошик</span>{% if cart_count %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Меню">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <nav class="site-nav" aria-label="Основна навігація">
+      <a href="{% url 'home' %}">Головна</a>
+      <a href="{% url 'catalog' %}">Каталог</a>
+      <a href="{% url 'configurator' %}">Конфігуратор</a>
+      <a href="{% url 'about' %}">Про сервіс</a>
+      <a class="nav-cart nav-cart-desktop" href="{% url 'cart' %}" aria-label="Кошик">Кошик{% if cart_count %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}</a>
+      <a class="nav-accent" href="{% url 'feedback' %}">Консультація</a>
+      {% if user.is_authenticated %}
+        <div class="user-nav-item" id="user-menu-container">
+          <button type="button" class="user-badge-btn" id="user-badge-toggle" aria-expanded="false" aria-haspopup="true">
+            <span class="user-avatar-pill">{{ user.username|make_list|first|upper }}</span>
+            <span class="user-name-text">{{ user.username }}</span>
+            <span class="user-dropdown-arrow">▾</span>
+          </button>
+          <div class="user-dropdown-popover" id="user-dropdown-menu">
+            <div class="user-dropdown-header">
+              <span class="user-badge-role">{% if user.is_staff %}Адміністратор{% else %}Користувач{% endif %}</span>
+              <strong>{{ user.username }}</strong>
+              {% if user.email %}<small class="user-dropdown-email">{{ user.email }}</small>{% endif %}
+            </div>
+            <div class="user-dropdown-divider"></div>
+            {% if user.is_staff %}
+              <a href="{% url 'admin:index' %}" class="user-dropdown-link" target="_blank">Адмін-панель</a>
+            {% endif %}
+            <a href="{% url 'cart' %}" class="user-dropdown-link">Мої замовлення</a>
+            <a href="{% url 'configurator' %}" class="user-dropdown-link">Кастом-майстерня</a>
+            <div class="user-dropdown-divider"></div>
+            <a href="{% url 'auth_logout' %}" class="user-dropdown-link user-logout-link">Вийти з акаунту</a>
+          </div>
+        </div>
+      {% else %}
+        <button type="button" class="nav-auth-btn open-auth-btn" onclick="if(window.openAuthModal){window.openAuthModal('login');}else{document.getElementById('auth-modal')?.classList.add('is-open');}">Увійти</button>
+      {% endif %}
+    </nav>
+  </header>
+  <main>
+    {% if messages %}
+      <div class="messages">{% for message in messages %}<p class="message {{ message.tags }}">{{ message }}</p>{% endfor %}</div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo footer-logo" href="{% url 'home' %}">GuitarChoice</a>
+        <p>Система підтримки вибору, конфігурування та замовлення гітар. Обирайте інструмент, що звучить по-вашому.</p>
+        <div class="footer-social" aria-label="Соцмережі">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="YouTube">YT</a>
+          <a href="#" aria-label="Telegram">TG</a>
+          <a href="#" aria-label="Facebook">FB</a>
+        </div>
+      </div>
+      <div class="footer-col" role="navigation" aria-label="Навігація у футері">
+        <h4>Навігація</h4>
+        <a href="{% url 'home' %}">Головна</a>
+        <a href="{% url 'catalog' %}">Каталог</a>
+        <a href="{% url 'about' %}">Про сервіс</a>
+        <a href="{% url 'feedback' %}">Консультація</a>
+      </div>
+      <div class="footer-col" role="navigation" aria-label="Послуги">
+        <h4>Замовлення</h4>
+        <a href="{% url 'configurator' %}">Конфігуратор</a>
+        <a href="{% url 'cart' %}">Кошик{% if cart_count %} ({{ cart_count }}){% endif %}</a>
+        <a href="{% url 'catalog' %}?type=electric">Електрогітари</a>
+        <a href="{% url 'catalog' %}?type=acoustic">Акустичні гітари</a>
+      </div>
+      <div class="footer-col footer-contacts">
+        <h4>Контакти</h4>
+        <a href="tel:+380441234567">+38 (044) 123-45-67</a>
+        <a href="mailto:hello@guitarchoice.ua">hello@guitarchoice.ua</a>
+        <p>м. Київ, вул. Музична, 12</p>
+        <p>Пн–Пт 10:00–19:00<br>Сб 11:00–16:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© {% now "Y" %} GuitarChoice. Усі права захищено.</p>
+      <p><a href="{% url 'about' %}">Умови сервісу</a> · <a href="{% url 'feedback' %}">Підтримка</a></p>
+    </div>
+  </footer>
+  <!-- СППР Міні-Агент Підбору Гітари -->
+  <div class="dss-widget">
+    <div class="dss-hint" id="dss-hint">
+      <span class="dss-hint-dot"></span>
+      <span>Підібрати гітару через СППР</span>
+    </div>
+    <button class="dss-trigger" id="dss-trigger" type="button" aria-label="Відкрити СППР помічника" title="Система підтримки вибору гітари">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"></path>
+        <path d="M18 10a6 6 0 0 1-12 0"></path>
+        <line x1="12" y1="16" x2="12" y2="21"></line>
+        <line x1="8" y1="21" x2="16" y2="21"></line>
+      </svg>
+      <span class="dss-badge">СППР</span>
+    </button>
+  </div>
+
+  <div class="dss-modal" id="dss-modal" aria-hidden="true">
+    <div class="dss-header">
+      <div class="dss-header-info">
+        <div class="dss-avatar">AI</div>
+        <div class="dss-header-text">
+          <h3>СППР · Помічник</h3>
+          <p>Підтримка прийняття рішень</p>
+        </div>
+      </div>
+      <button class="dss-close" id="dss-close" type="button" aria-label="Закрити">✕</button>
+    </div>
+    <div class="dss-body">
+      <!-- Крок 1: Музичний стиль -->
+      <div class="dss-step is-active" id="dss-step-1">
+        <span class="dss-progress">Крок 1 з 3</span>
+        <div class="dss-msg">
+          Привіт! Я ваш <strong>СППР-асистент</strong>. Визначимо ідеальний інструмент за 3 кроки.<br><br>
+          <strong>Який музичний стиль вам найближчий?</strong>
+        </div>
+        <div class="dss-options">
+          <button class="dss-opt-btn" type="button" data-field="genre" data-val="rock">Рок / Альтернатива</button>
+          <button class="dss-opt-btn" type="button" data-field="genre" data-val="metal">Метал / Важкий рок</button>
+          <button class="dss-opt-btn" type="button" data-field="genre" data-val="blues">Блюз / Джаз / Фанк</button>
+          <button class="dss-opt-btn" type="button" data-field="genre" data-val="acoustic">Акустичний поп / Інді</button>
+          <button class="dss-opt-btn" type="button" data-field="genre" data-val="classical">Класика / Фламенко</button>
+          <button class="dss-opt-btn" type="button" data-field="genre" data-val="bass">Бас / Ритм-секція</button>
+        </div>
+      </div>
+
+      <!-- Крок 2: Форма / тип гітари -->
+      <div class="dss-step" id="dss-step-2">
+        <span class="dss-progress">Крок 2 з 3</span>
+        <div class="dss-msg">
+          Чудовий напрямок!<br><br>
+          <strong>Якій формі чи типу гітари надаєте перевагу?</strong>
+        </div>
+        <div class="dss-options">
+          <button class="dss-opt-btn" type="button" data-field="shape" data-val="electric">Електрогітара (Strat / Solid)</button>
+          <button class="dss-opt-btn" type="button" data-field="shape" data-val="acoustic">Акустична (Дредноут / Вестерн)</button>
+          <button class="dss-opt-btn" type="button" data-field="shape" data-val="bass">Бас-гітара</button>
+          <button class="dss-opt-btn" type="button" data-field="shape" data-val="classical">Класична з нейлоном</button>
+          <button class="dss-opt-btn" type="button" data-field="shape" data-val="any">Довіряю вибору системи</button>
+        </div>
+      </div>
+
+      <!-- Крок 3: Бюджет -->
+      <div class="dss-step" id="dss-step-3">
+        <span class="dss-progress">Крок 3 з 3</span>
+        <div class="dss-msg">
+          Майже готово! Залишився останній критерій:<br><br>
+          <strong>Який орієнтовний бюджет розглядаєте?</strong>
+        </div>
+        <div class="dss-options">
+          <button class="dss-opt-btn" type="button" data-field="budget" data-val="low">До 15 000 грн (Стартовий)</button>
+          <button class="dss-opt-btn" type="button" data-field="budget" data-val="mid">15 000 – 30 000 грн (Оптимальний)</button>
+          <button class="dss-opt-btn" type="button" data-field="budget" data-val="high">Від 30 000 грн (Преміум)</button>
+          <button class="dss-opt-btn" type="button" data-field="budget" data-val="any">Будь-який відповідний</button>
+        </div>
+      </div>
+
+      <!-- Завантаження -->
+      <div class="dss-step" id="dss-step-loading">
+        <div class="dss-loading">
+          <div class="dss-spinner"></div>
+          <p><strong>СППР аналізує каталог</strong><br><small class="muted">Оцінка характеристик, матеріалів та цін...</small></p>
+        </div>
+      </div>
+
+      <!-- Результат підбору -->
+      <div class="dss-step" id="dss-step-result">
+        <div class="dss-result-card">
+          <span class="dss-result-badge">Оптимальний вибір СППР</span>
+          <h4 class="dss-result-title" id="dss-res-title">Fender Player II Stratocaster</h4>
+          <p class="dss-result-price" id="dss-res-price">38 900 грн</p>
+          <p class="dss-result-reason" id="dss-res-reason"></p>
+        </div>
+        <div class="dss-result-actions">
+          <a class="button" id="dss-res-config-btn" href="#">Зібрати в конфігураторі <span>→</span></a>
+          <a class="button button-ghost" id="dss-res-detail-btn" href="#">Деталі моделі</a>
+          <button class="dss-restart-btn" id="dss-restart" type="button">↻ Пройти підбір знову</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальне вікно входу / реєстрації -->
+  <div class="auth-modal-overlay" id="auth-modal" aria-hidden="true">
+    <div class="auth-modal-card" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+      <button type="button" class="auth-close-btn" id="auth-modal-close" aria-label="Закрити вікно">✕</button>
+      
+      <div class="auth-header">
+        <span class="auth-eyebrow">GuitarChoice Account</span>
+        <h2 id="auth-modal-title">Вхід в акаунт</h2>
+      </div>
+
+      <div class="auth-tabs" id="auth-tabs">
+        <button type="button" class="auth-tab active" data-tab="login">Вхід</button>
+        <button type="button" class="auth-tab" data-tab="register">Реєстрація</button>
+      </div>
+
+      <div class="auth-status-msg" id="auth-status-msg" style="display: none;"></div>
+
+      <!-- Форма входу -->
+      <form class="auth-form-panel is-active" id="login-form" method="post" action="{% url 'auth_login' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <div class="auth-input-group">
+          <label for="id_login_username">Ім’я користувача</label>
+          <input type="text" id="id_login_username" name="username" placeholder="Ваш логін або admin" required autocomplete="username">
+        </div>
+        <div class="auth-input-group">
+          <label for="id_login_password">Пароль</label>
+          <input type="password" id="id_login_password" name="password" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="button auth-submit-btn">Увійти в акаунт <span>→</span></button>
+      </form>
+
+      <!-- Форма реєстрації -->
+      <form class="auth-form-panel" id="register-form" method="post" action="{% url 'auth_register' %}" style="display: none;">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <div class="auth-input-group">
+          <label for="id_reg_username">Ім’я користувача</label>
+          <input type="text" id="id_reg_username" name="username" placeholder="Придумайте логін (від 3 символів)" required autocomplete="username">
+        </div>
+        <div class="auth-input-group">
+          <label for="id_reg_email">Email <small>(необов’язково)</small></label>
+          <input type="email" id="id_reg_email" name="email" placeholder="name@example.com" autocomplete="email">
+        </div>
+        <div class="auth-input-group">
+          <label for="id_reg_password">Пароль</label>
+          <input type="password" id="id_reg_password" name="password" placeholder="Мінімум 6 символів" required autocomplete="new-password">
+        </div>
+        <div class="auth-input-group">
+          <label for="id_reg_confirm">Підтвердження пароля</label>
+          <input type="password" id="id_reg_confirm" name="password_confirm" placeholder="Повторіть пароль" required autocomplete="new-password">
+        </div>
+        <button type="submit" class="button auth-submit-btn">Створити акаунт <span>→</span></button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Мобільне меню
+    const navToggle = document.querySelector('.nav-toggle');
+    const siteNav = document.querySelector('.site-nav');
+
+    if (navToggle && siteNav) {
+      navToggle.addEventListener('click', () => {
+        navToggle.classList.toggle('is-active');
+        siteNav.classList.toggle('is-open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!siteNav.contains(e.target) && !navToggle.contains(e.target)) {
+          navToggle.classList.remove('is-active');
+          siteNav.classList.remove('is-open');
+        }
+      });
+    }
+
+    // Міні-Агент СППР
+    const dssTrigger = document.querySelector('#dss-trigger');
+    const dssHint = document.querySelector('#dss-hint');
+    const dssModal = document.querySelector('#dss-modal');
+    const dssClose = document.querySelector('#dss-close');
+    const dssRestart = document.querySelector('#dss-restart');
+
+    const dssAnswers = { genre: 'rock', shape: 'any', budget: 'any' };
+
+    function showStep(stepId) {
+      document.querySelectorAll('.dss-step').forEach(step => step.classList.remove('is-active'));
+      const target = document.querySelector(stepId);
+      if (target) target.classList.add('is-active');
+    }
+
+    if (dssTrigger && dssModal) {
+      const toggleModal = () => {
+        const isOpen = dssModal.classList.toggle('is-open');
+        dssModal.setAttribute('aria-hidden', !isOpen);
+        if (dssHint) dssHint.style.display = 'none';
+      };
+
+      dssTrigger.addEventListener('click', toggleModal);
+      if (dssHint) dssHint.addEventListener('click', toggleModal);
+      if (dssClose) dssClose.addEventListener('click', toggleModal);
+
+      // Кнопки виклику СППР з будь-якої сторінки
+      document.querySelectorAll('.open-dss-modal').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          dssModal.classList.add('is-open');
+          dssModal.setAttribute('aria-hidden', 'false');
+          if (dssHint) dssHint.style.display = 'none';
+        });
+      });
+
+      // Вибір варіантів
+      document.querySelectorAll('.dss-opt-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const field = btn.getAttribute('data-field');
+          const val = btn.getAttribute('data-val');
+          dssAnswers[field] = val;
+
+          if (field === 'genre') {
+            showStep('#dss-step-2');
+          } else if (field === 'shape') {
+            showStep('#dss-step-3');
+          } else if (field === 'budget') {
+            showStep('#dss-step-loading');
+            
+            // Запит до СППР-алгоритму
+            const params = new URLSearchParams(dssAnswers);
+            fetch(`/dss/recommend/?${params.toString()}`)
+              .then(res => res.json())
+              .then(data => {
+                if (data.success && data.guitar) {
+                  const g = data.guitar;
+                  document.querySelector('#dss-res-title').textContent = `${g.brand} ${g.name}`;
+                  document.querySelector('#dss-res-price').textContent = `${Math.round(g.price).toLocaleString('uk-UA')} грн`;
+                  document.querySelector('#dss-res-reason').textContent = data.reason;
+                  document.querySelector('#dss-res-config-btn').href = g.config_url;
+                  document.querySelector('#dss-res-detail-btn').href = g.detail_url;
+                  showStep('#dss-step-result');
+                } else {
+                  showStep('#dss-step-1');
+                }
+              })
+              .catch(() => {
+                showStep('#dss-step-1');
+              });
+          }
+        });
+      });
+
+      // Перезапуск підбору
+      if (dssRestart) {
+        dssRestart.addEventListener('click', () => {
+          showStep('#dss-step-1');
+        });
+      }
+    }
+
+    // Модальне вікно авторизації
+    (function() {
+      const authModal = document.getElementById('auth-modal');
+      const authCloseBtn = document.getElementById('auth-modal-close');
+      const openAuthBtns = document.querySelectorAll('.open-auth-btn');
+      const authTabs = document.querySelectorAll('.auth-tab');
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      const authTitle = document.getElementById('auth-modal-title');
+      const authStatus = document.getElementById('auth-status-msg');
+
+      function openAuth(tab = 'login') {
+        const modal = document.getElementById('auth-modal');
+        if (!modal) return;
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        switchAuthTab(tab);
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeAuth() {
+        const modal = document.getElementById('auth-modal');
+        if (!modal) return;
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        const st = document.getElementById('auth-status-msg');
+        if (st) {
+          st.style.display = 'none';
+          st.className = 'auth-status-msg';
+        }
+      }
+
+      window.openAuthModal = openAuth;
+      window.closeAuthModal = closeAuth;
+
+      function switchAuthTab(tabName) {
+        authTabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+        if (tabName === 'login') {
+          loginForm.style.display = 'flex';
+          registerForm.style.display = 'none';
+          authTitle.textContent = 'Вхід в акаунт';
+          setTimeout(() => document.getElementById('id_login_username')?.focus(), 100);
+        } else {
+          loginForm.style.display = 'none';
+          registerForm.style.display = 'flex';
+          authTitle.textContent = 'Реєстрація акаунту';
+          setTimeout(() => document.getElementById('id_reg_username')?.focus(), 100);
+        }
+        if (authStatus) authStatus.style.display = 'none';
+      }
+
+      openAuthBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          openAuth('login');
+        });
+      });
+
+      if (authCloseBtn) authCloseBtn.addEventListener('click', closeAuth);
+
+      authTabs.forEach(t => {
+        t.addEventListener('click', () => switchAuthTab(t.dataset.tab));
+      });
+
+      authModal?.addEventListener('click', (e) => {
+        if (e.target === authModal) closeAuth();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && authModal?.classList.contains('is-open')) closeAuth();
+      });
+
+      function handleAuthSubmit(form, url) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          authStatus.style.display = 'none';
+          const submitBtn = form.querySelector('button[type="submit"]');
+          const origText = submitBtn.innerHTML;
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = 'Зачекайте...';
+
+          try {
+            const res = await fetch(url, {
+              method: 'POST',
+              body: new FormData(form),
+              headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            const data = await res.json();
+            if (data.success) {
+              authStatus.className = 'auth-status-msg is-success';
+              authStatus.textContent = 'Успішно! Завантажуємо...';
+              authStatus.style.display = 'block';
+              setTimeout(() => {
+                window.location.reload();
+              }, 400);
+            } else {
+              authStatus.className = 'auth-status-msg is-error';
+              authStatus.textContent = data.error || 'Помилка авторизації';
+              authStatus.style.display = 'block';
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = origText;
+            }
+          } catch (err) {
+            authStatus.className = 'auth-status-msg is-error';
+            authStatus.textContent = 'Сталася помилка зв’язку. Спробуйте ще раз.';
+            authStatus.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = origText;
+          }
+        });
+      }
+
+      if (loginForm) handleAuthSubmit(loginForm, '{% url "auth_login" %}');
+      if (registerForm) handleAuthSubmit(registerForm, '{% url "auth_register" %}');
+
+      // Дропдаун меню користувача
+      const userBadgeBtn = document.getElementById('user-badge-toggle');
+      const userDropdownMenu = document.getElementById('user-dropdown-menu');
+      if (userBadgeBtn && userDropdownMenu) {
+        userBadgeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpen = userDropdownMenu.classList.toggle('is-open');
+          userBadgeBtn.setAttribute('aria-expanded', isOpen);
+        });
+        document.addEventListener('click', (e) => {
+          if (!userDropdownMenu.contains(e.target) && e.target !== userBadgeBtn) {
+            userDropdownMenu.classList.remove('is-open');
+            userBadgeBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+    })();
+  });
+  </script>
+</body>
+</html>

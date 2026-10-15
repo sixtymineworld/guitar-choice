@@ -1,0 +1,8 @@
+{% extends 'guitars/base.html' %}
+{% block title %}{{ guitar.brand }} {{ guitar.name }} — GuitarChoice{% endblock %}
+{% block content %}
+<section class="detail">
+  <div class="detail-visual">{% if guitar.image_url %}<img src="{{ guitar.image_url }}" alt="{{ guitar }}">{% else %}<div class="detail-guitar"></div>{% endif %}</div>
+  <article class="detail-copy"><a class="back" href="{% url 'catalog' %}">← До каталогу</a><p class="eyebrow">{{ guitar.get_guitar_type_display }} · {{ guitar.brand }}</p><h1>{{ guitar.name }}</h1><p class="detail-price">{{ guitar.price|floatformat:0 }} грн</p><p class="description">{{ guitar.description }}</p><dl><div><dt>Матеріал корпусу</dt><dd>{{ guitar.material }}</dd></div><div><dt>Кількість струн</dt><dd>{{ guitar.strings_count }}</dd></div><div><dt>Статус</dt><dd>{% if guitar.is_available %}<span class="available">В наявності</span>{% else %}<span class="unavailable">Очікується</span>{% endif %}</dd></div></dl><div class="detail-actions"><a class="button" href="{% url 'configurator' %}">Створити кастом з нуля <span>→</span></a><a class="button button-ghost" href="{% url 'feedback' %}">Хочу консультацію</a></div></article>
+</section>
+{% endblock %}
