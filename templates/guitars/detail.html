@@ -1,8 +1,149 @@
 {% extends 'guitars/base.html' %}
+{% load static %}
 {% block title %}{{ guitar.brand }} {{ guitar.name }} — GuitarChoice{% endblock %}
+
 {% block content %}
-<section class="detail">
-  <div class="detail-visual">{% if guitar.image_url %}<img src="{{ guitar.image_url }}" alt="{{ guitar }}">{% else %}<div class="detail-guitar"></div>{% endif %}</div>
-  <article class="detail-copy"><a class="back" href="{% url 'catalog' %}">← До каталогу</a><p class="eyebrow">{{ guitar.get_guitar_type_display }} · {{ guitar.brand }}</p><h1>{{ guitar.name }}</h1><p class="detail-price">{{ guitar.price|floatformat:0 }} грн</p><p class="description">{{ guitar.description }}</p><dl><div><dt>Матеріал корпусу</dt><dd>{{ guitar.material }}</dd></div><div><dt>Кількість струн</dt><dd>{{ guitar.strings_count }}</dd></div><div><dt>Статус</dt><dd>{% if guitar.is_available %}<span class="available">В наявності</span>{% else %}<span class="unavailable">Очікується</span>{% endif %}</dd></div></dl><div class="detail-actions"><a class="button" href="{% url 'configurator' %}">Створити кастом з нуля <span>→</span></a><a class="button button-ghost" href="{% url 'feedback' %}">Хочу консультацію</a></div></article>
-</section>
+<div class="detail-container">
+  <!-- Навігаційний ланцюжок -->
+  <nav class="detail-nav" aria-label="Навігація">
+    <a class="detail-back-link" href="{% url 'catalog' %}">
+      <span class="back-arrow">←</span> Назад до каталогу
+    </a>
+    <div class="detail-breadcrumbs">
+      <a href="{% url 'home' %}">Головна</a>
+      <span class="crumb-sep">/</span>
+      <a href="{% url 'catalog' %}">Каталог</a>
+      <span class="crumb-sep">/</span>
+      <span class="crumb-current">{{ guitar.brand }} {{ guitar.name }}</span>
+    </div>
+  </nav>
+
+  <!-- Головна вітрина товару -->
+  <div class="detail-showcase">
+    <!-- Зображення гітари БЕЗ РАМОК І ФОНОВИХ БЛОКІВ -->
+    <div class="detail-visual-clean">
+      {% if guitar.image_url %}
+        <img src="{{ guitar.image_url }}" alt="{{ guitar.brand }} {{ guitar.name }}" class="detail-guitar-image">
+      {% else %}
+        <img src="{% static 'images/my_guitar.png' %}" alt="{{ guitar.brand }} {{ guitar.name }}" class="detail-guitar-image">
+      {% endif %}
+    </div>
+
+    <!-- Інформація про інструмент і замовлення -->
+    <div class="detail-info-pane">
+      <div class="detail-header-meta">
+        <span class="detail-type-badge">{{ guitar.get_guitar_type_display }}</span>
+        <span class="detail-brand-badge">{{ guitar.brand }}</span>
+      </div>
+
+      <h1 class="detail-guitar-title">{{ guitar.name }}</h1>
+
+      <!-- Ціна та наявність -->
+      <div class="detail-price-status-bar">
+        <div class="detail-price-wrap">
+          <span class="detail-price-num">{{ guitar.price|floatformat:0 }}</span>
+          <span class="detail-price-currency">грн</span>
+        </div>
+
+        {% if guitar.is_available %}
+          <div class="detail-stock-pill in-stock">
+            <span class="pulse-point"></span> В наявності
+          </div>
+        {% else %}
+          <div class="detail-stock-pill out-of-stock">
+            Очікується
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Опис -->
+      <div class="detail-desc-block">
+        <p>{{ guitar.description }}</p>
+      </div>
+
+      <!-- Характеристики -->
+      <div class="detail-specs-box">
+        <h3 class="detail-specs-heading">Специфікація інструмента</h3>
+        <dl class="detail-specs-list">
+          <div class="detail-spec-row">
+            <dt>Виробник</dt>
+            <dd>{{ guitar.brand }}</dd>
+          </div>
+          <div class="detail-spec-row">
+            <dt>Тип гітари</dt>
+            <dd>{{ guitar.get_guitar_type_display }}</dd>
+          </div>
+          <div class="detail-spec-row">
+            <dt>Матеріал деки</dt>
+            <dd>{{ guitar.material }}</dd>
+          </div>
+          <div class="detail-spec-row">
+            <dt>Кількість струн</dt>
+            <dd>{{ guitar.strings_count }} струн(и)</dd>
+          </div>
+          <div class="detail-spec-row">
+            <dt>Передпродажне доведення</dt>
+            <dd>Відкалібровано майстром</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Дії та замовлення -->
+      <div class="detail-actions-panel">
+        <form method="post" action="{% url 'guitar_detail' guitar.pk %}" class="detail-order-form">
+          {% csrf_token %}
+          {% if guitar.is_available %}
+            <button class="button button-order-cta" type="submit">
+              Додати у кошик <span>→</span>
+            </button>
+          {% else %}
+            <button class="button button-order-disabled" type="button" disabled>
+              Очікується поставка
+            </button>
+          {% endif %}
+        </form>
+
+        <div class="detail-sub-actions">
+          <a class="button button-ghost" href="{% url 'configurator' %}">Кастом-конфігуратор</a>
+          <button class="button button-ghost open-dss-modal" type="button">СППР-підбір</button>
+          <a class="button button-ghost" href="{% url 'feedback' %}">Консультація майстра</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Схожі моделі з каталогу -->
+  {% if similar_guitars %}
+    <section class="detail-similar-block">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Каталог</p>
+          <h2>Схожі інструменти</h2>
+        </div>
+        <a href="{% url 'catalog' %}">Увесь каталог →</a>
+      </div>
+
+      <div class="cards">
+        {% for sim in similar_guitars %}
+          <article class="card">
+            <div class="card-visual">
+              {% if sim.image_url %}
+                <img src="{{ sim.image_url }}" alt="{{ sim.name }}" loading="lazy">
+              {% else %}
+                <img src="{% static 'images/my_guitar.png' %}" alt="{{ sim.name }}" loading="lazy">
+              {% endif %}
+              <span>{{ sim.get_guitar_type_display }}</span>
+            </div>
+            <div class="card-body">
+              <p class="muted">{{ sim.brand }} · {{ sim.material }}</p>
+              <h3>{{ sim.name }}</h3>
+              <p>{{ sim.price|floatformat:0 }} грн</p>
+              <a href="{{ sim.get_absolute_url }}">Переглянути модель →</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+</div>
 {% endblock %}

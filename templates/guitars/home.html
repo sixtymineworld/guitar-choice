@@ -15,23 +15,17 @@
   </div>
 
   <div class="hero-art" aria-label="Інтерактивна модель Fender Stratocaster">
-    <span class="hero-model-tag">Classic Stratocaster</span>
-
     <div class="hero-guitar-stage">
       <div class="guitar-halo"></div>
       <div class="soundwave-pulse" id="soundwave-pulse"></div>
 
-
-
-      <div class="guitar-wrapper" id="guitar-stage-wrapper" title="Натисніть на гітару, щоб забриніли струни!">
+      <div class="guitar-wrapper" id="guitar-stage-wrapper" title="Натисніть на гітару, щоб прослухати акорд">
         <img src="{% static 'images/my_guitar.png' %}" alt="Fender Stratocaster" class="hero-guitar-img" id="hero-guitar-img">
       </div>
     </div>
 
-    <!-- Панель керування звуком -->
     <div class="stage-controls">
-      <span class="stage-model-name">Fender Stratocaster Black &amp; Gold</span>
-      <button type="button" class="strum-btn" id="strum-guitar-btn" title="Прослухати звучання інструмента">
+      <button type="button" class="strum-btn" id="strum-guitar-btn">
         Прослухати звучання
       </button>
     </div>
@@ -39,13 +33,21 @@
 </section>
 
 <section class="section feature-section">
-  <div class="section-heading"><div><p class="eyebrow">Рекомендовані зараз</p><h2>Інструменти для натхнення</h2></div><a href="{% url 'catalog' %}">Увесь каталог →</a></div>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Рекомендовані зараз</p>
+      <h2>Інструменти для натхнення</h2>
+    </div>
+    <a href="{% url 'catalog' %}">Увесь каталог →</a>
+  </div>
   <div class="cards">
     {% for guitar in featured %}
       <article class="card">
         <div class="card-visual">
           {% if guitar.image_url %}
             <img src="{{ guitar.image_url }}" alt="{{ guitar.name }}" loading="lazy">
+          {% else %}
+            <img src="{% static 'images/my_guitar.png' %}" alt="{{ guitar.name }}" loading="lazy">
           {% endif %}
           <span>{{ guitar.get_guitar_type_display }}</span>
         </div>
@@ -82,78 +84,56 @@
 
 <script>
   (function () {
-      // 1. Анімація звукової хвилі
-      const soundwave = document.querySelector('#soundwave-pulse');
+    const soundwave = document.querySelector('#soundwave-pulse');
+    let audioCtx = null;
 
-      function animateStrum() {
-          if (soundwave) {
-              soundwave.classList.remove('active');
-              void soundwave.offsetWidth;
-              soundwave.classList.add('active');
-          }
+    function animateStrum() {
+      if (soundwave) {
+        soundwave.classList.remove('active');
+        void soundwave.offsetWidth;
+        soundwave.classList.add('active');
       }
+    }
 
-      // 2. Відтворення акорду
-      function playChord() {
-          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    function playChord() {
+      const ctx = new AudioContext();
+      const notes = [110, 164.81, 220, 261.63, 329.63];
 
-          if (!AudioCtx) return;
+      notes.forEach(function(freq, i) {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const start = ctx.currentTime + i * 0.05;
 
-          try {
-              const ctx = new AudioCtx();
-              const chord = [110, 164.81, 220, 261.63, 329.63];
-              const now = ctx.currentTime;
+          osc.type = 'sine';
+          osc.frequency.value = freq;
 
-              if (ctx.state === 'suspended') {
-                  ctx.resume();
-              }
+          gain.gain.setValueAtTime(0, start);
+          gain.gain.linearRampToValueAtTime(0.2, start + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.001, start + 1.5);
 
-              chord.forEach((freq, i) => {
-                  const osc = ctx.createOscillator();
-                  const gain = ctx.createGain();
-                  const filter = ctx.createBiquadFilter();
-                  const start = now + i * 0.042;
+          osc.connect(gain);
+          gain.connect(ctx.destination);
 
-                  osc.type = i < 2 ? 'triangle' : 'sawtooth';
-                  osc.frequency.setValueAtTime(freq, start);
+          osc.start(start);
+          osc.stop(start + 1.5);
+      });
+  }
 
-                  filter.type = 'lowpass';
-                  filter.frequency.setValueAtTime(3200, start);
-                  filter.frequency.exponentialRampToValueAtTime(340, start + 2.2);
+    function strumGuitar() {
+      animateStrum();
+      playChord();
+    }
 
-                  gain.gain.setValueAtTime(0, start);
-                  gain.gain.linearRampToValueAtTime(0.22, start + 0.008);
-                  gain.gain.exponentialRampToValueAtTime(0.0001, start + 2.3);
+    const strumBtn = document.querySelector('#strum-guitar-btn');
+    const guitarWrapper = document.querySelector('#guitar-stage-wrapper');
 
-                  osc.connect(filter);
-                  filter.connect(gain);
-                  gain.connect(ctx.destination);
+    if (strumBtn) {
+      strumBtn.addEventListener('click', strumGuitar);
+    }
 
-                  osc.start(start);
-                  osc.stop(start + 2.4);
-              });
-          } catch (error) {
-              console.error('Помилка відтворення звуку:', error);
-          }
-      }
-
-
-      // 3. Бринчання гітари
-      function strumGuitar() {
-          animateStrum();
-          playChord();
-      }
-
-      const strumBtn = document.querySelector('#strum-guitar-btn');
-      const guitarWrapper = document.querySelector('#guitar-stage-wrapper');
-
-      if (strumBtn) {
-          strumBtn.addEventListener('click', strumGuitar);
-      }
-
-      if (guitarWrapper) {
-          guitarWrapper.addEventListener('click', strumGuitar);
-      }
+    if (guitarWrapper) {
+      guitarWrapper.addEventListener('click', strumGuitar);
+    }
   })();
 </script>
 {% endblock %}

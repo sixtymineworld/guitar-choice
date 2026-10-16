@@ -50,7 +50,35 @@ def guitar_detail(request, pk):
     if not guitar:
         messages.error(request, "Запитувану модель гітари не знайдено.")
         return redirect("catalog")
-    return render(request, "guitars/detail.html", {"guitar": guitar})
+
+    if request.method == "POST":
+        if not guitar.is_available:
+            messages.warning(request, f"Модель «{guitar.brand} {guitar.name}» наразі очікується на складі.")
+            return redirect("guitar_detail", pk=guitar.pk)
+
+        GuitarOrder.objects.create(
+            session_key=_session_key(request),
+            guitar=guitar,
+            status=GuitarOrder.Status.CART,
+            quantity=1,
+        )
+        messages.success(request, f"«{guitar.brand} {guitar.name}» додано до вашого кошика!")
+        return redirect("cart")
+
+    similar = list(Guitar.objects.filter(guitar_type=guitar.guitar_type).exclude(pk=guitar.pk)[:3])
+    if len(similar) < 3:
+        needed = 3 - len(similar)
+        excluded_ids = [guitar.pk] + [g.pk for g in similar]
+        similar.extend(list(Guitar.objects.exclude(pk__in=excluded_ids)[:needed]))
+
+    return render(
+        request,
+        "guitars/detail.html",
+        {
+            "guitar": guitar,
+            "similar_guitars": similar,
+        },
+    )
 
 
 def about(request):

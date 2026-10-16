@@ -173,8 +173,9 @@ class GuitarOrder(models.Model):
         return sum(self.SURCHARGES.get(field, {}).get(getattr(self, field), 0) for field in self.SURCHARGES)
 
     def calculate_unit_price(self):
-        base = self.guitar.price if (self.guitar_id and self.guitar) else self.BASE_CRAFT_PRICE
-        return base + self.options_surcharge()
+        if self.guitar_id and self.guitar:
+            return self.guitar.price
+        return self.BASE_CRAFT_PRICE + self.options_surcharge()
 
     @property
     def total_price(self):

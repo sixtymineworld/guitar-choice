@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=10.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=17.0">
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -113,11 +113,7 @@
   </footer>
   <!-- СППР Міні-Агент Підбору Гітари -->
   <div class="dss-widget">
-    <div class="dss-hint" id="dss-hint">
-      <span class="dss-hint-dot"></span>
-      <span>Підібрати гітару через СППР</span>
-    </div>
-    <button class="dss-trigger" id="dss-trigger" type="button" aria-label="Відкрити СППР помічника" title="Система підтримки вибору гітари">
+    <button class="dss-trigger" id="dss-trigger" type="button" aria-label="Відкрити СППР помічника">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"></path>
         <path d="M18 10a6 6 0 0 1-12 0"></path>
@@ -292,7 +288,6 @@
 
     // Міні-Агент СППР
     const dssTrigger = document.querySelector('#dss-trigger');
-    const dssHint = document.querySelector('#dss-hint');
     const dssModal = document.querySelector('#dss-modal');
     const dssClose = document.querySelector('#dss-close');
     const dssRestart = document.querySelector('#dss-restart');
@@ -309,11 +304,9 @@
       const toggleModal = () => {
         const isOpen = dssModal.classList.toggle('is-open');
         dssModal.setAttribute('aria-hidden', !isOpen);
-        if (dssHint) dssHint.style.display = 'none';
       };
 
       dssTrigger.addEventListener('click', toggleModal);
-      if (dssHint) dssHint.addEventListener('click', toggleModal);
       if (dssClose) dssClose.addEventListener('click', toggleModal);
 
       // Кнопки виклику СППР з будь-якої сторінки
@@ -322,7 +315,6 @@
           e.preventDefault();
           dssModal.classList.add('is-open');
           dssModal.setAttribute('aria-hidden', 'false');
-          if (dssHint) dssHint.style.display = 'none';
         });
       });
 
