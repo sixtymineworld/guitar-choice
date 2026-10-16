@@ -127,9 +127,27 @@ main {
   justify-content: space-between;
   max-width: 1260px;
   margin: auto;
-  padding: 28px 36px;
-  position: relative;
-  z-index: 20;
+  padding: 22px 36px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--header-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.25s ease,
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.site-header.is-scrolled {
+  border-bottom-color: var(--header-border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.site-header.is-hidden {
+  transform: translateY(-110%);
 }
 
 .logo {
@@ -192,9 +210,9 @@ nav a:not(.nav-accent):hover::after {
 }
 
 .nav-accent {
-  padding: 8px 16px;
+  padding: 8px 18px;
   border: 1px solid var(--wine);
-  border-radius: var(--radius-sm);
+  border-radius: 99px;
   color: var(--wine);
   font-weight: 600;
   background: transparent;
@@ -530,12 +548,13 @@ nav a:not(.nav-accent):hover::after {
   border-radius: var(--radius-md);
   background: var(--bg-surface);
   box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   display: flex;
   flex-direction: column;
 }
 
 .card:hover {
+  transform: translateY(-3px);
   border-color: var(--border-soft);
   box-shadow: var(--shadow-md);
 }
@@ -562,6 +581,11 @@ nav a:not(.nav-accent):hover::after {
   object-fit: cover;
   object-position: center;
   z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-visual img {
+  transform: scale(1.02);
 }
 
 .card-visual span {
@@ -621,6 +645,13 @@ nav a:not(.nav-accent):hover::after {
   border: 1px solid rgba(232, 204, 164, 0.14);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.process-step:hover {
+  transform: translateY(-3px);
+  border-color: rgba(232, 204, 164, 0.32);
+  box-shadow: var(--shadow-md);
 }
 
 .process-num {
@@ -1189,6 +1220,13 @@ nav a:not(.nav-accent):hover::after {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-md);
   padding: 18px 16px;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.hero-stat-box:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .hero-stat-val {
@@ -1212,7 +1250,7 @@ nav a:not(.nav-accent):hover::after {
   margin: 0;
 }
 
-/* 2. Принципи платформи (4 статичні картки) */
+/* 2. Принципи платформи (4 картки) */
 .principles-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1228,6 +1266,13 @@ nav a:not(.nav-accent):hover::after {
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.principle-item:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-soft);
+  box-shadow: var(--shadow-md);
 }
 
 .principle-num {
@@ -1273,6 +1318,13 @@ nav a:not(.nav-accent):hover::after {
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.mission-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-soft);
+  box-shadow: var(--shadow-md);
 }
 
 .mission-card h3 {
@@ -1307,6 +1359,13 @@ nav a:not(.nav-accent):hover::after {
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.faq-panel:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-soft);
+  box-shadow: var(--shadow-md);
 }
 
 .faq-panel summary {
@@ -1628,7 +1687,8 @@ nav a:not(.nav-accent):hover::after {
 }
 
 .cart-item:hover {
-  border-color: rgba(193, 154, 88, 0.45);
+  transform: translateY(-2px);
+  border-color: var(--border-soft);
   box-shadow: var(--shadow-md);
 }
 
@@ -2055,6 +2115,7 @@ footer p {
   .site-nav .nav-accent {
     margin-top: 8px;
     text-align: center;
+    border-radius: 99px;
     border-bottom: 1px solid var(--wine);
   }
 

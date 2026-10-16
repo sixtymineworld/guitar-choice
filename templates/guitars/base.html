@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=17.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20.0">
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -268,10 +268,35 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-    // Мобільне меню
+    // Розумний навбар (показується при скролі вгору, ховається при скролі вниз)
+    const siteHeader = document.querySelector('.site-header');
     const navToggle = document.querySelector('.nav-toggle');
     const siteNav = document.querySelector('.site-nav');
+    let lastScrollY = window.scrollY;
 
+    if (siteHeader) {
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+
+        siteHeader.classList.toggle('is-scrolled', currentScrollY > 20);
+
+        if (currentScrollY <= 60) {
+          siteHeader.classList.remove('is-hidden');
+        } else if (currentScrollY > lastScrollY + 4 && currentScrollY > 80) {
+          siteHeader.classList.add('is-hidden');
+          if (navToggle && siteNav) {
+            navToggle.classList.remove('is-active');
+            siteNav.classList.remove('is-open');
+          }
+        } else if (currentScrollY < lastScrollY - 4) {
+          siteHeader.classList.remove('is-hidden');
+        }
+
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+    }
+
+    // Мобільне меню
     if (navToggle && siteNav) {
       navToggle.addEventListener('click', () => {
         navToggle.classList.toggle('is-active');
