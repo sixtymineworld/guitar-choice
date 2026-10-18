@@ -1,9 +1,6 @@
 from django import forms
 from .models import Feedback, GuitarOrder
-
-
 class FeedbackForm(forms.ModelForm):
-    # Honeypot field: invisible to real users, filled by naive bots
     website = forms.CharField(
         required=False,
         widget=forms.TextInput(attrs={
@@ -12,7 +9,6 @@ class FeedbackForm(forms.ModelForm):
             "aria-hidden": "true",
         })
     )
-
     class Meta:
         model = Feedback
         fields = ("name", "email", "message")
@@ -42,10 +38,7 @@ class FeedbackForm(forms.ModelForm):
 
 
 class GuitarConfigForm(forms.ModelForm):
-    """Configurator: custom guitar built from scratch."""
-
     QUANTITY_CHOICES = [(n, str(n)) for n in range(1, 11)]
-
     quantity = forms.TypedChoiceField(label="Кількість", choices=QUANTITY_CHOICES, coerce=int, initial=1)
 
     class Meta:
@@ -54,7 +47,6 @@ class GuitarConfigForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Додаємо доплату до підпису кожної опції
         for name, prices in GuitarOrder.SURCHARGES.items():
             if name in self.fields:
                 field = self.fields[name]
@@ -66,4 +58,3 @@ class GuitarConfigForm(forms.ModelForm):
 
 class CartQuantityForm(forms.Form):
     quantity = forms.IntegerField(min_value=1, max_value=20)
-
