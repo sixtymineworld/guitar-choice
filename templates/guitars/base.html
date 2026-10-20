@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=38.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=47.0">
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -16,11 +16,30 @@
     <a class="logo" href="{% url 'home' %}">GuitarChoice</a>
     <div class="header-actions">
       {% if user.is_authenticated %}
-        <div class="mobile-user-pill" title="Ви увійшли як {{ user.username }}">
-          <span class="user-avatar-pill">{{ user.username|make_list|first|upper }}</span>
+        <div class="mobile-user-wrap">
+          <button type="button" class="mobile-user-btn" id="mobile-user-toggle" aria-label="Профіль {{ user.username }}" aria-expanded="false" aria-haspopup="true">
+            <span class="user-avatar-pill">{{ user.username|make_list|first|upper }}</span>
+          </button>
+          <div class="user-dropdown-popover mobile-user-popover" id="mobile-user-menu">
+            <div class="user-dropdown-header">
+              <span class="user-badge-role">{% if user.is_staff %}Адміністратор{% else %}Користувач{% endif %}</span>
+              <strong>{{ user.username }}</strong>
+              {% if user.email %}<small class="user-dropdown-email">{{ user.email }}</small>{% endif %}
+            </div>
+            <div class="user-dropdown-divider"></div>
+            {% if user.is_staff %}
+              <a href="{% url 'admin:index' %}" class="user-dropdown-link" target="_blank">Адмін-панель</a>
+            {% endif %}
+            <a href="{% url 'cart' %}" class="user-dropdown-link">Мої замовлення</a>
+            <a href="{% url 'configurator' %}" class="user-dropdown-link">Кастом-майстерня</a>
+            <div class="user-dropdown-divider"></div>
+            <a href="{% url 'auth_logout' %}" class="user-dropdown-link user-logout-link">Вийти з акаунту</a>
+          </div>
         </div>
       {% else %}
-        <button type="button" class="header-auth-btn-mobile open-auth-btn" aria-label="Вхід" onclick="if(window.openAuthModal){window.openAuthModal('login');}else{document.getElementById('auth-modal')?.classList.add('is-open');}">Вхід</button>
+        <button type="button" class="mobile-user-btn open-auth-btn" aria-label="Вхід" onclick="if(window.openAuthModal){window.openAuthModal('login');}else{document.getElementById('auth-modal')?.classList.add('is-open');}">
+          <span class="user-avatar-pill user-avatar-logged-out" title="Увійти в акаунт"></span>
+        </button>
       {% endif %}
       <a class="nav-cart header-cart-mobile" href="{% url 'cart' %}" aria-label="Кошик">
         <span>Кошик</span>{% if cart_count %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}
@@ -39,7 +58,7 @@
       <a class="nav-cart nav-cart-desktop" href="{% url 'cart' %}" aria-label="Кошик">Кошик{% if cart_count %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}</a>
       <a class="nav-accent" href="{% url 'feedback' %}">Консультація</a>
       {% if user.is_authenticated %}
-        <div class="user-nav-item" id="user-menu-container">
+        <div class="user-nav-item desktop-only-user" id="user-menu-container">
           <button type="button" class="user-badge-btn" id="user-badge-toggle" aria-expanded="false" aria-haspopup="true">
             <span class="user-avatar-pill">{{ user.username|make_list|first|upper }}</span>
             <span class="user-name-text">{{ user.username }}</span>
@@ -62,7 +81,7 @@
           </div>
         </div>
       {% else %}
-        <button type="button" class="nav-auth-btn open-auth-btn" onclick="if(window.openAuthModal){window.openAuthModal('login');}else{document.getElementById('auth-modal')?.classList.add('is-open');}">Увійти</button>
+        <button type="button" class="nav-auth-btn open-auth-btn desktop-only-auth" onclick="if(window.openAuthModal){window.openAuthModal('login');}else{document.getElementById('auth-modal')?.classList.add('is-open');}">Увійти</button>
       {% endif %}
     </nav>
   </header>
@@ -517,29 +536,28 @@
       if (registerForm) sendAuthForm(registerForm, '{% url "auth_register" %}');
     }
 
-    // ===== Меню користувача =====
-    const userBtn = document.getElementById('user-badge-toggle');
-    const userMenu = document.getElementById('user-dropdown-menu');
+    // ===== Меню користувача (Десктоп + Мобільне) =====
+    const setupUserMenu = (btnId, menuId) => {
+      const btn = document.getElementById(btnId);
+      const menu = document.getElementById(menuId);
+      if (!btn || !menu) return;
 
-    if (userBtn && userMenu) {
-      userBtn.addEventListener('click', (e) => {
+      btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        userMenu.classList.toggle('is-open');
-
-        if (userMenu.classList.contains('is-open')) {
-          userBtn.setAttribute('aria-expanded', 'true');
-        } else {
-          userBtn.setAttribute('aria-expanded', 'false');
-        }
+        const isOpen = menu.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       });
 
       document.addEventListener('click', (e) => {
-        if (!userMenu.contains(e.target)) {
-          userMenu.classList.remove('is-open');
-          userBtn.setAttribute('aria-expanded', 'false');
+        if (!menu.contains(e.target) && !btn.contains(e.target)) {
+          menu.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
         }
       });
-    }
+    };
+
+    setupUserMenu('user-badge-toggle', 'user-dropdown-menu');
+    setupUserMenu('mobile-user-toggle', 'mobile-user-menu');
 
   });
   </script>
