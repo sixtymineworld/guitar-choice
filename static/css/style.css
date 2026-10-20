@@ -680,34 +680,9 @@ nav a:not(.nav-accent):hover::after {
 .catalog-layout {
   display: grid;
   grid-template-columns: 260px 1fr;
-  gap: 28px 48px;
+  gap: 48px;
   padding-bottom: 90px;
   align-items: start;
-}
-
-.catalog-top-bar {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 48px;
-  align-items: center;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border-soft);
-  margin-bottom: 4px;
-}
-
-.catalog-top-bar .results {
-  grid-column: 2;
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-}
-
-.catalog-top-bar .results strong {
-  color: var(--wine);
-  font-weight: 700;
 }
 
 .filters {
@@ -2264,15 +2239,6 @@ footer p {
   .cart-layout {
     grid-template-columns: 1fr;
     gap: 24px;
-  }
-
-  .catalog-top-bar {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-
-  .catalog-top-bar .results {
-    grid-column: 1;
   }
 
   .section-heading {

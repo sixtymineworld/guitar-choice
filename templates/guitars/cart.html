@@ -22,6 +22,7 @@
                 <span>Кастом {{ item.get_instrument_type_display }} ({{ item.get_body_shape_display }})</span>
               {% endif %}
             </h3>
+            {% if not item.guitar %}
             <ul class="cart-options">
               <li><span>Форма</span>{{ item.get_body_shape_display }}</li>
               <li><span>Дерево</span>{{ item.get_wood_display }}</li>
@@ -30,6 +31,13 @@
               <li><span>Струни</span>{{ item.get_strings_count_display }}</li>
               <li><span>Датчики</span>{{ item.get_pickups_set_display }}</li>
             </ul>
+            {% else %}
+            <ul class="cart-options">
+              <li><span>Тип</span>{{ item.guitar.get_guitar_type_display }}</li>
+              <li><span>Матеріал</span>{{ item.guitar.material }}</li>
+              <li><span>Струн</span>{{ item.guitar.strings_count }}</li>
+            </ul>
+            {% endif %}
           </div>
           <div class="cart-item-side">
             <p class="cart-price">{{ item.total_price|floatformat:0 }} грн</p>

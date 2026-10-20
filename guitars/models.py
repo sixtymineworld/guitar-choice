@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
@@ -195,6 +196,13 @@ class GuitarOrder(models.Model):
         "strings_count": {},
         "pickups_set": {},
     }
+    TYPE_SURCHARGES = {
+        _itype: {
+            _f: {_val: _surcharge for _val, _, _surcharge in _opts}
+            for _f, _opts in _fields.items()
+        }
+        for _itype, _fields in CONFIG_OPTIONS.items()
+    }
 
     _seen = {}
     for _itype, _fields in CONFIG_OPTIONS.items():
@@ -252,17 +260,18 @@ class GuitarOrder(models.Model):
         return f"Замовлення №{self.pk}: {name}"
 
     def options_surcharge(self):
+        type_surcharges = self.TYPE_SURCHARGES.get(self.instrument_type, {})
         total = 0
         for field in ["body_shape", "wood", "color", "frets_count", "strings_count", "pickups_set"]:
             val = getattr(self, field, None)
-            total += self.ALL_SURCHARGES.get(field, {}).get(val, 0)
+            total += type_surcharges.get(field, {}).get(val, self.ALL_SURCHARGES.get(field, {}).get(val, 0))
         return total
 
     def calculate_unit_price(self):
         if self.guitar_id and self.guitar:
             return self.guitar.price
         base = self.BASE_CRAFT_PRICES.get(self.instrument_type, self.BASE_CRAFT_PRICE)
-        return base + self.options_surcharge()
+        return Decimal(base + self.options_surcharge())
 
     @property
     def total_price(self):

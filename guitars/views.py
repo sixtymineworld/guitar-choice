@@ -116,6 +116,7 @@ def configurator(request):
         "price_data": {
             "base_craft": {str(k): float(v) for k, v in GuitarOrder.BASE_CRAFT_PRICES.items()},
             "config_options": GuitarOrder.CONFIG_OPTIONS,
+            "type_surcharges": GuitarOrder.TYPE_SURCHARGES,
             "all_surcharges": GuitarOrder.ALL_SURCHARGES,
         },
     })

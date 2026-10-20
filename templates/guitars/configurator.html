@@ -115,12 +115,13 @@
       const selectedType = instrumentTypeSelect.value || "electric";
       const basePrice = Number(priceData.base_craft[selectedType]) || 18500;
       const quantity = Number(form.elements.quantity ? form.elements.quantity.value : 1) || 1;
+      const surcharges = (priceData.type_surcharges && priceData.type_surcharges[selectedType]) || priceData.all_surcharges;
 
       let optionsTotal = 0;
-      for (const field in priceData.all_surcharges) {
+      for (const field in surcharges) {
         const select = form.elements[field];
         if (select && select.value) {
-          optionsTotal += Number(priceData.all_surcharges[field][select.value]) || 0;
+          optionsTotal += Number(surcharges[field][select.value]) || 0;
         }
       }
 

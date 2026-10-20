@@ -26,6 +26,7 @@ class GuitarOrderAdmin(admin.ModelAdmin):
     list_filter = ("status", "instrument_type", "body_shape", "wood", "color", "pickups_set", "frets_count", "strings_count")
     search_fields = ("guitar__name", "guitar__brand", "session_key")
     readonly_fields = ("unit_price", "session_key", "created_at")
+    list_select_related = ("guitar",)
 
     @admin.display(description="Гітара / Кастом")
     def item_title(self, obj):

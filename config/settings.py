@@ -58,8 +58,7 @@ TEMPLATES = [{
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# The web application itself uses SQLite. MySQL is used by the dedicated
-# import/export commands via mysql-connector-python.
+# Підключення до бази даних MySQL (параметри зчитуються з .env або використовуються локальні значення)
 DATABASES = {
     "default": {
         "ENGINE": "mysql.connector.django",
