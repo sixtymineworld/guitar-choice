@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=31.0">
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -77,12 +77,6 @@
       <div class="footer-brand">
         <a class="logo footer-logo" href="{% url 'home' %}">GuitarChoice</a>
         <p>Система підтримки вибору, конфігурування та замовлення гітар. Обирайте інструмент, що звучить по-вашому.</p>
-        <div class="footer-social" aria-label="Соцмережі">
-          <a href="#" aria-label="Instagram">IG</a>
-          <a href="#" aria-label="YouTube">YT</a>
-          <a href="#" aria-label="Telegram">TG</a>
-          <a href="#" aria-label="Facebook">FB</a>
-        </div>
       </div>
       <div class="footer-col" role="navigation" aria-label="Навігація у футері">
         <h4>Навігація</h4>
@@ -101,8 +95,8 @@
       <div class="footer-col footer-contacts">
         <h4>Контакти</h4>
         <a href="tel:+380441234567">+38 (044) 123-45-67</a>
-        <a href="mailto:hello@guitarchoice.ua">hello@guitarchoice.ua</a>
-        <p>м. Київ, вул. Музична, 12</p>
+        <a href="mailto:hello@guitarchoice.ua">guitarchoice@mail.com</a>
+        <p>м. Львів, вул. Дорога Кривчацька, 17А</p>
         <p>Пн–Пт 10:00–19:00<br>Сб 11:00–16:00</p>
       </div>
     </div>
@@ -113,26 +107,19 @@
   </footer>
   <!-- СППР Міні-Агент Підбору Гітари -->
   <div class="dss-widget">
-    <button class="dss-trigger" id="dss-trigger" type="button" aria-label="Відкрити СППР помічника">
+    <button class="dss-trigger" id="dss-trigger" type="button" aria-label="Відкрити AI-помічника">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"></path>
         <path d="M18 10a6 6 0 0 1-12 0"></path>
         <line x1="12" y1="16" x2="12" y2="21"></line>
         <line x1="8" y1="21" x2="16" y2="21"></line>
       </svg>
-      <span class="dss-badge">СППР</span>
+      <span class="dss-badge">AI</span>
     </button>
   </div>
 
   <div class="dss-modal" id="dss-modal" aria-hidden="true">
     <div class="dss-header">
-      <div class="dss-header-info">
-        <div class="dss-avatar">AI</div>
-        <div class="dss-header-text">
-          <h3>СППР · Помічник</h3>
-          <p>Підтримка прийняття рішень</p>
-        </div>
-      </div>
       <button class="dss-close" id="dss-close" type="button" aria-label="Закрити">✕</button>
     </div>
     <div class="dss-body">
@@ -140,7 +127,6 @@
       <div class="dss-step is-active" id="dss-step-1">
         <span class="dss-progress">Крок 1 з 3</span>
         <div class="dss-msg">
-          Привіт! Я ваш <strong>СППР-асистент</strong>. Визначимо ідеальний інструмент за 3 кроки.<br><br>
           <strong>Який музичний стиль вам найближчий?</strong>
         </div>
         <div class="dss-options">
@@ -157,7 +143,6 @@
       <div class="dss-step" id="dss-step-2">
         <span class="dss-progress">Крок 2 з 3</span>
         <div class="dss-msg">
-          Чудовий напрямок!<br><br>
           <strong>Якій формі чи типу гітари надаєте перевагу?</strong>
         </div>
         <div class="dss-options">
@@ -173,7 +158,6 @@
       <div class="dss-step" id="dss-step-3">
         <span class="dss-progress">Крок 3 з 3</span>
         <div class="dss-msg">
-          Майже готово! Залишився останній критерій:<br><br>
           <strong>Який орієнтовний бюджет розглядаєте?</strong>
         </div>
         <div class="dss-options">
@@ -188,18 +172,18 @@
       <div class="dss-step" id="dss-step-loading">
         <div class="dss-loading">
           <div class="dss-spinner"></div>
-          <p><strong>СППР аналізує каталог</strong><br><small class="muted">Оцінка характеристик, матеріалів та цін...</small></p>
+          <p><strong>AI аналізує каталог</strong><br><small class="muted">Оцінка характеристик, матеріалів та цін...</small></p>
         </div>
       </div>
 
       <!-- Результат підбору -->
       <div class="dss-step" id="dss-step-result">
-        <div class="dss-result-card">
-          <span class="dss-result-badge">Оптимальний вибір СППР</span>
+        <a class="dss-result-card" id="dss-res-card-link" href="#" title="Перейти до товару">
+          <span class="dss-result-badge">Оптимальний вибір AI</span>
           <h4 class="dss-result-title" id="dss-res-title">Fender Player II Stratocaster</h4>
           <p class="dss-result-price" id="dss-res-price">38 900 грн</p>
           <p class="dss-result-reason" id="dss-res-reason"></p>
-        </div>
+        </a>
         <div class="dss-result-actions">
           <a class="button" id="dss-res-config-btn" href="#">Зібрати в конфігураторі <span>→</span></a>
           <a class="button button-ghost" id="dss-res-detail-btn" href="#">Деталі моделі</a>
@@ -267,36 +251,41 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Розумний навбар (показується при скролі вгору, ховається при скролі вниз)
-    const siteHeader = document.querySelector('.site-header');
+    document.addEventListener('DOMContentLoaded', () => {
+
+    // ===== Навбар =====
+    const header = document.querySelector('.site-header');
     const navToggle = document.querySelector('.nav-toggle');
     const siteNav = document.querySelector('.site-nav');
-    let lastScrollY = window.scrollY;
+    let lastScroll = window.scrollY;
 
-    if (siteHeader) {
+    const closeMenu = () => {
+      if (navToggle) navToggle.classList.remove('is-active');
+      if (siteNav) siteNav.classList.remove('is-open');
+    };
+
+    if (header) {
       window.addEventListener('scroll', () => {
-        const currentScrollY = window.scrollY;
+        const now = window.scrollY;
 
-        siteHeader.classList.toggle('is-scrolled', currentScrollY > 20);
-
-        if (currentScrollY <= 60) {
-          siteHeader.classList.remove('is-hidden');
-        } else if (currentScrollY > lastScrollY + 4 && currentScrollY > 80) {
-          siteHeader.classList.add('is-hidden');
-          if (navToggle && siteNav) {
-            navToggle.classList.remove('is-active');
-            siteNav.classList.remove('is-open');
-          }
-        } else if (currentScrollY < lastScrollY - 4) {
-          siteHeader.classList.remove('is-hidden');
+        if (now > 20) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
         }
 
-        lastScrollY = currentScrollY;
-      }, { passive: true });
+        if (now <= 60 || now < lastScroll - 4) {
+          header.classList.remove('is-hidden'); // скрол вгору
+        } else if (now > lastScroll + 4 && now > 80) {
+          header.classList.add('is-hidden'); // скрол вниз
+          closeMenu();
+        }
+
+        lastScroll = now;
+      });
     }
 
-    // Мобільне меню
+    // ===== Мобільне меню =====
     if (navToggle && siteNav) {
       navToggle.addEventListener('click', () => {
         navToggle.classList.toggle('is-active');
@@ -305,41 +294,90 @@
 
       document.addEventListener('click', (e) => {
         if (!siteNav.contains(e.target) && !navToggle.contains(e.target)) {
-          navToggle.classList.remove('is-active');
-          siteNav.classList.remove('is-open');
+          closeMenu();
         }
       });
     }
 
-    // Міні-Агент СППР
-    const dssTrigger = document.querySelector('#dss-trigger');
+    // ===== СППР =====
     const dssModal = document.querySelector('#dss-modal');
-    const dssClose = document.querySelector('#dss-close');
-    const dssRestart = document.querySelector('#dss-restart');
-
     const dssAnswers = { genre: 'rock', shape: 'any', budget: 'any' };
 
-    function showStep(stepId) {
-      document.querySelectorAll('.dss-step').forEach(step => step.classList.remove('is-active'));
-      const target = document.querySelector(stepId);
-      if (target) target.classList.add('is-active');
-    }
+    const showStep = (id) => {
+      document.querySelectorAll('.dss-step').forEach(step => {
+        step.classList.remove('is-active');
+      });
+      document.querySelector(id).classList.add('is-active');
+    };
 
-    if (dssTrigger && dssModal) {
-      const toggleModal = () => {
-        const isOpen = dssModal.classList.toggle('is-open');
-        dssModal.setAttribute('aria-hidden', !isOpen);
-      };
+    const openDss = () => {
+      showStep('#dss-step-1');
+      dssModal.classList.add('is-open');
+      dssModal.setAttribute('aria-hidden', 'false');
+    };
 
-      dssTrigger.addEventListener('click', toggleModal);
-      if (dssClose) dssClose.addEventListener('click', toggleModal);
+    const closeDss = () => {
+      dssModal.classList.remove('is-open');
+      dssModal.setAttribute('aria-hidden', 'true');
+    };
+
+    const showDssResult = (data) => {
+      const g = data.guitar;
+      document.querySelector('#dss-res-title').textContent = `${g.brand} ${g.name}`;
+      document.querySelector('#dss-res-price').textContent = `${Math.round(g.price).toLocaleString('uk-UA')} грн`;
+      document.querySelector('#dss-res-reason').textContent = data.reason;
+      document.querySelector('#dss-res-config-btn').href = g.config_url;
+      document.querySelector('#dss-res-detail-btn').href = g.detail_url;
+      const cardLink = document.querySelector('#dss-res-card-link');
+      if (cardLink) cardLink.href = g.detail_url;
+      showStep('#dss-step-result');
+    };
+
+    const askDss = async () => {
+      showStep('#dss-step-loading');
+
+      const url = `/dss/recommend/?genre=${dssAnswers.genre}&shape=${dssAnswers.shape}&budget=${dssAnswers.budget}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.success && data.guitar) {
+          showDssResult(data);
+        } else {
+          showStep('#dss-step-1');
+        }
+      } catch (err) {
+        showStep('#dss-step-1');
+      }
+    };
+
+    if (dssModal) {
+      const dssTrigger = document.querySelector('#dss-trigger');
+      const dssClose = document.querySelector('#dss-close');
+      const dssRestart = document.querySelector('#dss-restart');
+
+      if (dssTrigger) {
+        dssTrigger.addEventListener('click', () => {
+          if (dssModal.classList.contains('is-open')) {
+            closeDss();
+          } else {
+            openDss();
+          }
+        });
+      }
+
+      if (dssClose) dssClose.addEventListener('click', closeDss);
+
+      if (dssRestart) {
+        dssRestart.addEventListener('click', () => showStep('#dss-step-1'));
+      }
 
       // Кнопки виклику СППР з будь-якої сторінки
       document.querySelectorAll('.open-dss-modal').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
-          dssModal.classList.add('is-open');
-          dssModal.setAttribute('aria-hidden', 'false');
+          openDss();
         });
       });
 
@@ -350,101 +388,112 @@
           const val = btn.getAttribute('data-val');
           dssAnswers[field] = val;
 
-          if (field === 'genre') {
-            showStep('#dss-step-2');
-          } else if (field === 'shape') {
-            showStep('#dss-step-3');
-          } else if (field === 'budget') {
-            showStep('#dss-step-loading');
-            
-            // Запит до СППР-алгоритму
-            const params = new URLSearchParams(dssAnswers);
-            fetch(`/dss/recommend/?${params.toString()}`)
-              .then(res => res.json())
-              .then(data => {
-                if (data.success && data.guitar) {
-                  const g = data.guitar;
-                  document.querySelector('#dss-res-title').textContent = `${g.brand} ${g.name}`;
-                  document.querySelector('#dss-res-price').textContent = `${Math.round(g.price).toLocaleString('uk-UA')} грн`;
-                  document.querySelector('#dss-res-reason').textContent = data.reason;
-                  document.querySelector('#dss-res-config-btn').href = g.config_url;
-                  document.querySelector('#dss-res-detail-btn').href = g.detail_url;
-                  showStep('#dss-step-result');
-                } else {
-                  showStep('#dss-step-1');
-                }
-              })
-              .catch(() => {
-                showStep('#dss-step-1');
-              });
-          }
+          if (field === 'genre') showStep('#dss-step-2');
+          if (field === 'shape') showStep('#dss-step-3');
+          if (field === 'budget') askDss();
         });
       });
-
-      // Перезапуск підбору
-      if (dssRestart) {
-        dssRestart.addEventListener('click', () => {
-          showStep('#dss-step-1');
-        });
-      }
     }
 
-    // Модальне вікно авторизації
-    (function() {
-      const authModal = document.getElementById('auth-modal');
-      const authCloseBtn = document.getElementById('auth-modal-close');
-      const openAuthBtns = document.querySelectorAll('.open-auth-btn');
-      const authTabs = document.querySelectorAll('.auth-tab');
-      const loginForm = document.getElementById('login-form');
-      const registerForm = document.getElementById('register-form');
-      const authTitle = document.getElementById('auth-modal-title');
-      const authStatus = document.getElementById('auth-status-msg');
+    // ===== Авторизація =====
+    const authModal = document.getElementById('auth-modal');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const authTitle = document.getElementById('auth-modal-title');
+    const authStatus = document.getElementById('auth-status-msg');
+    const authTabs = document.querySelectorAll('.auth-tab');
 
-      function openAuth(tab = 'login') {
-        const modal = document.getElementById('auth-modal');
-        if (!modal) return;
-        modal.classList.add('is-open');
-        modal.setAttribute('aria-hidden', 'false');
-        switchAuthTab(tab);
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeAuth() {
-        const modal = document.getElementById('auth-modal');
-        if (!modal) return;
-        modal.classList.remove('is-open');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        const st = document.getElementById('auth-status-msg');
-        if (st) {
-          st.style.display = 'none';
-          st.className = 'auth-status-msg';
-        }
-      }
-
-      window.openAuthModal = openAuth;
-      window.closeAuthModal = closeAuth;
-
-      function switchAuthTab(tabName) {
-        authTabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
-        if (tabName === 'login') {
-          loginForm.style.display = 'flex';
-          registerForm.style.display = 'none';
-          authTitle.textContent = 'Вхід в акаунт';
-          setTimeout(() => document.getElementById('id_login_username')?.focus(), 100);
+    const switchAuthTab = (tab) => {
+      authTabs.forEach(t => {
+        if (t.dataset.tab === tab) {
+          t.classList.add('active');
         } else {
-          loginForm.style.display = 'none';
-          registerForm.style.display = 'flex';
-          authTitle.textContent = 'Реєстрація акаунту';
-          setTimeout(() => document.getElementById('id_reg_username')?.focus(), 100);
+          t.classList.remove('active');
         }
-        if (authStatus) authStatus.style.display = 'none';
+      });
+
+      if (tab === 'login') {
+        loginForm.style.display = 'flex';
+        registerForm.style.display = 'none';
+        authTitle.textContent = 'Вхід в акаунт';
+      } else {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'flex';
+        authTitle.textContent = 'Реєстрація акаунту';
       }
 
-      openAuthBtns.forEach(btn => {
+      authStatus.style.display = 'none';
+    };
+
+    const openAuth = () => {
+      authModal.classList.add('is-open');
+      authModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      switchAuthTab('login');
+    };
+
+    const closeAuth = () => {
+      authModal.classList.remove('is-open');
+      authModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      authStatus.style.display = 'none';
+      authStatus.className = 'auth-status-msg';
+    };
+
+    // щоб можна було викликати з інших скриптів
+    window.openAuthModal = openAuth;
+    window.closeAuthModal = closeAuth;
+
+    const showAuthMessage = (text, isError) => {
+      if (isError) {
+        authStatus.className = 'auth-status-msg is-error';
+      } else {
+        authStatus.className = 'auth-status-msg is-success';
+      }
+      authStatus.textContent = text;
+      authStatus.style.display = 'block';
+    };
+
+    const sendAuthForm = (form, url) => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const btn = form.querySelector('button[type="submit"]');
+        const oldText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = 'Зачекайте...';
+
+        try {
+          const res = await fetch(url, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            showAuthMessage('Успішно! Завантажуємо...', false);
+            setTimeout(() => window.location.reload(), 400);
+          } else {
+            showAuthMessage(data.error || 'Помилка авторизації', true);
+            btn.disabled = false;
+            btn.innerHTML = oldText;
+          }
+        } catch (err) {
+          showAuthMessage('Сталася помилка зв’язку. Спробуйте ще раз.', true);
+          btn.disabled = false;
+          btn.innerHTML = oldText;
+        }
+      });
+    };
+
+    if (authModal) {
+      const authCloseBtn = document.getElementById('auth-modal-close');
+
+      document.querySelectorAll('.open-auth-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
-          openAuth('login');
+          openAuth();
         });
       });
 
@@ -454,74 +503,44 @@
         t.addEventListener('click', () => switchAuthTab(t.dataset.tab));
       });
 
-      authModal?.addEventListener('click', (e) => {
+      // клік по темному фону
+      authModal.addEventListener('click', (e) => {
         if (e.target === authModal) closeAuth();
       });
 
+      // Escape
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && authModal?.classList.contains('is-open')) closeAuth();
+        if (e.key === 'Escape' && authModal.classList.contains('is-open')) closeAuth();
       });
 
-      function handleAuthSubmit(form, url) {
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          authStatus.style.display = 'none';
-          const submitBtn = form.querySelector('button[type="submit"]');
-          const origText = submitBtn.innerHTML;
-          submitBtn.disabled = true;
-          submitBtn.innerHTML = 'Зачекайте...';
+      if (loginForm) sendAuthForm(loginForm, '{% url "auth_login" %}');
+      if (registerForm) sendAuthForm(registerForm, '{% url "auth_register" %}');
+    }
 
-          try {
-            const res = await fetch(url, {
-              method: 'POST',
-              body: new FormData(form),
-              headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            });
-            const data = await res.json();
-            if (data.success) {
-              authStatus.className = 'auth-status-msg is-success';
-              authStatus.textContent = 'Успішно! Завантажуємо...';
-              authStatus.style.display = 'block';
-              setTimeout(() => {
-                window.location.reload();
-              }, 400);
-            } else {
-              authStatus.className = 'auth-status-msg is-error';
-              authStatus.textContent = data.error || 'Помилка авторизації';
-              authStatus.style.display = 'block';
-              submitBtn.disabled = false;
-              submitBtn.innerHTML = origText;
-            }
-          } catch (err) {
-            authStatus.className = 'auth-status-msg is-error';
-            authStatus.textContent = 'Сталася помилка зв’язку. Спробуйте ще раз.';
-            authStatus.style.display = 'block';
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = origText;
-          }
-        });
-      }
+    // ===== Меню користувача =====
+    const userBtn = document.getElementById('user-badge-toggle');
+    const userMenu = document.getElementById('user-dropdown-menu');
 
-      if (loginForm) handleAuthSubmit(loginForm, '{% url "auth_login" %}');
-      if (registerForm) handleAuthSubmit(registerForm, '{% url "auth_register" %}');
+    if (userBtn && userMenu) {
+      userBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userMenu.classList.toggle('is-open');
 
-      // Дропдаун меню користувача
-      const userBadgeBtn = document.getElementById('user-badge-toggle');
-      const userDropdownMenu = document.getElementById('user-dropdown-menu');
-      if (userBadgeBtn && userDropdownMenu) {
-        userBadgeBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const isOpen = userDropdownMenu.classList.toggle('is-open');
-          userBadgeBtn.setAttribute('aria-expanded', isOpen);
-        });
-        document.addEventListener('click', (e) => {
-          if (!userDropdownMenu.contains(e.target) && e.target !== userBadgeBtn) {
-            userDropdownMenu.classList.remove('is-open');
-            userBadgeBtn.setAttribute('aria-expanded', 'false');
-          }
-        });
-      }
-    })();
+        if (userMenu.classList.contains('is-open')) {
+          userBtn.setAttribute('aria-expanded', 'true');
+        } else {
+          userBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!userMenu.contains(e.target)) {
+          userMenu.classList.remove('is-open');
+          userBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
   });
   </script>
 </body>

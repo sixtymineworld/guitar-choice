@@ -39,29 +39,27 @@
 
 {{ price_data|json_script:"price-data" }}
 <script>
-  (function () {
-    const data = JSON.parse(document.getElementById("price-data").textContent);
-    const form = document.getElementById("config-form");
-    const fmt = (n) => Math.round(n).toLocaleString("uk-UA") + " грн";
+    const data = JSON.parse(document.querySelector("#price-data").textContent);
+    const form = document.querySelector("#config-form");
 
-    function recalc() {
-      const base = Number(data.base_craft) || 0;
-      let options = 0;
-      for (const [field, prices] of Object.entries(data.options)) {
-        if (form.elements[field]) {
-          options += prices[form.elements[field].value] || 0;
+    function calculatePrice() {
+        let options = 0;
+
+        for (const field in data.options) {
+            options += data.options[field][form.elements[field].value] || 0;
         }
-      }
-      const qty = parseInt(form.elements["quantity"].value, 10) || 1;
-      document.getElementById("sum-base").textContent = fmt(base);
-      document.getElementById("sum-options").textContent = fmt(options);
-      document.getElementById("sum-qty").textContent = qty;
-      document.getElementById("sum-total").textContent = fmt((base + options) * qty);
+
+        const base = Number(data.base_craft);
+        const quantity = Number(form.elements.quantity.value) || 1;
+
+        document.querySelector("#sum-base").textContent = base + " грн";
+        document.querySelector("#sum-options").textContent = options + " грн";
+        document.querySelector("#sum-qty").textContent = quantity;
+        document.querySelector("#sum-total").textContent = (base + options) * quantity + " грн";
     }
 
-    form.addEventListener("change", recalc);
-    recalc();
-  })();
+    form.addEventListener("change", calculatePrice);
+    calculatePrice();
 </script>
 {% endblock %}
 

@@ -90,7 +90,6 @@ button, input, select, textarea {
 
 button,
 .button,
-.strum-btn,
 .nav-accent,
 .open-dss-modal {
   font-family: var(--font-btn);
@@ -397,34 +396,19 @@ nav a:not(.nav-accent):hover::after {
 
 .guitar-halo {
   position: absolute;
-  width: 300px;
-  height: 300px;
+  width: 320px;
+  height: 320px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 65%);
   filter: blur(20px);
   pointer-events: none;
   z-index: 1;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), background 0.5s ease;
 }
 
-.soundwave-pulse {
-  position: absolute;
-  width: 180px;
-  height: 180px;
-  border: 1px solid rgba(179, 139, 77, 0.4);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  transform: scale(0.6);
-}
-
-.soundwave-pulse.active {
-  animation: soundwaveRipples 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes soundwaveRipples {
-  0% { opacity: 0.85; transform: scale(0.7); }
-  100% { opacity: 0; transform: scale(2.6); border-color: rgba(255, 255, 255, 0); }
+.hero-art:hover .guitar-halo {
+  transform: scale(1.05);
+  background: radial-gradient(circle, rgba(216, 159, 116, 0.12) 0%, transparent 70%);
 }
 
 .guitar-wrapper {
@@ -436,8 +420,12 @@ nav a:not(.nav-accent):hover::after {
   justify-content: center;
   transform-origin: center center;
   transform: rotate(13deg);
-  cursor: pointer;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 3;
+}
+
+.hero-art:hover .guitar-wrapper {
+  transform: rotate(10deg) scale(1.01);
 }
 
 .hero-guitar-img {
@@ -447,38 +435,11 @@ nav a:not(.nav-accent):hover::after {
   object-fit: contain;
   overflow: visible;
   filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.22));
+  transition: filter 0.5s ease;
 }
 
-/* Нижня кнопка прослуховування */
-.stage-controls {
-  position: absolute;
-  bottom: 22px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 15;
-}
-
-.strum-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
-  background: rgba(250, 245, 238, 0.08);
-  color: var(--cream);
-  border: 1px solid rgba(250, 245, 238, 0.24);
-  font-family: var(--font-btn);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
-  white-space: nowrap;
-}
-
-.strum-btn:hover {
-  background: rgba(250, 245, 238, 0.16);
-  border-color: rgba(250, 245, 238, 0.5);
+.hero-art:hover .hero-guitar-img {
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.3));
 }
 
 /* ==========================================================================
@@ -2351,45 +2312,46 @@ footer p {
   align-items: flex-end;
 }
 
-/* Кругла плаваюча кнопка агента */
+/* Кругла плаваюча кнопка СППР */
 .dss-trigger {
   position: relative;
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--wine-dark);
   background: var(--wine);
   color: #ffffff;
   display: grid;
   place-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 16px rgba(114, 47, 55, 0.35);
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .dss-trigger:hover {
   background: var(--wine-dark);
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 6px 22px rgba(114, 47, 55, 0.45);
 }
 
 .dss-trigger svg {
-  width: 28px;
-  height: 28px;
-  transition: var(--transition);
+  width: 22px;
+  height: 22px;
+  stroke: #ffffff;
 }
 
 .dss-badge {
   position: absolute;
   top: -4px;
   right: -4px;
-  padding: 2px 7px;
-  background: var(--gold);
-  color: var(--wine-dark);
-  font-size: 0.65rem;
-  font-weight: 800;
+  padding: 1px 6px;
+  background: var(--wine-dark);
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 700;
   border-radius: 99px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   border: 2px solid var(--bg-surface);
 }
 
@@ -2397,7 +2359,7 @@ footer p {
 .dss-modal {
   position: fixed;
   right: 28px;
-  bottom: 104px;
+  bottom: 96px;
   z-index: 1001;
   width: 390px;
   max-width: calc(100vw - 32px);
@@ -2424,64 +2386,34 @@ footer p {
   transform: translateY(0) scale(1);
 }
 
-/* Шапка модального вікна */
+/* Шапка модального вікна (суто бордовий навбар) */
 .dss-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
+  justify-content: flex-end;
+  padding: 12px 18px;
+  min-height: 48px;
   background: linear-gradient(135deg, var(--wine-rich), var(--wine-dark));
   color: #fff;
   border-bottom: 1px solid rgba(193, 154, 88, 0.3);
 }
 
-.dss-header-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.dss-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  color: var(--wine-dark);
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: 1rem;
-}
-
-.dss-header-text h3 {
-  margin: 0;
-  font-size: 1.05rem;
-  color: #fff;
-}
-
-.dss-header-text p {
-  margin: 0;
-  font-size: 0.72rem;
-  color: var(--gold-light);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
 .dss-close {
   background: transparent;
   border: 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 1.3rem;
   line-height: 1;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: var(--transition);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
 }
 
 .dss-close:hover {
   color: #fff;
-  transform: scale(1.15);
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.08);
 }
 
 /* Тіло діалогу СППР */
@@ -2568,26 +2500,36 @@ footer p {
   justify-content: center;
   flex: 1;
   text-align: center;
-  gap: 16px;
+  gap: 14px;
 }
 
 .dss-spinner {
-  width: 44px;
-  height: 44px;
-  border: 3px solid rgba(90, 13, 32, 0.15);
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--border-soft);
   border-top-color: var(--wine);
   border-radius: 50%;
-  animation: dssSpin 0.8s linear infinite;
+  animation: dssSpin 0.7s linear infinite;
 }
 
 /* Екран результату СППР */
 .dss-result-card {
+  display: block;
+  text-decoration: none;
   background: var(--bg-surface);
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-md);
-  padding: 18px;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 16px;
+  border: 1px solid var(--border-card);
+  border-top: 3px solid var(--wine);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.dss-result-card:hover {
+  border-color: var(--wine);
+  box-shadow: 0 4px 14px rgba(90, 13, 32, 0.14);
+  transform: translateY(-2px);
 }
 
 .dss-result-badge {
@@ -2599,26 +2541,34 @@ footer p {
   font-weight: 800;
   border-radius: 99px;
   margin-bottom: 10px;
+  letter-spacing: 0.04em;
 }
 
 .dss-result-title {
   margin: 0 0 6px;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
+  font-family: var(--font-display);
   color: var(--text-heading);
+  transition: color 0.18s ease;
+}
+
+.dss-result-card:hover .dss-result-title {
+  color: var(--wine);
 }
 
 .dss-result-price {
-  font-size: 1.2rem;
-  font-weight: 800;
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
   color: var(--wine);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .dss-result-reason {
-  font-size: 0.86rem;
-  line-height: 1.55;
+  font-size: 0.84rem;
+  line-height: 1.5;
   color: var(--text-subtle);
-  border-top: 1px solid var(--border-soft);
+  border-top: 1px solid var(--line);
   padding-top: 10px;
   margin: 0;
 }
@@ -2633,25 +2583,25 @@ footer p {
 .dss-result-actions .button {
   width: 100%;
   justify-content: center;
-  padding: 12px;
-  font-size: 0.88rem;
+  padding: 10px;
+  font-size: 0.84rem;
 }
 
 .dss-restart-btn {
   background: transparent;
   border: 0;
   color: var(--text-muted);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
   text-align: center;
-  padding: 6px;
-  margin-top: 4px;
+  padding: 4px;
+  margin-top: 2px;
+  transition: color 0.15s ease;
 }
 
 .dss-restart-btn:hover {
   color: var(--wine);
-  text-decoration: underline;
 }
 
 @keyframes dssSpin {

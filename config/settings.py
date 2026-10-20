@@ -1,8 +1,10 @@
 from pathlib import Path
 import os
 import warnings
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-change-this-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "1") == "1"
 
@@ -60,8 +62,16 @@ WSGI_APPLICATION = "config.wsgi.application"
 # import/export commands via mysql-connector-python.
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "mysql.connector.django",
+        "NAME": os.getenv("MYSQL_DATABASE", "guitar_choice"),
+        "USER": os.getenv("MYSQL_USER", "guitar_user"),
+        "PASSWORD": os.getenv("MYSQL_PASSWORD", ""),
+        "HOST": os.getenv("MYSQL_HOST", "127.0.0.1"),
+        "PORT": int(os.getenv("MYSQL_PORT", "3306")),
+        "OPTIONS": {
+            "charset": "utf8mb4",
+            "autocommit": True,
+        },
     }
 }
 

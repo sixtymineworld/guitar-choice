@@ -10,24 +10,16 @@
     <p class="lead">Порівнюйте моделі за типом, матеріалом, кількістю струн і бюджетом. Зважене рішення — до першого акорду.</p>
     <div class="hero-actions">
       <a class="button" href="{% url 'catalog' %}">Переглянути каталог <span>→</span></a>
-      <button class="button button-ghost open-dss-modal" type="button">СППР-підбір</button>
+      <button class="button button-ghost open-dss-modal" type="button">AI-підбір</button>
     </div>
   </div>
 
-  <div class="hero-art" aria-label="Інтерактивна модель Fender Stratocaster">
+  <div class="hero-art" aria-label="Модель Fender Stratocaster">
     <div class="hero-guitar-stage">
       <div class="guitar-halo"></div>
-      <div class="soundwave-pulse" id="soundwave-pulse"></div>
-
-      <div class="guitar-wrapper" id="guitar-stage-wrapper" title="Натисніть на гітару, щоб прослухати акорд">
-        <img src="{% static 'images/my_guitar.png' %}" alt="Fender Stratocaster" class="hero-guitar-img" id="hero-guitar-img">
+      <div class="guitar-wrapper">
+        <img src="{% static 'images/my_guitar.png' %}" alt="Fender Stratocaster" class="hero-guitar-img">
       </div>
-    </div>
-
-    <div class="stage-controls">
-      <button type="button" class="strum-btn" id="strum-guitar-btn">
-        Прослухати звучання
-      </button>
     </div>
   </div>
 </section>
@@ -81,59 +73,4 @@
     <p>Ми допоможемо скласти фінальну конфігурацію.</p>
   </article>
 </section>
-
-<script>
-  (function () {
-    const soundwave = document.querySelector('#soundwave-pulse');
-    let audioCtx = null;
-
-    function animateStrum() {
-      if (soundwave) {
-        soundwave.classList.remove('active');
-        void soundwave.offsetWidth;
-        soundwave.classList.add('active');
-      }
-    }
-
-    function playChord() {
-      const ctx = new AudioContext();
-      const notes = [110, 164.81, 220, 261.63, 329.63];
-
-      notes.forEach(function(freq, i) {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          const start = ctx.currentTime + i * 0.05;
-
-          osc.type = 'sine';
-          osc.frequency.value = freq;
-
-          gain.gain.setValueAtTime(0, start);
-          gain.gain.linearRampToValueAtTime(0.2, start + 0.03);
-          gain.gain.exponentialRampToValueAtTime(0.001, start + 1.5);
-
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-
-          osc.start(start);
-          osc.stop(start + 1.5);
-      });
-  }
-
-    function strumGuitar() {
-      animateStrum();
-      playChord();
-    }
-
-    const strumBtn = document.querySelector('#strum-guitar-btn');
-    const guitarWrapper = document.querySelector('#guitar-stage-wrapper');
-
-    if (strumBtn) {
-      strumBtn.addEventListener('click', strumGuitar);
-    }
-
-    if (guitarWrapper) {
-      guitarWrapper.addEventListener('click', strumGuitar);
-    }
-  })();
-</script>
 {% endblock %}
