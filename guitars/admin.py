@@ -22,11 +22,11 @@ class FeedbackAdmin(admin.ModelAdmin):
 
 @admin.register(GuitarOrder)
 class GuitarOrderAdmin(admin.ModelAdmin):
-    list_display = ("id", "item_title", "body_shape", "wood", "color", "pickups_set", "quantity", "unit_price", "status", "created_at")
-    list_filter = ("status", "body_shape", "wood", "color", "pickups_set", "frets_count", "strings_count")
+    list_display = ("id", "item_title", "instrument_type", "body_shape", "wood", "color", "pickups_set", "quantity", "unit_price", "status", "created_at")
+    list_filter = ("status", "instrument_type", "body_shape", "wood", "color", "pickups_set", "frets_count", "strings_count")
     search_fields = ("guitar__name", "guitar__brand", "session_key")
     readonly_fields = ("unit_price", "session_key", "created_at")
 
     @admin.display(description="Гітара / Кастом")
     def item_title(self, obj):
-        return obj.guitar.name if obj.guitar else f"Кастом {obj.get_body_shape_display()}"
+        return obj.guitar.name if obj.guitar else f"Кастом {obj.get_instrument_type_display()} ({obj.get_body_shape_display()})"

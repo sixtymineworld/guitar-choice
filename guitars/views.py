@@ -105,17 +105,18 @@ def configurator(request):
             order.session_key = _session_key(request)
             order.status = GuitarOrder.Status.CART
             order.save()
-            messages.success(request, f"Кастомну конфігурацію «{order.get_body_shape_display()}» додано до кошика.")
+            messages.success(request, f"Кастомну конфігурацію «{order.get_instrument_type_display()} ({order.get_body_shape_display()})» додано до кошика.")
             return redirect("cart")
         else:
             messages.error(request, "Будь ласка, оберіть коректні параметри конфігурації.")
 
     return render(request, "guitars/configurator.html", {
         "form": form,
-        # Дані для живого підрахунку ціни на сторінці
+        # Дані для живого підрахунку ціни та динамічних списків на сторінці
         "price_data": {
-            "base_craft": float(GuitarOrder.BASE_CRAFT_PRICE),
-            "options": {field: {str(k): v for k, v in prices.items()} for field, prices in GuitarOrder.SURCHARGES.items()},
+            "base_craft": {str(k): float(v) for k, v in GuitarOrder.BASE_CRAFT_PRICES.items()},
+            "config_options": GuitarOrder.CONFIG_OPTIONS,
+            "all_surcharges": GuitarOrder.ALL_SURCHARGES,
         },
     })
 

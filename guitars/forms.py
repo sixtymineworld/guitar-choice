@@ -43,17 +43,16 @@ class GuitarConfigForm(forms.ModelForm):
 
     class Meta:
         model = GuitarOrder
-        fields = ("body_shape", "wood", "color", "frets_count", "strings_count", "pickups_set", "quantity")
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for name, prices in GuitarOrder.SURCHARGES.items():
-            if name in self.fields:
-                field = self.fields[name]
-                field.choices = [
-                    (value, f"{label} (+{prices[value]} грн)" if prices.get(value) else label)
-                    for value, label in field.choices
-                ]
+        fields = (
+            "instrument_type",
+            "body_shape",
+            "wood",
+            "color",
+            "frets_count",
+            "strings_count",
+            "pickups_set",
+            "quantity",
+        )
 
 
 class CartQuantityForm(forms.Form):

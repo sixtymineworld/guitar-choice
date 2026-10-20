@@ -53,85 +53,161 @@ class Feedback(models.Model):
 class GuitarOrder(models.Model):
     """A custom guitar configuration created in the configurator and kept in the cart."""
 
-    class BodyShape(models.TextChoices):
-        STRATOCASTER = "stratocaster", "Стратокастер (Stratocaster)"
-        TELECASTER = "telecaster", "Телекастер (Telecaster)"
-        LES_PAUL = "les_paul", "Лес Пол (Les Paul)"
-        SUPERSTRAT = "superstrat", "Суперстрат (Superstrat)"
-
-    class Color(models.TextChoices):
-        BLACK = "black", "Чорний глянець"
-        SUNBURST = "sunburst", "Вінтажний санберст"
-        WINE = "wine", "Бордовий глянець"
-        WHITE = "white", "Олімпійський білий"
-        NATURAL = "natural", "Натуральне дерево"
-
-    class FretsCount(models.TextChoices):
-        FRETS_21 = "21", "21 лад"
-        FRETS_22 = "22", "22 лади"
-        FRETS_24 = "24", "24 лади"
-
-    class StringsCount(models.TextChoices):
-        STRINGS_6 = "6", "6 струн"
-        STRINGS_7 = "7", "7 струн"
-        STRINGS_8 = "8", "8 струн"
-
-    class PickupsSet(models.TextChoices):
-        SSS = "sss", "SSS (3 сингли Vintage)"
-        HSS = "hss", "HSS (Хамбакер + 2 сингли)"
-        HH = "hh", "HH (2 хамбакери Custom)"
-        HSH = "hsh", "HSH (2 хамбакери + сингл)"
-
-    class Wood(models.TextChoices):
-        ALDER = "alder", "Вільха (Alder)"
-        ASH = "ash", "Ясен (Ash)"
-        MAHOGANY = "mahogany", "Махагоні (Mahogany)"
-        BASSWOOD = "basswood", "Липа (Basswood)"
+    class InstrumentType(models.TextChoices):
+        ELECTRIC = "electric", "Електрогітара"
+        BASS = "bass", "Бас-гітара"
+        ACOUSTIC = "acoustic", "Акустична гітара"
 
     class Status(models.TextChoices):
         CART = "cart", "У кошику"
         PLACED = "placed", "Оформлено"
 
+    BASE_CRAFT_PRICES = {
+        InstrumentType.ELECTRIC: 18500,
+        InstrumentType.BASS: 19500,
+        InstrumentType.ACOUSTIC: 17000,
+    }
     BASE_CRAFT_PRICE = 18500
 
-    # Доплати за кастомні опції майстерні, грн
-    SURCHARGES = {
-        "body_shape": {
-            BodyShape.STRATOCASTER: 0,
-            BodyShape.TELECASTER: 800,
-            BodyShape.SUPERSTRAT: 2800,
-            BodyShape.LES_PAUL: 4500,
+    # Опції для кожного типу інструмента: (value, label, surcharge)
+    CONFIG_OPTIONS = {
+        InstrumentType.ELECTRIC: {
+            "body_shape": [
+                ("stratocaster", "Стратокастер (Stratocaster)", 0),
+                ("telecaster", "Телекастер (Telecaster)", 800),
+                ("superstrat", "Суперстрат (Superstrat)", 2800),
+                ("les_paul", "Лес Пол (Les Paul)", 4500),
+            ],
+            "wood": [
+                ("alder", "Вільха (Alder)", 0),
+                ("basswood", "Липа (Basswood)", 1400),
+                ("ash", "Ясен (Ash)", 3800),
+                ("mahogany", "Махагоні (Mahogany)", 6200),
+            ],
+            "color": [
+                ("natural", "Натуральне дерево (Natural)", 0),
+                ("black", "Чорний глянець (Gloss Black)", 1800),
+                ("white", "Олімпійський білий (Olympic White)", 2400),
+                ("sunburst", "Вінтажний санберст (Sunburst)", 3800),
+                ("wine", "Бордовий глянець (Wine Red)", 4500),
+            ],
+            "frets_count": [
+                ("21", "21 лад (Вінтаж)", 0),
+                ("22", "22 лади (Стандарт)", 1200),
+                ("24", "24 лади (Соло)", 2600),
+            ],
+            "strings_count": [
+                ("6", "6 струн (Стандарт)", 0),
+                ("7", "7 струн (Розширений діапазон)", 4200),
+                ("8", "8 струн (Джент / Модерн)", 6800),
+            ],
+            "pickups_set": [
+                ("sss", "SSS (3 сингли Vintage)", 4200),
+                ("hss", "HSS (Хамбакер + 2 сингли)", 5800),
+                ("hh", "HH (2 хамбакери Custom)", 7600),
+                ("hsh", "HSH (2 хамбакери + сингл)", 8900),
+            ],
         },
-        "wood": {
-            Wood.ALDER: 0,
-            Wood.BASSWOOD: 1400,
-            Wood.ASH: 3800,
-            Wood.MAHOGANY: 6200,
+        InstrumentType.BASS: {
+            "body_shape": [
+                ("p_bass", "Precision Bass (Класичний бас)", 0),
+                ("j_bass", "Jazz Bass (Ергономічний контур)", 1200),
+                ("modern_bass", "Modern Bass (Спортивний дизайн)", 2500),
+            ],
+            "wood": [
+                ("alder", "Вільха (Alder — класичний тон)", 0),
+                ("ash", "Ясен (Ash — яскравий резонанс)", 3800),
+                ("mahogany", "Махагоні (Глибокий щільний низ)", 6200),
+                ("basswood", "Липа (Полегшений резонанс)", 1400),
+            ],
+            "color": [
+                ("natural", "Натуральне дерево (Natural)", 0),
+                ("black", "Чорний глянець (Gloss Black)", 1800),
+                ("white", "Олімпійський білий (Olympic White)", 2400),
+                ("sunburst", "Вінтажний санберст (Sunburst)", 3800),
+                ("wine", "Бордовий глянець (Wine Red)", 4500),
+            ],
+            "frets_count": [
+                ("20", "20 ладів (Вінтажний стандарт)", 0),
+                ("24", "24 лади (Повний доступ до верхів)", 1600),
+                ("fretless", "Безладовий гриф (Fretless)", 3200),
+            ],
+            "strings_count": [
+                ("4", "4 струни (Класика)", 0),
+                ("5", "5 струн (Розширений бас)", 3500),
+                ("6", "6 струн (Прогресивний бас)", 5800),
+            ],
+            "pickups_set": [
+                ("p_split", "Split-Coil (P-Bass Punch)", 3800),
+                ("jj_set", "Jazz Single-Coil Set (J-Bass)", 4600),
+                ("pj_set", "PJ-Set (Універсальний P+J)", 5400),
+                ("dual_hb", "Dual Active Humbuckers", 7200),
+            ],
         },
-        "color": {
-            Color.NATURAL: 0,
-            Color.BLACK: 1800,
-            Color.WHITE: 2400,
-            Color.SUNBURST: 3800,
-            Color.WINE: 4500,
-        },
-        "frets_count": {
-            FretsCount.FRETS_21: 0,
-            FretsCount.FRETS_22: 1200,
-            FretsCount.FRETS_24: 2600,
-        },
-        "strings_count": {
-            StringsCount.STRINGS_6: 0,
-            StringsCount.STRINGS_7: 4200,
-            StringsCount.STRINGS_8: 6800,
-        },
-        "pickups_set": {
-            PickupsSet.SSS: 4200,
-            PickupsSet.HSS: 5800,
-            PickupsSet.HH: 7600,
-            PickupsSet.HSH: 8900,
+        InstrumentType.ACOUSTIC: {
+            "body_shape": [
+                ("dreadnought", "Дредноут (Dreadnought — потужний)", 0),
+                ("grand_auditorium", "Grand Auditorium (Збалансований)", 1500),
+                ("classical_body", "Класична форма (Іспанська)", 800),
+            ],
+            "wood": [
+                ("spruce_mahogany", "Топ: Ялина Sitka / Боки: Махагоні", 0),
+                ("cedar_rosewood", "Топ: Кедр / Боки: Палісандр", 3600),
+                ("all_mahogany", "Повністю Махагоні (All-Mahogany)", 2400),
+            ],
+            "color": [
+                ("natural", "Натуральний глянцевий лак", 0),
+                ("natural_satin", "Натуральний матовий шовк (Satin)", 800),
+                ("sunburst", "Вінтажний тютюновий санберст", 2800),
+                ("black", "Чорний глянець", 1800),
+            ],
+            "frets_count": [
+                ("19", "19 ладів (Класика)", 0),
+                ("20", "20 ладів (Вестерн)", 500),
+            ],
+            "strings_count": [
+                ("6_steel", "6 струн (Акустичний метал)", 0),
+                ("6_nylon", "6 струн (Класичний нейлон)", 0),
+                ("12_steel", "12 струн (12-струнна акустика)", 4500),
+            ],
+            "pickups_set": [
+                ("none", "Без звукознімача (Чиста акустика)", 0),
+                ("piezo_under", "Підпоріжковий п'єзодатчик", 2800),
+                ("fishman_sys", "Преамп Fishman Presys (п'єзо + мікрофон)", 5900),
+            ],
         },
     }
+
+    # Зведені списки варіантів та націнок для моделі та сумісності
+    ALL_CHOICES = {
+        "body_shape": [],
+        "wood": [],
+        "color": [],
+        "frets_count": [],
+        "strings_count": [],
+        "pickups_set": [],
+    }
+    ALL_SURCHARGES = {
+        "body_shape": {},
+        "wood": {},
+        "color": {},
+        "frets_count": {},
+        "strings_count": {},
+        "pickups_set": {},
+    }
+
+    _seen = {}
+    for _itype, _fields in CONFIG_OPTIONS.items():
+        for _f, _opts in _fields.items():
+            if _f not in _seen:
+                _seen[_f] = set()
+            for _val, _lbl, _surcharge in _opts:
+                if _val not in _seen[_f]:
+                    _seen[_f].add(_val)
+                    ALL_CHOICES[_f].append((_val, _lbl))
+                ALL_SURCHARGES[_f][_val] = _surcharge
+
+    SURCHARGES = ALL_SURCHARGES
 
     guitar = models.ForeignKey(
         Guitar,
@@ -141,12 +217,18 @@ class GuitarOrder(models.Model):
         blank=True,
         related_name="orders",
     )
-    body_shape = models.CharField("форма гітари", max_length=20, choices=BodyShape.choices, default=BodyShape.STRATOCASTER)
-    wood = models.CharField("дерево корпусу", max_length=20, choices=Wood.choices, default=Wood.ALDER)
-    color = models.CharField("колір", max_length=20, choices=Color.choices, default=Color.NATURAL)
-    frets_count = models.CharField("кількість ладів", max_length=10, choices=FretsCount.choices, default=FretsCount.FRETS_22)
-    strings_count = models.CharField("кількість струн", max_length=10, choices=StringsCount.choices, default=StringsCount.STRINGS_6)
-    pickups_set = models.CharField("сет звукознімачів", max_length=20, choices=PickupsSet.choices, default=PickupsSet.SSS)
+    instrument_type = models.CharField(
+        "тип інструмента",
+        max_length=20,
+        choices=InstrumentType.choices,
+        default=InstrumentType.ELECTRIC,
+    )
+    body_shape = models.CharField("форма гітари", max_length=35, choices=ALL_CHOICES["body_shape"], default="stratocaster")
+    wood = models.CharField("дерево корпусу / топ", max_length=35, choices=ALL_CHOICES["wood"], default="alder")
+    color = models.CharField("колір", max_length=35, choices=ALL_CHOICES["color"], default="natural")
+    frets_count = models.CharField("кількість ладів", max_length=20, choices=ALL_CHOICES["frets_count"], default="22")
+    strings_count = models.CharField("кількість струн", max_length=20, choices=ALL_CHOICES["strings_count"], default="6")
+    pickups_set = models.CharField("звукознімачі / електроніка", max_length=35, choices=ALL_CHOICES["pickups_set"], default="sss")
     quantity = models.PositiveSmallIntegerField(
         "кількість",
         default=1,
@@ -166,23 +248,27 @@ class GuitarOrder(models.Model):
         if self.guitar_id and self.guitar:
             name = self.guitar.name
         else:
-            name = f"Кастом {self.get_body_shape_display()}"
+            name = f"Кастом {self.get_instrument_type_display()} ({self.get_body_shape_display()})"
         return f"Замовлення №{self.pk}: {name}"
 
     def options_surcharge(self):
-        return sum(self.SURCHARGES.get(field, {}).get(getattr(self, field), 0) for field in self.SURCHARGES)
+        total = 0
+        for field in ["body_shape", "wood", "color", "frets_count", "strings_count", "pickups_set"]:
+            val = getattr(self, field, None)
+            total += self.ALL_SURCHARGES.get(field, {}).get(val, 0)
+        return total
 
     def calculate_unit_price(self):
         if self.guitar_id and self.guitar:
             return self.guitar.price
-        return self.BASE_CRAFT_PRICE + self.options_surcharge()
+        base = self.BASE_CRAFT_PRICES.get(self.instrument_type, self.BASE_CRAFT_PRICE)
+        return base + self.options_surcharge()
 
     @property
     def total_price(self):
         return self.unit_price * self.quantity
 
     def save(self, *args, **kwargs):
-        # Поки замовлення в кошику — ціна актуальна; після оформлення вона фіксується
         if self.status == self.Status.CART or self.unit_price is None:
             self.unit_price = self.calculate_unit_price()
         super().save(*args, **kwargs)

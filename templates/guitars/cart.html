@@ -12,14 +12,14 @@
     <div class="cart-items">
       {% for item in items %}
         <article class="cart-item">
-          <div class="cart-item-visual"><span>{% if item.guitar %}{{ item.guitar.get_guitar_type_display }}{% else %}Custom Shop{% endif %}</span></div>
+          <div class="cart-item-visual"><span>{% if item.guitar %}{{ item.guitar.get_guitar_type_display }}{% else %}{{ item.get_instrument_type_display }}{% endif %}</span></div>
           <div class="cart-item-body">
             <p class="muted">{% if item.guitar %}{{ item.guitar.brand }} · {% else %}Індивідуальне складання · {% endif %}замовлення №{{ item.pk }}</p>
             <h3>
               {% if item.guitar %}
                 <a href="{{ item.guitar.get_absolute_url }}">{{ item.guitar.name }}</a>
               {% else %}
-                <span>Кастом {{ item.get_body_shape_display }}</span>
+                <span>Кастом {{ item.get_instrument_type_display }} ({{ item.get_body_shape_display }})</span>
               {% endif %}
             </h3>
             <ul class="cart-options">

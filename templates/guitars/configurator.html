@@ -4,22 +4,47 @@
 <section class="page-title">
   <p class="eyebrow">Кастом-майстерня</p>
   <h1>Зберіть гітару з нуля</h1>
-  <p>Створіть свій індивідуальний інструмент ручної роботи. Оберіть форму деки, дерево корпусу, колір фінішу, лади, струни та сет звукознімачів. Гітара буде виготовлена майстром з нуля.</p>
+  <p>Оберіть категорію інструмента — електрогітару, бас або акустику. Параметри, дерево деки, звукознімачі та лади автоматично підлаштуються під обраний тип.</p>
 </section>
 
 <section class="configurator">
   <form class="config-form" method="post" id="config-form">
     {% csrf_token %}
     {% if form.non_field_errors %}{% for error in form.non_field_errors %}<p class="error">{{ error }}</p>{% endfor %}{% endif %}
+
+    <!-- Селектор типу інструмента -->
+    <div class="type-selector-group">
+      <span class="type-selector-label">1. Оберіть тип інструмента</span>
+      <div class="type-selector-tabs" role="tablist">
+        <button type="button" class="type-tab is-active" data-type="electric" role="tab" aria-selected="true">
+          <span class="type-tab-name">Електрогітара</span>
+        </button>
+        <button type="button" class="type-tab" data-type="bass" role="tab" aria-selected="false">
+          <span class="type-tab-name">Бас-гітара</span>
+        </button>
+        <button type="button" class="type-tab" data-type="acoustic" role="tab" aria-selected="false">
+          <span class="type-tab-name">Акустична гітара</span>
+        </button>
+      </div>
+      <!-- Приховане поле форми Django для типу інструмента -->
+      <div style="display: none;">
+        {{ form.instrument_type }}
+      </div>
+    </div>
+
+    <!-- Сітка параметрів конфігуратора -->
     <div class="config-grid">
       {% for field in form %}
-        <label>
-          {{ field.label }}
-          {{ field }}
-          {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
-        </label>
+        {% if field.name != 'instrument_type' %}
+          <label id="label_{{ field.name }}">
+            {{ field.label }}
+            {{ field }}
+            {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
+          </label>
+        {% endif %}
       {% endfor %}
     </div>
+
     <button class="button" type="submit">Створити замовлення <span>→</span></button>
   </form>
 
@@ -32,34 +57,120 @@
       <div><dt>Кількість</dt><dd id="sum-qty">1</dd></div>
     </dl>
     <p class="config-total"><span>Разом</span><strong id="sum-total">—</strong></p>
-    <p class="muted">Включає ручне складання інструмента, шліфування та полірування ладів, екранування темброблоку й прецизійне налаштування мензури.</p>
+    <p class="muted">Включає ручне виготовлення деки й грифа, шліфування та полірування ладів, екранування електроніки й прецизійне налаштування мензури.</p>
     <a class="back" href="{% url 'cart' %}">Перейти до кошика →</a>
   </aside>
 </section>
 
 {{ price_data|json_script:"price-data" }}
 <script>
-    const data = JSON.parse(document.querySelector("#price-data").textContent);
+  (function () {
+    const priceData = JSON.parse(document.querySelector("#price-data").textContent);
     const form = document.querySelector("#config-form");
+    const instrumentTypeSelect = document.querySelector("#id_instrument_type");
+    const typeTabs = document.querySelectorAll(".type-tab");
 
-    function calculatePrice() {
-        let options = 0;
+    const basePriceEl = document.querySelector("#sum-base");
+    const optionsPriceEl = document.querySelector("#sum-options");
+    const qtyEl = document.querySelector("#sum-qty");
+    const totalEl = document.querySelector("#sum-total");
 
-        for (const field in data.options) {
-            options += data.options[field][form.elements[field].value] || 0;
-        }
-
-        const base = Number(data.base_craft);
-        const quantity = Number(form.elements.quantity.value) || 1;
-
-        document.querySelector("#sum-base").textContent = base + " грн";
-        document.querySelector("#sum-options").textContent = options + " грн";
-        document.querySelector("#sum-qty").textContent = quantity;
-        document.querySelector("#sum-total").textContent = (base + options) * quantity + " грн";
+    function formatUAH(num) {
+      return Math.round(num).toLocaleString("uk-UA") + " грн";
     }
 
-    form.addEventListener("change", calculatePrice);
+    function updateDropdowns(selectedType) {
+      const typeConfig = priceData.config_options[selectedType];
+      if (!typeConfig) return;
+
+      for (const fieldName in typeConfig) {
+        const select = form.elements[fieldName];
+        if (!select) continue;
+
+        const currentVal = select.value;
+        const options = typeConfig[fieldName];
+
+        select.innerHTML = "";
+        let valFound = false;
+
+        options.forEach(([val, label, surcharge]) => {
+          const opt = document.createElement("option");
+          opt.value = val;
+          opt.textContent = surcharge > 0 ? `${label} (+${formatUAH(surcharge)})` : label;
+          select.appendChild(opt);
+          if (val === currentVal) {
+            valFound = true;
+          }
+        });
+
+        if (valFound) {
+          select.value = currentVal;
+        } else if (options.length > 0) {
+          select.value = options[0][0];
+        }
+      }
+    }
+
+    function calculatePrice() {
+      const selectedType = instrumentTypeSelect.value || "electric";
+      const basePrice = Number(priceData.base_craft[selectedType]) || 18500;
+      const quantity = Number(form.elements.quantity ? form.elements.quantity.value : 1) || 1;
+
+      let optionsTotal = 0;
+      for (const field in priceData.all_surcharges) {
+        const select = form.elements[field];
+        if (select && select.value) {
+          optionsTotal += Number(priceData.all_surcharges[field][select.value]) || 0;
+        }
+      }
+
+      basePriceEl.textContent = formatUAH(basePrice);
+      optionsPriceEl.textContent = formatUAH(optionsTotal);
+      qtyEl.textContent = quantity;
+      totalEl.textContent = formatUAH((basePrice + optionsTotal) * quantity);
+    }
+
+    // Клік по кнопках-табах вибору типу
+    typeTabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        const type = tab.dataset.type;
+        typeTabs.forEach(t => {
+          t.classList.remove("is-active");
+          t.setAttribute("aria-selected", "false");
+        });
+        tab.classList.add("is-active");
+        tab.setAttribute("aria-selected", "true");
+
+        instrumentTypeSelect.value = type;
+        updateDropdowns(type);
+        calculatePrice();
+      });
+    });
+
+    // Слухач змін у селектах форми
+    form.addEventListener("change", (e) => {
+      if (e.target === instrumentTypeSelect) {
+        const type = instrumentTypeSelect.value;
+        typeTabs.forEach(t => {
+          const isActive = t.dataset.type === type;
+          t.classList.toggle("is-active", isActive);
+          t.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+        updateDropdowns(type);
+      }
+      calculatePrice();
+    });
+
+    // Початкова ініціалізація
+    const initialType = instrumentTypeSelect.value || "electric";
+    typeTabs.forEach(t => {
+      const isActive = t.dataset.type === initialType;
+      t.classList.toggle("is-active", isActive);
+      t.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+    updateDropdowns(initialType);
     calculatePrice();
+  })();
 </script>
 {% endblock %}
 
