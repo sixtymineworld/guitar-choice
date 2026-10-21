@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
@@ -30,18 +30,28 @@ def home(request):
 def catalog(request):
     guitars = Guitar.objects.all()
     query = request.GET.get("q", "").strip()[:100]
-    selected_type = request.GET.get("type", "").strip()
+    selected_types = request.GET.getlist("type")
+    valid_types = [t for t in selected_types if t in Guitar.GuitarType.values]
 
     if query:
         guitars = guitars.filter(Q(name__icontains=query) | Q(brand__icontains=query) | Q(material__icontains=query))
-    if selected_type and selected_type in Guitar.GuitarType.values:
-        guitars = guitars.filter(guitar_type=selected_type)
+    if valid_types:
+        guitars = guitars.filter(guitar_type__in=valid_types)
+
+    # Підрахунок кількості інструментів за типами для фільтра
+    counts_qs = Guitar.objects.values("guitar_type").annotate(total=Count("id"))
+    counts_dict = {item["guitar_type"]: item["total"] for item in counts_qs}
+
+    types_with_meta = [
+        (value, label, counts_dict.get(value, 0))
+        for value, label in Guitar.GuitarType.choices
+    ]
 
     return render(request, "guitars/catalog.html", {
         "guitars": guitars,
         "query": query,
-        "selected_type": selected_type,
-        "types": Guitar.GuitarType.choices,
+        "selected_types": valid_types,
+        "types": types_with_meta,
     })
 
 
