@@ -1,0 +1,101 @@
+{% extends 'guitars/base.html' %}
+{% load static guitar_tags %}
+
+{% block title %}{% if object %}Редагування відгуку{% else %}Новий відгук{% endif %} — {{ guitar.brand }} {{ guitar.name }} — GuitarChoice{% endblock %}
+
+{% block content %}
+<div class="review-page-layout">
+  <nav class="detail-nav mb-4" aria-label="Навігація">
+    <a class="detail-back-link" href="{{ guitar.get_absolute_url }}">
+      <span class="back-arrow">←</span> Назад до {{ guitar.brand }} {{ guitar.name }}
+    </a>
+  </nav>
+
+  <div class="review-page-grid">
+    <!-- Ліва колонка: Інформація та прев'ю гітари -->
+    <div class="review-page-sidebar">
+      <div>
+        <p class="eyebrow">{% if object %}Оновлення вражень{% else %}Ваш відгук{% endif %}</p>
+        <h1 style="font-size: 2.8rem; letter-spacing: -0.03em; margin: 6px 0 12px;">{% if object %}Редагування відгуку{% else %}Оцініть інструмент{% endif %}</h1>
+        <p class="lead" style="font-size: 1.05rem; line-height: 1.5; color: var(--muted); margin-top: 8px;">
+          {% if object %}
+            Ви можете змінити вашу оцінку або уточнити текст відгуку про інструмент.
+          {% else %}
+            Поділіться власним досвідом гри на цій моделі. Ваша оцінка допоможе іншим музикантам обрати свою ідеальну гітару.
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="review-guitar-mini-card">
+        {% if guitar.image_url %}
+          <img class="review-guitar-mini-img" src="{{ guitar.image_url }}" alt="{{ guitar.name }}" onerror="this.onerror=null;this.src='{% static 'images/my_guitar.png' %}';">
+        {% else %}
+          <img class="review-guitar-mini-img" src="{% static 'images/my_guitar.png' %}" alt="{{ guitar.name }}">
+        {% endif %}
+        <div class="review-guitar-mini-info">
+          <p>{{ guitar.brand }} · {{ guitar.get_guitar_type_display }}</p>
+          <h3>{{ guitar.name }}</h3>
+          <div class="review-guitar-mini-price">{% format_uah guitar.price %}</div>
+        </div>
+      </div>
+
+      <div class="review-tips-box">
+        <h4>Поради для якісного відгуку</h4>
+        <ul>
+          <li><strong>Звучання:</strong> як інструмент поводиться в міксі, на чистій та перевантаженій тональності?</li>
+          <li><strong>Ергономіка:</strong> наскільки комфортний профіль грифу та баланс ваги?</li>
+          <li><strong>Збірка:</strong> якість ладів, кілків, бриджу та регуляторів.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Права колонка: Форма редагування / створення -->
+    <div class="review-form-card">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger mb-4" role="alert">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        <div class="form-group">
+          <label for="{{ form.rating.id_for_label }}">Ваша оцінка *</label>
+          {{ form.rating }}
+          {% if form.rating.errors %}
+            <small class="error text-danger d-block mt-1">{{ form.rating.errors|striptags }}</small>
+          {% endif %}
+          <span class="review-field-hint">Оберіть від 1 (погано) до 5 (відмінно).</span>
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.comment.id_for_label }}">Текст відгуку *</label>
+          {{ form.comment }}
+          {% if form.comment.errors %}
+            <small class="error text-danger d-block mt-1">{{ form.comment.errors|striptags }}</small>
+          {% endif %}
+          <span class="review-field-hint">Мінімум 10 символів. Посилання на сайти та спам заборонені.</span>
+        </div>
+
+        <div class="review-actions-wrap">
+          <div class="review-main-actions">
+            <button type="submit" class="button">
+              {% if object %}Зберегти зміни <span>→</span>{% else %}Опублікувати відгук <span>→</span>{% endif %}
+            </button>
+            <a href="{{ guitar.get_absolute_url }}" class="button button-ghost">
+              Скасувати
+            </a>
+          </div>
+
+          {% if object %}
+            <a href="{% url 'guitars:review_delete' object.pk %}" class="review-delete-btn">
+              Видалити цей відгук
+            </a>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

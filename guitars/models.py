@@ -1,4 +1,5 @@
 from decimal import Decimal
+from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
@@ -33,7 +34,7 @@ class Guitar(models.Model):
         return f"{self.brand} {self.name}"
 
     def get_absolute_url(self):
-        return reverse("guitar_detail", kwargs={"pk": self.pk})
+        return reverse("guitars:guitar_detail", kwargs={"pk": self.pk})
 
 
 class Feedback(models.Model):
@@ -281,3 +282,33 @@ class GuitarOrder(models.Model):
         if self.status == self.Status.CART or self.unit_price is None:
             self.unit_price = self.calculate_unit_price()
         super().save(*args, **kwargs)
+
+
+class Review(models.Model):
+    """Review for a guitar left by an authenticated user."""
+
+    class Rating(models.IntegerChoices):
+        POOR = 1, "1 — Погано"
+        FAIR = 2, "2 — Задовільно"
+        GOOD = 3, "3 — Добре"
+        VERY_GOOD = 4, "4 — Дуже добре"
+        EXCELLENT = 5, "5 — Відмінно"
+
+    guitar = models.ForeignKey(Guitar, on_delete=models.CASCADE, related_name="reviews", verbose_name="гітара")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reviews", verbose_name="автор")
+    rating = models.PositiveSmallIntegerField("оцінка", choices=Rating.choices, default=Rating.EXCELLENT)
+    comment = models.TextField("текст відгуку", max_length=1000)
+    created_at = models.DateTimeField("створено", auto_now_add=True)
+    updated_at = models.DateTimeField("оновлено", auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "відгук"
+        verbose_name_plural = "відгуки"
+
+    def __str__(self):
+        return f"Відгук від {self.user} на {self.guitar} ({self.rating}★)"
+
+    def get_absolute_url(self):
+        return reverse("guitars:guitar_detail", kwargs={"pk": self.guitar_id})
+

@@ -29,32 +29,18 @@
 
     <button class="button" type="submit">Застосувати</button>
     {% if query or selected_types %}
-      <a class="filter-reset-link" href="{% url 'catalog' %}">✕ Очистити фільтри</a>
+      <a class="filter-reset-link" href="{% url 'guitars:catalog' %}">✕ Очистити фільтри</a>
     {% endif %}
   </form>
   <div class="catalog-content">
     <div class="cards catalog-cards">
       {% for guitar in guitars %}
-        <article class="card">
-          <div class="card-visual">
-            {% if guitar.image_url %}
-              <img src="{{ guitar.image_url }}" alt="{{ guitar.name }}" loading="lazy" onerror="this.onerror=null;this.src='{% static 'images/my_guitar.png' %}';">
-            {% else %}
-              <img src="{% static 'images/my_guitar.png' %}" alt="{{ guitar.name }}" loading="lazy">
-            {% endif %}
-            <span>{{ guitar.get_guitar_type_display }}</span>
-          </div>
-          <div class="card-body">
-            <p class="muted">{{ guitar.brand }} · {{ guitar.material }}</p>
-            <h3>{{ guitar.name }}</h3>
-            <p>{{ guitar.price|floatformat:0 }} грн</p>
-            <a href="{{ guitar.get_absolute_url }}">Переглянути модель →</a>
-          </div>
-        </article>
+        {% include "guitars/includes/_guitar_card.html" with guitar=guitar %}
       {% empty %}
         <p class="catalog-empty">За вашим запитом моделей не знайдено.</p>
       {% endfor %}
     </div>
+    {% include "guitars/includes/_pagination.html" %}
   </div>
 </section>
 {% endblock %}

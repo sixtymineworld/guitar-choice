@@ -1,0 +1,41 @@
+{% extends 'guitars/base.html' %}
+{% block title %}Реєстрація — GuitarChoice{% endblock %}
+
+{% block content %}
+<section class="page-title">
+  <p class="eyebrow">Обліковий запис</p>
+  <h1>Створення нового акаунту</h1>
+  <p>Зареєструйтесь, щоб залишати відгуки про гітари та зберігати власні конфігурації.</p>
+</section>
+
+<div class="feedback-layout">
+  <form method="post" class="card feedback-card">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    {% for field in form %}
+      <div class="filter-field">
+        <label for="{{ field.id_for_label }}" class="filter-label">{{ field.label }} {% if field.field.required %}*{% endif %}</label>
+        {{ field }}
+        {% if field.help_text %}
+          <small class="muted">{{ field.help_text|safe }}</small>
+        {% endif %}
+        {% if field.errors %}
+          <p class="field-error text-danger">{{ field.errors|striptags }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <div class="feedback-actions mt-3">
+      <button type="submit" class="button">Зареєструватися</button>
+      <a href="{% url 'guitars:home' %}" class="button button-ghost">На головну</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+

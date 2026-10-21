@@ -1,0 +1,68 @@
+{% extends 'guitars/base.html' %}
+{% load guitar_tags %}
+{% block title %}Панель замовлень (Staff) — GuitarChoice{% endblock %}
+
+{% block content %}
+<section class="page-title">
+  <p class="eyebrow">Службовий розділ (Staff Only)</p>
+  <h1>Керування замовленнями клієнтів</h1>
+  <p>Перегляд оформлених замовлень на серійні моделі та кастомні збірки.</p>
+</section>
+
+<div class="cart-layout">
+  <div class="card p-3">
+    {% if orders %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th>Тип</th>
+              <th>Інструмент / Конфігурація</th>
+              <th>К-сть</th>
+              <th>Вартість</th>
+              <th>Статус</th>
+              <th>Дата</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+              <tr>
+                <td><strong>#{{ order.id }}</strong></td>
+                <td>
+                  {% if order.guitar_id %}
+                    <span class="badge bg-primary">Каталог</span>
+                  {% else %}
+                    <span class="badge bg-success">Кастом</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if order.guitar_id %}
+                    <a href="{{ order.guitar.get_absolute_url }}"><strong>{{ order.guitar.brand }} {{ order.guitar.name }}</strong></a>
+                  {% else %}
+                    <strong>Кастом {{ order.get_instrument_type_display }}</strong>
+                    <small class="d-block text-muted">{{ order.get_body_shape_display }}, {{ order.get_wood_display }}, {{ order.get_color_display }}</small>
+                  {% endif %}
+                </td>
+                <td>{{ order.quantity }} шт.</td>
+                <td>{% format_uah order.total_price %}</td>
+                <td>
+                  {% if order.status == "placed" %}
+                    <span class="badge bg-warning text-dark">Оформлено</span>
+                  {% else %}
+                    <span class="badge bg-secondary">У кошику</span>
+                  {% endif %}
+                </td>
+                <td><small class="text-muted">{{ order.created_at|date:"d.m.Y H:i" }}</small></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="empty-reviews-text">Оформлених замовлень наразі немає.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+

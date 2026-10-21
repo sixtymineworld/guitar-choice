@@ -1,0 +1,45 @@
+{% extends 'guitars/base.html' %}
+{% load static guitar_tags %}
+
+{% block title %}Видалення відгуку — GuitarChoice{% endblock %}
+
+{% block content %}
+<div class="review-page-layout">
+  <nav class="detail-nav mb-4" aria-label="Навігація">
+    <a class="detail-back-link" href="{{ object.guitar.get_absolute_url }}">
+      <span class="back-arrow">←</span> Повернутися до {{ object.guitar.brand }} {{ object.guitar.name }}
+    </a>
+  </nav>
+
+  <div class="review-page-grid" style="grid-template-columns: 1fr; max-width: 680px; margin: 30px auto;">
+    <div class="review-form-card" style="border-top: 4px solid #dc3545;">
+      <p class="eyebrow" style="color: #dc3545;">Підтвердження дії</p>
+      <h1 style="font-size: 2.2rem; margin-bottom: 12px;">Видалити ваш відгук?</h1>
+      <p style="color: var(--muted); line-height: 1.5; margin-bottom: 24px;">
+        Ви збираєтеся видалити відгук про <strong>{{ object.guitar.brand }} {{ object.guitar.name }}</strong>. Цю дію неможливо скасувати.
+      </p>
+
+      <div style="background: rgba(0,0,0,0.03); border-left: 3px solid var(--wine); padding: 16px 20px; border-radius: var(--radius-sm); margin-bottom: 28px;">
+        <div style="margin-bottom: 6px; color: #f59e0b; font-size: 1.1rem;">
+          {% render_stars object.rating %} <span style="font-size: 0.85rem; color: var(--muted); margin-left: 8px;">{{ object.created_at|date:"d.m.Y" }}</span>
+        </div>
+        <p style="margin: 0; font-size: 0.95rem; font-style: italic; color: var(--dark); line-height: 1.5;">
+          «{{ object.comment }}»
+        </p>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="review-main-actions" style="gap: 16px;">
+          <button type="submit" class="button" style="background: #dc3545; border-color: #dc3545; color: #fff;">
+            Так, видалити назавжди
+          </button>
+          <a href="{{ object.guitar.get_absolute_url }}" class="button button-ghost">
+            Скасувати
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -12,8 +12,8 @@
     </p>
     <div class="about-hero-actions">
       <button class="button open-dss-modal" type="button">AI-підбір <span>→</span></button>
-      <a class="button button-ghost" href="{% url 'configurator' %}">Конфігуратор</a>
-      <a class="button button-ghost" href="{% url 'catalog' %}">Каталог</a>
+      <a class="button button-ghost" href="{% url 'guitars:configurator' %}">Конфігуратор</a>
+      <a class="button button-ghost" href="{% url 'guitars:catalog' %}">Каталог</a>
     </div>
 
     <div class="hero-stats-strip">
@@ -94,7 +94,7 @@
           У конфігураторі можна обрати форму корпусу (Stratocaster, Telecaster, Les Paul, Superstrat), деревину (вільха, липа, ясен, махагоні), колір покриття, кількість ладів (21, 22, 24), струн (6, 7, 8) і набір датчиків (SSS, HSS, HH, HSH).
         </p>
         <div class="about-card-actions">
-          <a class="button button-ghost" href="{% url 'configurator' %}">Перейти в конфігуратор</a>
+          <a class="button button-ghost" href="{% url 'guitars:configurator' %}">Перейти в конфігуратор</a>
         </div>
       </div>
     </div>
@@ -107,7 +107,7 @@
         <p class="eyebrow">FAQ</p>
         <h2>Часті запитання</h2>
       </div>
-      <a href="{% url 'feedback' %}">Написати нам →</a>
+      <a href="{% url 'guitars:feedback' %}">Написати нам →</a>
     </div>
 
     <div class="faq-accordion">

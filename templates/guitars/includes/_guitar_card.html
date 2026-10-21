@@ -1,0 +1,18 @@
+{% load static guitar_tags %}
+<article class="card">
+  <div class="card-visual">
+    {% if guitar.image_url %}
+      <img src="{{ guitar.image_url }}" alt="{{ guitar.name }}" loading="lazy" onerror="this.onerror=null;this.src='{% static 'images/my_guitar.png' %}';">
+    {% else %}
+      <img src="{% static 'images/my_guitar.png' %}" alt="{{ guitar.name }}" loading="lazy">
+    {% endif %}
+    <span>{{ guitar.get_guitar_type_display }}</span>
+  </div>
+  <div class="card-body">
+    <p class="muted">{{ guitar.brand }}{% if guitar.material %} · {{ guitar.material }}{% endif %}</p>
+    <h3>{{ guitar.name }}</h3>
+    <p>{% format_uah guitar.price %}</p>
+    <a href="{{ guitar.get_absolute_url }}">Переглянути модель →</a>
+  </div>
+</article>
+

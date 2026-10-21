@@ -1,10 +1,17 @@
 from django.urls import path
 from . import views
 
+app_name = "guitars"
+
 urlpatterns = [
     path("", views.home, name="home"),
-    path("catalog/", views.catalog, name="catalog"),
-    path("guitars/<int:pk>/", views.guitar_detail, name="guitar_detail"),
+    path("catalog/", views.GuitarListView.as_view(), name="catalog"),
+    path("guitars/<int:pk>/", views.GuitarDetailView.as_view(), name="guitar_detail"),
+    path("guitars/<int:pk>/reviews/add/", views.ReviewCreateView.as_view(), name="review_create"),
+    path("reviews/<int:pk>/edit/", views.ReviewUpdateView.as_view(), name="review_update"),
+    path("reviews/<int:pk>/delete/", views.ReviewDeleteView.as_view(), name="review_delete"),
+    path("staff/orders/", views.StaffOrdersListView.as_view(), name="staff_orders"),
+    path("register/", views.UserRegisterView.as_view(), name="register"),
     path("configurator/", views.configurator, name="configurator"),
     path("cart/", views.cart, name="cart"),
     path("cart/<int:pk>/update/", views.cart_update, name="cart_update"),

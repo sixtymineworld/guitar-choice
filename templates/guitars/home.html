@@ -9,7 +9,7 @@
     <h1>Знайдіть гітару,<br><em>що звучить як ви.</em></h1>
     <p class="lead">Порівнюйте моделі за типом, матеріалом, кількістю струн і бюджетом. Зважене рішення — до першого акорду.</p>
     <div class="hero-actions">
-      <a class="button" href="{% url 'catalog' %}">Переглянути каталог <span>→</span></a>
+      <a class="button" href="{% url 'guitars:catalog' %}">Переглянути каталог <span>→</span></a>
       <button class="button button-ghost open-dss-modal" type="button">AI-підбір</button>
     </div>
   </div>
@@ -30,26 +30,11 @@
       <p class="eyebrow">Рекомендовані зараз</p>
       <h2>Інструменти для натхнення</h2>
     </div>
-    <a href="{% url 'catalog' %}">Увесь каталог →</a>
+    <a href="{% url 'guitars:catalog' %}">Увесь каталог →</a>
   </div>
   <div class="cards">
     {% for guitar in featured %}
-      <article class="card">
-        <div class="card-visual">
-          {% if guitar.image_url %}
-            <img src="{{ guitar.image_url }}" alt="{{ guitar.name }}" loading="lazy" onerror="this.onerror=null;this.src='{% static 'images/my_guitar.png' %}';">
-          {% else %}
-            <img src="{% static 'images/my_guitar.png' %}" alt="{{ guitar.name }}" loading="lazy">
-          {% endif %}
-          <span>{{ guitar.get_guitar_type_display }}</span>
-        </div>
-        <div class="card-body">
-          <p class="muted">{{ guitar.brand }}</p>
-          <h3>{{ guitar.name }}</h3>
-          <p>{{ guitar.price|floatformat:0 }} грн</p>
-          <a href="{{ guitar.get_absolute_url }}">Детальніше →</a>
-        </div>
-      </article>
+      {% include "guitars/includes/_guitar_card.html" with guitar=guitar %}
     {% empty %}
       <p>Каталог поки що порожній. Додайте моделі в адмін-панелі або виконайте команду <code>seed_guitars</code>.</p>
     {% endfor %}

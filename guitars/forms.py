@@ -1,5 +1,6 @@
 from django import forms
-from .models import Feedback, GuitarOrder
+from .models import Feedback, Guitar, GuitarOrder, Review
+from .validators import validate_no_spam_links
 
 
 class FeedbackForm(forms.ModelForm):
@@ -59,3 +60,86 @@ class GuitarConfigForm(forms.ModelForm):
 
 class CartQuantityForm(forms.Form):
     quantity = forms.IntegerField(min_value=1, max_value=20)
+
+
+class CatalogSearchForm(forms.Form):
+    """Independent Form for searching and filtering instruments in catalog."""
+
+    q = forms.CharField(
+        required=False,
+        max_length=100,
+        widget=forms.TextInput(attrs={"placeholder": "Бренд, модель або матеріал"}),
+    )
+    type = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=Guitar.GuitarType.choices,
+    )
+
+
+class ReviewForm(forms.ModelForm):
+    """ModelForm for creating and editing reviews with explicit fields (owner excluded)."""
+
+    class Meta:
+        model = Review
+        fields = ("rating", "comment")
+        widgets = {
+            "rating": forms.Select(attrs={"class": "form-select"}),
+            "comment": forms.Textarea(attrs={
+                "placeholder": "Поділіться вашими враженнями про інструмент...",
+                "rows": 4,
+                "maxlength": "1000",
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["comment"].validators.append(validate_no_spam_links)
+
+    def clean_comment(self):
+        comment = self.cleaned_data.get("comment", "").strip()
+        if len(comment) < 10:
+            raise forms.ValidationError("Відгук повинен містити щонайменше 10 символів.")
+        return comment
+
+
+
+class CatalogSearchForm(forms.Form):
+    """Independent Form for searching and filtering instruments in catalog."""
+
+    q = forms.CharField(
+        required=False,
+        max_length=100,
+        widget=forms.TextInput(attrs={"placeholder": "Бренд, модель або матеріал"}),
+    )
+    type = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=Guitar.GuitarType.choices,
+    )
+
+
+class ReviewForm(forms.ModelForm):
+    """ModelForm for creating and editing reviews with explicit fields (owner excluded)."""
+
+    class Meta:
+        model = Review
+        fields = ("rating", "comment")
+        widgets = {
+            "rating": forms.Select(attrs={"class": "form-select"}),
+            "comment": forms.Textarea(attrs={
+                "placeholder": "Поділіться вашими враженнями про інструмент...",
+                "rows": 4,
+                "maxlength": "1000",
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["comment"].validators.append(validate_no_spam_links)
+
+    def clean_comment(self):
+        comment = self.cleaned_data.get("comment", "").strip()
+        if len(comment) < 10:
+            raise forms.ValidationError("Відгук повинен містити щонайменше 10 символів.")
+        return comment

@@ -1,18 +1,18 @@
 {% extends 'guitars/base.html' %}
-{% load static %}
+{% load static guitar_tags %}
 {% block title %}{{ guitar.brand }} {{ guitar.name }} — GuitarChoice{% endblock %}
 
 {% block content %}
 <div class="detail-container">
   <!-- Навігаційний ланцюжок -->
   <nav class="detail-nav" aria-label="Навігація">
-    <a class="detail-back-link" href="{% url 'catalog' %}">
+    <a class="detail-back-link" href="{% url 'guitars:catalog' %}">
       <span class="back-arrow">←</span> Назад до каталогу
     </a>
     <div class="detail-breadcrumbs">
-      <a href="{% url 'home' %}">Головна</a>
+      <a href="{% url 'guitars:home' %}">Головна</a>
       <span class="crumb-sep">/</span>
-      <a href="{% url 'catalog' %}">Каталог</a>
+      <a href="{% url 'guitars:catalog' %}">Каталог</a>
       <span class="crumb-sep">/</span>
       <span class="crumb-current">{{ guitar.brand }} {{ guitar.name }}</span>
     </div>
@@ -86,7 +86,7 @@
 
       <!-- Дії та замовлення -->
       <div class="detail-actions-panel">
-        <form method="post" action="{% url 'guitar_detail' guitar.pk %}" class="detail-order-form">
+        <form method="post" action="{% url 'guitars:guitar_detail' guitar.pk %}" class="detail-order-form">
           {% csrf_token %}
           {% if guitar.is_available %}
             <button class="button button-order-cta" type="submit">
@@ -100,13 +100,54 @@
         </form>
 
         <div class="detail-sub-actions">
-          <a class="button button-ghost" href="{% url 'configurator' %}">Кастом-конфігуратор</a>
+          <a class="button button-ghost" href="{% url 'guitars:configurator' %}">Кастом-конфігуратор</a>
           <button class="button button-ghost open-dss-modal" type="button">AI-підбір</button>
-          <a class="button button-ghost" href="{% url 'feedback' %}">Консультація майстра</a>
+          <a class="button button-ghost" href="{% url 'guitars:feedback' %}">Консультація майстра</a>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Блок відгуків покупців (В3.1, В4.3, В6.1, В7.2, В7.3) -->
+  <section class="detail-reviews-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Враження покупців</p>
+        <h2>Відгуки про {{ guitar.name }}</h2>
+      </div>
+      {% if user.is_authenticated %}
+        <a class="button button-ghost" href="{% url 'guitars:review_create' guitar.pk %}">+ Написати відгук</a>
+      {% else %}
+        <a class="button button-ghost" href="{% url 'guitars:register' %}">Увійдіть, щоб залишити відгук</a>
+      {% endif %}
+    </div>
+
+    <div class="detail-reviews-list">
+      {% for review in guitar.reviews.all %}
+        <article class="review-item">
+          <div class="review-item-header">
+            <div>
+              <strong class="review-author-name">{{ review.user.username }}</strong>
+              {% if review.user.is_staff %}<span class="badge bg-secondary ms-1">Адміністрація</span>{% endif %}
+              <div class="review-item-rating">{% render_stars review.rating %}</div>
+            </div>
+            <div class="review-item-meta">
+              <time datetime="{{ review.created_at|date:'c' }}">{{ review.created_at|date:"d.m.Y H:i" }}</time>
+              {% if user == review.user or user.is_staff %}
+                <div class="review-item-actions">
+                  <a href="{% url 'guitars:review_update' review.pk %}" class="review-action-edit">Редагувати</a>
+                  <a href="{% url 'guitars:review_delete' review.pk %}" class="review-action-delete">Видалити</a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+          <p class="review-item-comment">{{ review.comment }}</p>
+        </article>
+      {% empty %}
+        <p class="empty-reviews-text">Відгуків поки що немає. Будьте першим, хто поділиться враженнями про цю гітару!</p>
+      {% endfor %}
+    </div>
+  </section>
 
   <!-- Схожі моделі з каталогу -->
   {% if similar_guitars %}
@@ -116,27 +157,12 @@
           <p class="eyebrow">Каталог</p>
           <h2>Схожі інструменти</h2>
         </div>
-        <a href="{% url 'catalog' %}">Увесь каталог →</a>
+        <a href="{% url 'guitars:catalog' %}">Увесь каталог →</a>
       </div>
 
       <div class="cards">
         {% for sim in similar_guitars %}
-          <article class="card">
-            <div class="card-visual">
-              {% if sim.image_url %}
-                <img src="{{ sim.image_url }}" alt="{{ sim.name }}" loading="lazy" onerror="this.onerror=null;this.src='{% static 'images/my_guitar.png' %}';">
-              {% else %}
-                <img src="{% static 'images/my_guitar.png' %}" alt="{{ sim.name }}" loading="lazy">
-              {% endif %}
-              <span>{{ sim.get_guitar_type_display }}</span>
-            </div>
-            <div class="card-body">
-              <p class="muted">{{ sim.brand }} · {{ sim.material }}</p>
-              <h3>{{ sim.name }}</h3>
-              <p>{{ sim.price|floatformat:0 }} грн</p>
-              <a href="{{ sim.get_absolute_url }}">Переглянути модель →</a>
-            </div>
-          </article>
+          {% include "guitars/includes/_guitar_card.html" with guitar=sim %}
         {% endfor %}
       </div>
     </section>

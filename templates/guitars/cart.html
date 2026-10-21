@@ -42,12 +42,12 @@
           <div class="cart-item-side">
             <p class="cart-price">{{ item.total_price|floatformat:0 }} грн</p>
             <p class="muted">{{ item.unit_price|floatformat:0 }} грн × {{ item.quantity }}</p>
-            <form class="cart-qty" method="post" action="{% url 'cart_update' item.pk %}">
+            <form class="cart-qty" method="post" action="{% url 'guitars:cart_update' item.pk %}">
               {% csrf_token %}
               <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="10" aria-label="Кількість">
               <button type="submit">Оновити</button>
             </form>
-            <form method="post" action="{% url 'cart_remove' item.pk %}">
+            <form method="post" action="{% url 'guitars:cart_remove' item.pk %}">
               {% csrf_token %}
               <button class="cart-remove" type="submit">Видалити</button>
             </form>
@@ -64,17 +64,17 @@
         <div><dt>Гітар</dt><dd>{{ items_count }}</dd></div>
       </dl>
       <p class="config-total"><span>До сплати</span><strong>{{ total|floatformat:0 }} грн</strong></p>
-      <form method="post" action="{% url 'cart_checkout' %}">
+      <form method="post" action="{% url 'guitars:cart_checkout' %}">
         {% csrf_token %}
         <button class="button" type="submit">Оформити замовлення <span>→</span></button>
       </form>
-      <a class="back" href="{% url 'configurator' %}">+ Додати ще конфігурацію</a>
+      <a class="back" href="{% url 'guitars:configurator' %}">+ Додати ще конфігурацію</a>
     </aside>
   {% else %}
     <div class="cart-empty">
       <h2>Кошик порожній</h2>
       <p class="lead">Створіть власну конфігурацію гітари — і вона з’явиться тут.</p>
-      <a class="button" href="{% url 'configurator' %}">До конфігуратора <span>→</span></a>
+      <a class="button" href="{% url 'guitars:configurator' %}">До конфігуратора <span>→</span></a>
     </div>
   {% endif %}
 </section>

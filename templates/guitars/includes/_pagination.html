@@ -1,0 +1,22 @@
+{% if is_paginated %}
+  <nav class="catalog-pagination" aria-label="Навігація по сторінках каталогу">
+    <div class="pagination-controls">
+      {% if page_obj.has_previous %}
+        <a class="pagination-btn" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% for t in selected_types %}&type={{ t }}{% endfor %}">
+          ← Попередня
+        </a>
+      {% endif %}
+
+      <span class="pagination-info">
+        Сторінка <strong>{{ page_obj.number }}</strong> з <strong>{{ page_obj.paginator.num_pages }}</strong>
+      </span>
+
+      {% if page_obj.has_next %}
+        <a class="pagination-btn" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% for t in selected_types %}&type={{ t }}{% endfor %}">
+          Наступна →
+        </a>
+      {% endif %}
+    </div>
+  </nav>
+{% endif %}
+

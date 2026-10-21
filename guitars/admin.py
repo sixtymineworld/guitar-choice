@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Feedback, Guitar, GuitarOrder
+from .models import Feedback, Guitar, GuitarOrder, Review
 
 admin.site.site_header = "GuitarChoice — Панель адміністратора"
 admin.site.site_title = "GuitarChoice Admin"
@@ -31,3 +31,13 @@ class GuitarOrderAdmin(admin.ModelAdmin):
     @admin.display(description="Гітара / Кастом")
     def item_title(self, obj):
         return obj.guitar.name if obj.guitar else f"Кастом {obj.get_instrument_type_display()} ({obj.get_body_shape_display()})"
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ("guitar", "user", "rating", "created_at")
+    list_filter = ("rating", "created_at")
+    search_fields = ("guitar__name", "user__username", "comment")
+    readonly_fields = ("created_at", "updated_at")
+    list_select_related = ("guitar", "user")
+
