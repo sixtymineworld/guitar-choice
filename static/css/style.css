@@ -540,9 +540,10 @@ nav a:not(.nav-accent):hover::after {
 .card-visual {
   display: flex;
   align-items: flex-end;
-  height: 205px;
-  padding: 16px;
-  background: #ede6df;
+  height: 220px;
+  padding: 14px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-soft);
   position: relative;
   overflow: hidden;
 }
@@ -556,7 +557,8 @@ nav a:not(.nav-accent):hover::after {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 10px;
   object-position: center;
   z-index: 1;
   transition: transform 0.3s ease;

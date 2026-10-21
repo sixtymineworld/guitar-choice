@@ -23,7 +23,7 @@
     <!-- Зображення гітари БЕЗ РАМОК І ФОНОВИХ БЛОКІВ -->
     <div class="detail-visual-clean">
       {% if guitar.image_url %}
-        <img src="{{ guitar.image_url }}" alt="{{ guitar.brand }} {{ guitar.name }}" class="detail-guitar-image">
+        <img src="{{ guitar.image_url }}" alt="{{ guitar.brand }} {{ guitar.name }}" class="detail-guitar-image" onerror="this.onerror=null;this.src='{% static 'images/my_guitar.png' %}';">
       {% else %}
         <img src="{% static 'images/my_guitar.png' %}" alt="{{ guitar.brand }} {{ guitar.name }}" class="detail-guitar-image">
       {% endif %}
@@ -124,7 +124,7 @@
           <article class="card">
             <div class="card-visual">
               {% if sim.image_url %}
-                <img src="{{ sim.image_url }}" alt="{{ sim.name }}" loading="lazy">
+                <img src="{{ sim.image_url }}" alt="{{ sim.name }}" loading="lazy" onerror="this.onerror=null;this.src='{% static 'images/my_guitar.png' %}';">
               {% else %}
                 <img src="{% static 'images/my_guitar.png' %}" alt="{{ sim.name }}" loading="lazy">
               {% endif %}

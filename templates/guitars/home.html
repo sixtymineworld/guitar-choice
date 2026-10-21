@@ -37,7 +37,7 @@
       <article class="card">
         <div class="card-visual">
           {% if guitar.image_url %}
-            <img src="{{ guitar.image_url }}" alt="{{ guitar.name }}" loading="lazy">
+            <img src="{{ guitar.image_url }}" alt="{{ guitar.name }}" loading="lazy" onerror="this.onerror=null;this.src='{% static 'images/my_guitar.png' %}';">
           {% else %}
             <img src="{% static 'images/my_guitar.png' %}" alt="{{ guitar.name }}" loading="lazy">
           {% endif %}
