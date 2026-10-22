@@ -1,10 +1,11 @@
+from decimal import Decimal, InvalidOperation
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.db.models import Count, Q
+from django.db.models import Count, Max, Min, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -33,7 +34,7 @@ def home(request):
 
 
 class GuitarListView(ListView):
-    """Catalog of guitars with search, type filter, and pagination (B6.1, B6.3, B6.4)."""
+    """Catalog of guitars with search, type filter, price range slider, sorting, and pagination (B6.1, B6.3, B6.4)."""
     model = Guitar
     template_name = "guitars/catalog.html"
     context_object_name = "guitars"
@@ -44,17 +45,44 @@ class GuitarListView(ListView):
         query = self.request.GET.get("q", "").strip()[:100]
         selected_types = self.request.GET.getlist("type")
         valid_types = [t for t in selected_types if t in Guitar.GuitarType.values]
+        min_price = self.request.GET.get("min_price", "").strip()
+        max_price = self.request.GET.get("max_price", "").strip()
+        sort = self.request.GET.get("sort", "").strip()
 
         if query:
             qs = qs.filter(Q(name__icontains=query) | Q(brand__icontains=query) | Q(material__icontains=query))
         if valid_types:
             qs = qs.filter(guitar_type__in=valid_types)
+        if min_price:
+            try:
+                min_val = Decimal(min_price)
+                if min_val >= 0:
+                    qs = qs.filter(price__gte=min_val)
+            except (InvalidOperation, ValueError, TypeError):
+                pass
+        if max_price:
+            try:
+                max_val = Decimal(max_price)
+                if max_val >= 0:
+                    qs = qs.filter(price__lte=max_val)
+            except (InvalidOperation, ValueError, TypeError):
+                pass
+
+        if sort == "price_asc":
+            qs = qs.order_by("price", "id")
+        elif sort == "price_desc":
+            qs = qs.order_by("-price", "id")
+        else:
+            qs = qs.order_by("brand", "name")
         return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         query = self.request.GET.get("q", "").strip()[:100]
         selected_types = [t for t in self.request.GET.getlist("type") if t in Guitar.GuitarType.values]
+        min_price = self.request.GET.get("min_price", "").strip()
+        max_price = self.request.GET.get("max_price", "").strip()
+        sort = self.request.GET.get("sort", "").strip()
 
         counts_qs = Guitar.objects.values("guitar_type").annotate(total=Count("id"))
         counts_dict = {item["guitar_type"]: item["total"] for item in counts_qs}
@@ -63,9 +91,22 @@ class GuitarListView(ListView):
             (value, label, counts_dict.get(value, 0))
             for value, label in Guitar.GuitarType.choices
         ]
+
+        price_bounds = Guitar.objects.aggregate(
+            min_p=Min("price"),
+            max_p=Max("price")
+        )
+        catalog_min_price = int(price_bounds["min_p"] or 0)
+        catalog_max_price = int(price_bounds["max_p"] or 150000)
+
         context["query"] = query
         context["selected_types"] = selected_types
         context["types"] = types_with_meta
+        context["catalog_min_price"] = catalog_min_price
+        context["catalog_max_price"] = catalog_max_price
+        context["selected_min_price"] = min_price
+        context["selected_max_price"] = max_price
+        context["current_sort"] = sort
         return context
 
 

@@ -8,10 +8,59 @@
   <p>Використовуйте пошук і фільтр, щоб швидше знайти потрібну модель.</p>
 </section>
 <section class="catalog-layout">
-  <form class="filters" method="get">
+  <form class="filters" id="catalog-filter-form" method="get">
     <div class="filter-field">
       <label for="catalog-search" class="filter-label">Пошук</label>
       <input id="catalog-search" type="search" name="q" value="{{ query }}" placeholder="Бренд, модель або матеріал">
+    </div>
+
+    <div class="filter-group">
+      <label for="catalog-sort" class="filter-group-title">Сортування</label>
+      <select id="catalog-sort" name="sort" onchange="this.form.submit()">
+        <option value="" {% if not current_sort %}selected{% endif %}>За замовчуванням</option>
+        <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Спочатку дешевші</option>
+        <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Спочатку дорожчі</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-group-title">Ціна, грн</span>
+      <div class="price-inputs-row">
+        <div class="price-input-wrap">
+          <label for="catalog-min-price" class="price-field-label">Від</label>
+          <input type="number" 
+                 id="catalog-min-price" 
+                 name="min_price" 
+                 value="{{ selected_min_price }}" 
+                 placeholder="{{ catalog_min_price }}" 
+                 min="0" 
+                 max="{{ catalog_max_price }}">
+        </div>
+        <div class="price-input-wrap">
+          <label for="catalog-max-price" class="price-field-label">До</label>
+          <input type="number" 
+                 id="catalog-max-price" 
+                 name="max_price" 
+                 value="{{ selected_max_price|default:catalog_max_price }}" 
+                 min="0" 
+                 max="{{ catalog_max_price }}">
+        </div>
+      </div>
+
+      <div class="price-slider-wrap">
+        <input type="range" 
+               id="catalog-price-slider" 
+               min="{{ catalog_min_price }}" 
+               max="{{ catalog_max_price }}" 
+               step="500" 
+               value="{{ selected_max_price|default:catalog_max_price }}" 
+               class="price-range-slider"
+               aria-label="Повзунок ціни">
+        <div class="price-slider-limits">
+          <span>{{ catalog_min_price }} грн</span>
+          <span>{{ catalog_max_price }} грн</span>
+        </div>
+      </div>
     </div>
 
     <div class="filter-group">
@@ -28,11 +77,26 @@
     </div>
 
     <button class="button" type="submit">Застосувати</button>
-    {% if query or selected_types %}
+    {% if query or selected_types or selected_min_price or selected_max_price or current_sort %}
       <a class="filter-reset-link" href="{% url 'guitars:catalog' %}">✕ Очистити фільтри</a>
     {% endif %}
   </form>
+
   <div class="catalog-content">
+    <div class="catalog-toolbar">
+      <span class="catalog-count-badge">
+        Знайдено моделей: <strong>{{ paginator.count|default:guitars|length }}</strong>
+      </span>
+      <div class="catalog-toolbar-sort">
+        <label for="catalog-top-sort" class="sort-label">Сортування:</label>
+        <select id="catalog-top-sort" onchange="syncTopSort(this.value)">
+          <option value="" {% if not current_sort %}selected{% endif %}>За замовчуванням</option>
+          <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Спочатку дешевші</option>
+          <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Спочатку дорожчі</option>
+        </select>
+      </div>
+    </div>
+
     <div class="cards catalog-cards">
       {% for guitar in guitars %}
         {% include "guitars/includes/_guitar_card.html" with guitar=guitar %}
@@ -43,4 +107,34 @@
     {% include "guitars/includes/_pagination.html" %}
   </div>
 </section>
+
+<script>
+  (function() {
+    const slider = document.getElementById('catalog-price-slider');
+    const maxInput = document.getElementById('catalog-max-price');
+    const minInput = document.getElementById('catalog-min-price');
+    const form = document.getElementById('catalog-filter-form');
+
+    if (slider && maxInput) {
+      slider.addEventListener('input', function() {
+        maxInput.value = this.value;
+      });
+      maxInput.addEventListener('input', function() {
+        if (this.value) {
+          slider.value = this.value;
+        }
+      });
+    }
+
+    window.syncTopSort = function(val) {
+      const sideSort = document.getElementById('catalog-sort');
+      if (sideSort) {
+        sideSort.value = val;
+      }
+      if (form) {
+        form.submit();
+      }
+    };
+  })();
+</script>
 {% endblock %}

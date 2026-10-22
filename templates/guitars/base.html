@@ -33,7 +33,7 @@
             <div class="user-dropdown-divider"></div>
             {% if user.is_staff %}
               <a href="{% url 'admin:index' %}" class="user-dropdown-link" target="_blank">Адмін-панель</a>
-              <a href="{% url 'guitars:staff_orders' %}" class="user-dropdown-link">Панель замовлень (Staff)</a>
+              <a href="{% url 'guitars:staff_orders' %}" class="user-dropdown-link">Панель замовлень</a>
             {% endif %}
             <a href="{% url 'guitars:cart' %}" class="user-dropdown-link">Мої замовлення</a>
             <a href="{% url 'guitars:configurator' %}" class="user-dropdown-link">Кастом-майстерня</a>
@@ -81,7 +81,7 @@
             <div class="user-dropdown-divider"></div>
             {% if user.is_staff %}
               <a href="{% url 'admin:index' %}" class="user-dropdown-link" target="_blank">Адмін-панель</a>
-              <a href="{% url 'guitars:staff_orders' %}" class="user-dropdown-link">Панель замовлень (Staff)</a>
+              <a href="{% url 'guitars:staff_orders' %}" class="user-dropdown-link">Панель замовлень</a>
             {% endif %}
             <a href="{% url 'guitars:cart' %}" class="user-dropdown-link">Мої замовлення</a>
             <a href="{% url 'guitars:configurator' %}" class="user-dropdown-link">Кастом-майстерня</a>
@@ -206,7 +206,7 @@
       <!-- Результат підбору -->
       <div class="dss-step" id="dss-step-result">
         <a class="dss-result-card" id="dss-res-card-link" href="#" title="Перейти до товару">
-          <span class="dss-result-badge">⚡ Рекомендована модель</span>
+          <span class="dss-result-badge">Рекомендована модель</span>
           <h4 class="dss-result-title" id="dss-res-title">Fender Player II Stratocaster</h4>
           <p class="dss-result-price" id="dss-res-price">38 900 грн</p>
           <p class="dss-result-reason" id="dss-res-reason"></p>

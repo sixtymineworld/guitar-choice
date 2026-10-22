@@ -103,6 +103,23 @@ class RequirementsTests(TestCase):
         self.assertEqual(len(search_res.context["guitars"]), 1)
         self.assertEqual(search_res.context["guitars"][0].brand, "Gibson")
 
+        # Sorting: cheapest first and most expensive first
+        sort_asc_res = self.client.get(reverse("guitars:catalog"), {"sort": "price_asc"})
+        self.assertEqual(sort_asc_res.status_code, 200)
+        prices_asc = [g.price for g in sort_asc_res.context["guitars"]]
+        self.assertEqual(prices_asc, sorted(prices_asc))
+
+        sort_desc_res = self.client.get(reverse("guitars:catalog"), {"sort": "price_desc"})
+        self.assertEqual(sort_desc_res.status_code, 200)
+        prices_desc = [g.price for g in sort_desc_res.context["guitars"]]
+        self.assertEqual(prices_desc, sorted(prices_desc, reverse=True))
+
+        # Price range filter via slider/inputs (max_price / min_price)
+        price_filter_res = self.client.get(reverse("guitars:catalog"), {"min_price": "20000", "max_price": "50000"})
+        self.assertEqual(price_filter_res.status_code, 200)
+        for g in price_filter_res.context["guitars"]:
+            self.assertTrue(Decimal("20000") <= g.price <= Decimal("50000"))
+
         # DetailView with <int:pk>
         detail_res = self.client.get(self.guitar1.get_absolute_url())
         self.assertEqual(detail_res.status_code, 200)
