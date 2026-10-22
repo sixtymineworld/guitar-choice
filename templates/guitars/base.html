@@ -138,14 +138,10 @@
   </footer>
   <!-- СППР Міні-Агент Підбору Гітари -->
   <div class="dss-widget">
-    <button class="dss-trigger" id="dss-trigger" type="button" aria-label="Відкрити AI-помічника">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"></path>
-        <path d="M18 10a6 6 0 0 1-12 0"></path>
-        <line x1="12" y1="16" x2="12" y2="21"></line>
-        <line x1="8" y1="21" x2="16" y2="21"></line>
+    <button class="dss-trigger" id="dss-trigger" type="button" aria-label="Швидкий підбір інструмента">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffd166" stroke="#ffd166" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
       </svg>
-      <span class="dss-badge">AI</span>
     </button>
   </div>
 
@@ -203,14 +199,14 @@
       <div class="dss-step" id="dss-step-loading">
         <div class="dss-loading">
           <div class="dss-spinner"></div>
-          <p><strong>AI аналізує каталог</strong><br><small class="muted">Оцінка характеристик, матеріалів та цін...</small></p>
+          <p><strong>Аналіз каталогу гітар</strong><br><small class="muted">Оцінка характеристик, матеріалів та цін...</small></p>
         </div>
       </div>
 
       <!-- Результат підбору -->
       <div class="dss-step" id="dss-step-result">
         <a class="dss-result-card" id="dss-res-card-link" href="#" title="Перейти до товару">
-          <span class="dss-result-badge">Оптимальний вибір AI</span>
+          <span class="dss-result-badge">⚡ Рекомендована модель</span>
           <h4 class="dss-result-title" id="dss-res-title">Fender Player II Stratocaster</h4>
           <p class="dss-result-price" id="dss-res-price">38 900 грн</p>
           <p class="dss-result-reason" id="dss-res-reason"></p>
