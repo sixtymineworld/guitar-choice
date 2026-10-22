@@ -1,4 +1,6 @@
+from decimal import Decimal
 from django import template
+from django.db.models import Sum
 from django.utils.safestring import mark_safe
 
 register = template.Library()
@@ -26,3 +28,16 @@ def render_stars(rating, max_stars=5):
     empty = "☆" * (max_stars - val)
     return mark_safe(f'<span class="rating-stars" aria-label="{val} з {max_stars}">{filled}{empty}</span>')
 
+
+@register.simple_tag(takes_context=True)
+def get_cart_count(context):
+    """Calculate the number of items in the cart for the current session."""
+    request = context.get("request")
+    if not request or not request.session.session_key:
+        return 0
+    from guitars.models import GuitarOrder
+
+    total = GuitarOrder.objects.filter(
+        session_key=request.session.session_key, status=GuitarOrder.Status.CART
+    ).aggregate(total=Sum("quantity"))["total"]
+    return total or 0

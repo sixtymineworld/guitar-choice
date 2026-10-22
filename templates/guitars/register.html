@@ -2,40 +2,42 @@
 {% block title %}Реєстрація — GuitarChoice{% endblock %}
 
 {% block content %}
-<section class="page-title">
-  <p class="eyebrow">Обліковий запис</p>
-  <h1>Створення нового акаунту</h1>
-  <p>Зареєструйтесь, щоб залишати відгуки про гітари та зберігати власні конфігурації.</p>
-</section>
-
-<div class="feedback-layout">
-  <form method="post" class="card feedback-card">
+<section class="feedback-page">
+  <div>
+    <p class="eyebrow">Створення акаунту</p>
+    <h1>Станьте частиною клубу.</h1>
+    <p class="lead">Створіть свій профіль, щоб ділитися відгуками про гітари, зберігати власні конфігурації та отримувати експертні рекомендації.</p>
+  </div>
+  <form class="feedback-form" method="post">
     {% csrf_token %}
-
     {% if form.non_field_errors %}
-      <div class="alert alert-danger" role="alert">
+      <div class="alert alert-danger mb-3" role="alert">
         {{ form.non_field_errors }}
       </div>
     {% endif %}
 
     {% for field in form %}
-      <div class="filter-field">
-        <label for="{{ field.id_for_label }}" class="filter-label">{{ field.label }} {% if field.field.required %}*{% endif %}</label>
+      <label>
+        {{ field.label }}
         {{ field }}
         {% if field.help_text %}
-          <small class="muted">{{ field.help_text|safe }}</small>
+          <small style="display: block; color: var(--text-muted); font-size: 0.78rem; font-weight: 400; margin-top: 4px; line-height: 1.35;">
+            {{ field.help_text|striptags }}
+          </small>
         {% endif %}
-        {% if field.errors %}
-          <p class="field-error text-danger">{{ field.errors|striptags }}</p>
-        {% endif %}
-      </div>
+        {% for error in field.errors %}
+          <small class="error">{{ error }}</small>
+        {% endfor %}
+      </label>
     {% endfor %}
 
-    <div class="feedback-actions mt-3">
-      <button type="submit" class="button">Зареєструватися</button>
-      <a href="{% url 'guitars:home' %}" class="button button-ghost">На головну</a>
+    <button class="button" type="submit">Створити акаунт <span>→</span></button>
+
+    <div class="mt-3 text-center">
+      <small style="color: var(--text-muted); font-size: 0.88rem;">
+        Вже маєте акаунт? <a href="{% url 'guitars:login' %}" style="color: var(--wine); font-weight: 700; text-decoration: underline;">Увійти в кабінет</a>
+      </small>
     </div>
   </form>
-</div>
+</section>
 {% endblock %}
-

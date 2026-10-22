@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+from .constants import DSS_GENRE_NAMES, DSS_GENRE_TYPE_MAP
 from .forms import CartQuantityForm, CatalogSearchForm, FeedbackForm, GuitarConfigForm, ReviewForm
 from .models import Guitar, GuitarOrder, Review
 
@@ -208,22 +209,12 @@ def dss_recommend(request):
         shape = (request.GET.get("shape") or "any").strip().lower()
         budget = (request.GET.get("budget") or "any").strip().lower()
 
-        genre_type_map = {
-            "rock": Guitar.GuitarType.ELECTRIC,
-            "metal": Guitar.GuitarType.ELECTRIC,
-            "blues": Guitar.GuitarType.ELECTRIC,
-            "acoustic": Guitar.GuitarType.ACOUSTIC,
-            "indie": Guitar.GuitarType.ACOUSTIC,
-            "classical": Guitar.GuitarType.CLASSICAL,
-            "bass": Guitar.GuitarType.BASS,
-        }
-
         valid_types = set(Guitar.GuitarType.values)
         target_type = None
         if shape in valid_types:
             target_type = shape
-        elif genre in genre_type_map:
-            target_type = genre_type_map[genre]
+        elif genre in DSS_GENRE_TYPE_MAP:
+            target_type = DSS_GENRE_TYPE_MAP[genre]
 
         guitars = Guitar.objects.filter(is_available=True)
         if not guitars.exists():
@@ -250,16 +241,7 @@ def dss_recommend(request):
         if not selected_guitar:
             return JsonResponse({"success": False, "message": "Моделей не знайдено за вказаними критеріями."})
 
-        genre_names = {
-            "rock": "Рок / Альтернатива",
-            "metal": "Метал / Важкий рок",
-            "blues": "Блюз / Джаз / Фанк",
-            "acoustic": "Акустичний поп / Інді",
-            "indie": "Інді / Авторська пісня",
-            "classical": "Класика / Фламенко",
-            "bass": "Бас / Ритм-секція",
-        }
-        genre_str = genre_names.get(genre, genre.capitalize())
+        genre_str = DSS_GENRE_NAMES.get(genre, genre.capitalize())
         why = (
             f"СППР проаналізував ваші критерії: напрямок «{genre_str}» та бюджетні орієнтири. "
             f"Модель {selected_guitar.brand} {selected_guitar.name} ({selected_guitar.get_guitar_type_display()}) "
@@ -285,80 +267,6 @@ def dss_recommend(request):
         })
     except Exception:
         return JsonResponse({"success": False, "message": "Сталася внутрішня помилка при підборі гітари."}, status=500)
-
-
-@require_POST
-def auth_login(request):
-    is_ajax = request.headers.get("x-requested-with") == "XMLHttpRequest"
-    username = request.POST.get("username", "").strip()
-    password = request.POST.get("password", "")
-    next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or "/"
-
-    if not username or not password:
-        err = "Будь ласка, введіть ім'я користувача та пароль."
-        if is_ajax:
-            return JsonResponse({"success": False, "error": err})
-        messages.error(request, err)
-        return redirect(next_url)
-
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        if is_ajax:
-            return JsonResponse({"success": True, "username": user.username})
-        messages.success(request, f"Вітаємо, {user.username}! Ви успішно увійшли.")
-        return redirect(next_url)
-    else:
-        err = "Невірний логін або пароль."
-        if is_ajax:
-            return JsonResponse({"success": False, "error": err})
-        messages.error(request, err)
-        return redirect(next_url)
-
-
-@require_POST
-def auth_register(request):
-    is_ajax = request.headers.get("x-requested-with") == "XMLHttpRequest"
-    username = request.POST.get("username", "").strip()
-    email = request.POST.get("email", "").strip()
-    password = request.POST.get("password", "")
-    password_confirm = request.POST.get("password_confirm", "")
-    next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or "/"
-
-    if len(username) < 3:
-        err = "Ім'я користувача має містити щонайменше 3 символи."
-        if is_ajax:
-            return JsonResponse({"success": False, "error": err})
-        messages.error(request, err)
-        return redirect(next_url)
-
-    if User.objects.filter(username__iexact=username).exists():
-        err = "Користувач із таким іменем вже зареєстрований."
-        if is_ajax:
-            return JsonResponse({"success": False, "error": err})
-        messages.error(request, err)
-        return redirect(next_url)
-
-    if len(password) < 6:
-        err = "Пароль має містити щонайменше 6 символів."
-        if is_ajax:
-            return JsonResponse({"success": False, "error": err})
-        messages.error(request, err)
-        return redirect(next_url)
-
-    if password != password_confirm:
-        err = "Паролі не збігаються."
-        if is_ajax:
-            return JsonResponse({"success": False, "error": err})
-        messages.error(request, err)
-        return redirect(next_url)
-
-    user = User.objects.create_user(username=username, email=email, password=password)
-    login(request, user)
-    if is_ajax:
-        return JsonResponse({"success": True, "username": user.username})
-    messages.success(request, f"Акаунт «{user.username}» успішно створено! Ласкаво просимо.")
-    return redirect(next_url)
 
 
 @require_POST
@@ -460,5 +368,3 @@ class StaffOrdersListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_queryset(self):
         return GuitarOrder.objects.all().select_related("guitar").order_by("-created_at")
-
-

@@ -1,3 +1,4 @@
+from django.contrib.auth import views as auth_views
 from django.urls import path
 from . import views
 
@@ -11,7 +12,9 @@ urlpatterns = [
     path("reviews/<int:pk>/edit/", views.ReviewUpdateView.as_view(), name="review_update"),
     path("reviews/<int:pk>/delete/", views.ReviewDeleteView.as_view(), name="review_delete"),
     path("staff/orders/", views.StaffOrdersListView.as_view(), name="staff_orders"),
+    path("login/", auth_views.LoginView.as_view(template_name="guitars/login.html"), name="login"),
     path("register/", views.UserRegisterView.as_view(), name="register"),
+    path("logout/", views.auth_logout, name="auth_logout"),
     path("configurator/", views.configurator, name="configurator"),
     path("cart/", views.cart, name="cart"),
     path("cart/<int:pk>/update/", views.cart_update, name="cart_update"),
@@ -20,7 +23,4 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("feedback/", views.feedback, name="feedback"),
     path("dss/recommend/", views.dss_recommend, name="dss_recommend"),
-    path("auth/login/", views.auth_login, name="auth_login"),
-    path("auth/register/", views.auth_register, name="auth_register"),
-    path("auth/logout/", views.auth_logout, name="auth_logout"),
 ]

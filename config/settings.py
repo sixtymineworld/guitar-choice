@@ -52,7 +52,6 @@ TEMPLATES = [{
         "django.template.context_processors.request",
         "django.contrib.auth.context_processors.auth",
         "django.contrib.messages.context_processors.messages",
-        "guitars.context_processors.cart",
     ]},
 }]
 
@@ -82,3 +81,9 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Перенаправлення після авторизації
+LOGIN_REDIRECT_URL = "guitars:home"
+LOGOUT_REDIRECT_URL = "guitars:home"
+LOGIN_URL = "guitars:login"
+
