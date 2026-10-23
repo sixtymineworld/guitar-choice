@@ -42,9 +42,7 @@ class RequirementsTests(TestCase):
             comment="Фантастичний інструмент, грати одне задоволення!",
         )
 
-    def test_b3_models_and_relationships(self):
-        """В3.1, В3.2: 4 доменні моделі, зв'язок через ForeignKey, поле власника, __str__()."""
-        # 4 Domain models: Guitar, GuitarOrder, Feedback, Review
+    def test_models_and_relationships(self):
         self.assertIn("Fender Stratocaster Standard", str(self.guitar1))
         self.assertEqual(self.guitar1.get_absolute_url(), f"/guitars/{self.guitar1.pk}/")
 
@@ -58,31 +56,24 @@ class RequirementsTests(TestCase):
         order = GuitarOrder.objects.create(guitar=self.guitar1, status=GuitarOrder.Status.PLACED, quantity=1)
         self.assertIn(f"Замовлення №{order.pk}", str(order))
 
-    def test_b4_custom_templatetags(self):
-        """В4.3: Власні DTL-теги."""
+    def test_custom_templatetags(self):
         self.assertEqual(format_uah(28000), "28 000 ₴")
         stars_html = render_stars(4)
         self.assertIn("★★★★☆", stars_html)
 
-    def test_b5_forms_and_validators(self):
-        """В5.1, В5.2, В5.3: ModelForm, чиста форма, кастомний валідатор."""
-        # Standalone validator
+    def test_forms_and_validators(self):
         with self.assertRaises(ValidationError):
             validate_no_spam_links("Дивіться ціни на http://spam.com !")
         self.assertIsNone(validate_no_spam_links("Чудова гітара, рекомендую всім!"))
 
-        # ReviewForm explicit fields and validation in Ukrainian
         invalid_form = ReviewForm(data={"rating": 5, "comment": "Коротко"})
         self.assertFalse(invalid_form.is_valid())
         self.assertIn("Відгук повинен містити щонайменше 10 символів.", invalid_form.errors["comment"])
 
-        # Non-model form
         filter_form = CatalogSearchForm(data={"q": "Fender"})
         self.assertTrue(filter_form.is_valid())
 
-    def test_b6_generic_views_and_pagination(self):
-        """В6.1, В6.3, В6.4, В6.5: ListView з пагінацією та get_queryset, DetailView з <int:pk>."""
-        # Create additional guitars to verify pagination (paginate_by = 6)
+    def test_catalog_views_and_pagination(self):
         for i in range(10):
             Guitar.objects.create(
                 name=f"Guitar Model {i}",
@@ -97,13 +88,11 @@ class RequirementsTests(TestCase):
         self.assertTrue(response.context["is_paginated"])
         self.assertEqual(len(response.context["guitars"]), 6)
 
-        # Search filter via get_queryset
         search_res = self.client.get(reverse("guitars:catalog"), {"q": "Gibson"})
         self.assertEqual(search_res.status_code, 200)
         self.assertEqual(len(search_res.context["guitars"]), 1)
         self.assertEqual(search_res.context["guitars"][0].brand, "Gibson")
 
-        # Sorting: cheapest first and most expensive first
         sort_asc_res = self.client.get(reverse("guitars:catalog"), {"sort": "price_asc"})
         self.assertEqual(sort_asc_res.status_code, 200)
         prices_asc = [g.price for g in sort_asc_res.context["guitars"]]
@@ -114,25 +103,20 @@ class RequirementsTests(TestCase):
         prices_desc = [g.price for g in sort_desc_res.context["guitars"]]
         self.assertEqual(prices_desc, sorted(prices_desc, reverse=True))
 
-        # Price range filter via slider/inputs (max_price / min_price)
         price_filter_res = self.client.get(reverse("guitars:catalog"), {"min_price": "20000", "max_price": "50000"})
         self.assertEqual(price_filter_res.status_code, 200)
         for g in price_filter_res.context["guitars"]:
             self.assertTrue(Decimal("20000") <= g.price <= Decimal("50000"))
 
-        # DetailView with <int:pk>
         detail_res = self.client.get(self.guitar1.get_absolute_url())
         self.assertEqual(detail_res.status_code, 200)
         self.assertContains(detail_res, "Stratocaster Standard")
 
-    def test_b7_permissions_and_review_crud(self):
-        """В7.1, В7.2, В7.3: Автентифікація, автопризначення власника, заборона чужого редагування."""
-        # Review Create: anonymous user is redirected to login (LoginRequiredMixin)
+    def test_review_permissions_and_crud(self):
         create_url = reverse("guitars:review_create", kwargs={"pk": self.guitar1.pk})
         anon_res = self.client.get(create_url)
         self.assertEqual(anon_res.status_code, 302)
 
-        # Authenticated user creates review -> owner assigned in form_valid
         self.client.force_login(self.user2)
         post_res = self.client.post(create_url, {"rating": 5, "comment": "Дуже крутий звук, рекомендую!"})
         self.assertEqual(post_res.status_code, 302)
@@ -140,38 +124,30 @@ class RequirementsTests(TestCase):
         self.assertIsNotNone(new_review)
         self.assertEqual(new_review.user, self.user2)
 
-        # User2 tries to edit User1's review -> 403 Forbidden (UserPassesTestMixin)
         update_url = reverse("guitars:review_update", kwargs={"pk": self.review1.pk})
         forbidden_res = self.client.get(update_url)
         self.assertEqual(forbidden_res.status_code, 403)
 
-        # User1 (owner) can edit own review
         self.client.force_login(self.user1)
         owner_res = self.client.get(update_url)
         self.assertEqual(owner_res.status_code, 200)
 
-    def test_b7_staff_roles_and_access(self):
-        """В7.4, В7.5: Ролі та захист на сервері."""
+    def test_staff_roles_and_access(self):
         staff_url = reverse("guitars:staff_orders")
-        # Regular user denied 403
         self.client.force_login(self.user1)
         res = self.client.get(staff_url)
         self.assertEqual(res.status_code, 403)
 
-        # Staff user allowed 200
         self.client.force_login(self.staff_user)
         res_staff = self.client.get(staff_url)
         self.assertEqual(res_staff.status_code, 200)
 
-    def test_b7_logout_post_only(self):
-        """В7.1: Вихід лише через POST."""
+    def test_logout_post_only(self):
         self.client.force_login(self.user1)
         logout_url = reverse("guitars:auth_logout")
-        # GET is rejected with 405 Method Not Allowed
         get_res = self.client.get(logout_url)
         self.assertEqual(get_res.status_code, 405)
 
-        # POST succeeds
         post_res = self.client.post(logout_url)
         self.assertEqual(post_res.status_code, 302)
 

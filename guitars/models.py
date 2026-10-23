@@ -14,8 +14,6 @@ from .constants import (
 
 
 class Guitar(models.Model):
-    """An instrument available for configuration and ordering."""
-
     class GuitarType(models.TextChoices):
         ACOUSTIC = "acoustic", "Акустична"
         ELECTRIC = "electric", "Електрогітара"
@@ -61,8 +59,6 @@ class Feedback(models.Model):
 
 
 class GuitarOrder(models.Model):
-    """A custom guitar configuration created in the configurator and kept in the cart."""
-
     class InstrumentType(models.TextChoices):
         ELECTRIC = "electric", "Електрогітара"
         BASS = "bass", "Бас-гітара"
@@ -147,8 +143,6 @@ class GuitarOrder(models.Model):
 
 
 class Review(models.Model):
-    """Review for a guitar left by an authenticated user."""
-
     class Rating(models.IntegerChoices):
         POOR = 1, "1 — Погано"
         FAIR = 2, "2 — Задовільно"

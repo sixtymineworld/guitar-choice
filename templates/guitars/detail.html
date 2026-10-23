@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="detail-container">
-  <!-- Навігаційний ланцюжок -->
   <nav class="detail-nav" aria-label="Навігація">
     <a class="detail-back-link" href="{% url 'guitars:catalog' %}">
       <span class="back-arrow">←</span> Назад до каталогу
@@ -18,9 +17,7 @@
     </div>
   </nav>
 
-  <!-- Головна вітрина товару -->
   <div class="detail-showcase">
-    <!-- Зображення гітари БЕЗ РАМОК І ФОНОВИХ БЛОКІВ -->
     <div class="detail-visual-clean">
       {% if guitar.image_url %}
         <img src="{{ guitar.image_url }}" alt="{{ guitar.brand }} {{ guitar.name }}" class="detail-guitar-image" onerror="this.onerror=null;this.src='{% static 'images/my_guitar.png' %}';">
@@ -29,7 +26,6 @@
       {% endif %}
     </div>
 
-    <!-- Інформація про інструмент і замовлення -->
     <div class="detail-info-pane">
       <div class="detail-header-meta">
         <span class="detail-type-badge">{{ guitar.get_guitar_type_display }}</span>
@@ -38,7 +34,6 @@
 
       <h1 class="detail-guitar-title">{{ guitar.name }}</h1>
 
-      <!-- Ціна та наявність -->
       <div class="detail-price-status-bar">
         <div class="detail-price-wrap">
           <span class="detail-price-num">{{ guitar.price|floatformat:0 }}</span>
@@ -56,12 +51,10 @@
         {% endif %}
       </div>
 
-      <!-- Опис -->
       <div class="detail-desc-block">
         <p>{{ guitar.description }}</p>
       </div>
 
-      <!-- Характеристики -->
       <div class="detail-specs-box">
         <h3 class="detail-specs-heading">Специфікація інструмента</h3>
         <dl class="detail-specs-list">
@@ -84,7 +77,6 @@
         </dl>
       </div>
 
-      <!-- Дії та замовлення -->
       <div class="detail-actions-panel">
         <form method="post" action="{% url 'guitars:guitar_detail' guitar.pk %}" class="detail-order-form">
           {% csrf_token %}
@@ -108,7 +100,6 @@
     </div>
   </div>
 
-  <!-- Блок відгуків покупців (В3.1, В4.3, В6.1, В7.2, В7.3) -->
   <section class="detail-reviews-section">
     <div class="section-heading">
       <div>
@@ -149,7 +140,6 @@
     </div>
   </section>
 
-  <!-- Схожі моделі з каталогу -->
   {% if similar_guitars %}
     <section class="detail-similar-block">
       <div class="section-heading">

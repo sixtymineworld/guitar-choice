@@ -12,7 +12,6 @@
     {% csrf_token %}
     {% if form.non_field_errors %}{% for error in form.non_field_errors %}<p class="error">{{ error }}</p>{% endfor %}{% endif %}
 
-    <!-- Селектор типу інструмента -->
     <div class="type-selector-group">
       <span class="type-selector-label">1. Оберіть тип інструмента</span>
       <div class="type-selector-tabs" role="tablist">
@@ -26,13 +25,11 @@
           <span class="type-tab-name">Акустична гітара</span>
         </button>
       </div>
-      <!-- Приховане поле форми Django для типу інструмента -->
       <div style="display: none;">
         {{ form.instrument_type }}
       </div>
     </div>
 
-    <!-- Сітка параметрів конфігуратора -->
     <div class="config-grid">
       {% for field in form %}
         {% if field.name != 'instrument_type' %}
@@ -131,7 +128,6 @@
       totalEl.textContent = formatUAH((basePrice + optionsTotal) * quantity);
     }
 
-    // Клік по кнопках-табах вибору типу
     typeTabs.forEach(tab => {
       tab.addEventListener("click", () => {
         const type = tab.dataset.type;
@@ -148,7 +144,6 @@
       });
     });
 
-    // Слухач змін у селектах форми
     form.addEventListener("change", (e) => {
       if (e.target === instrumentTypeSelect) {
         const type = instrumentTypeSelect.value;
@@ -162,7 +157,6 @@
       calculatePrice();
     });
 
-    // Початкова ініціалізація
     const initialType = instrumentTypeSelect.value || "electric";
     typeTabs.forEach(t => {
       const isActive = t.dataset.type === initialType;

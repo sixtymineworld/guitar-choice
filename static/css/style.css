@@ -4,7 +4,7 @@
   --font-btn: "Montserrat", -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Базові відтінки замовлення */
+  
   --wine: #5a0d20;
   --wine-dark: #23050d;
   --wine-rich: #3f0916;
@@ -18,7 +18,7 @@
   --line: #e2d9d2;
   --line-light: rgba(226, 217, 210, 0.6);
   
-  /* Тематичні токени (Чистий, насичений теплий молочний фон без бордових відтінків) */
+  
   --bg-body: #f3ece2;
   --bg-gradient:
     radial-gradient(ellipse 950px 800px at -2% 10%, rgba(255, 252, 247, 0.85) 0%, rgba(242, 231, 218, 0.45) 50%, transparent 76%),
@@ -40,7 +40,7 @@
   --header-nav-color: #442a32;
   --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235a0d20' stroke-width='1.6'/%3E%3C/svg%3E");
 
-  /* М'які мінімалістичні тіні */
+  
   --rose-mist: #ece3e6;
   --rose-subtle: rgba(236, 227, 230, 0.2);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
@@ -53,7 +53,7 @@
   --radius-lg: 12px;
   --transition: all 0.25s ease;
 
-  /* Адаптація Bootstrap 5 під теплу молочну та винну кольоропалітру */
+  
   --bs-primary: #5a0d20;
   --bs-primary-rgb: 90, 13, 32;
   --bs-secondary: #88787c;
@@ -144,9 +144,6 @@ main {
   min-height: calc(100vh - 150px);
 }
 
-/* ==========================================================================
-   SITE HEADER
-   ========================================================================== */
 .site-header {
   display: flex;
   align-items: center;
@@ -209,8 +206,6 @@ main {
   display: none;
 }
 
-
-
 .site-nav {
   display: flex;
   align-items: center;
@@ -260,9 +255,6 @@ nav a:not(.nav-accent):hover::after {
   box-shadow: none;
 }
 
-/* ==========================================================================
-   HERO SECTION
-   ========================================================================== */
 .hero {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
@@ -411,9 +403,6 @@ nav a:not(.nav-accent):hover::after {
   color: #ffffff;
 }
 
-/* ==========================================================================
-   HERO ART & REAL GUITAR MODEL SHOWCASE
-   ========================================================================== */
 .hero-art {
   position: relative;
   overflow: hidden;
@@ -485,9 +474,6 @@ nav a:not(.nav-accent):hover::after {
   filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.3));
 }
 
-/* ==========================================================================
-   SECTIONS & GRIDS
-   ========================================================================== */
 .section,
 .page-title,
 .catalog-layout,
@@ -543,9 +529,6 @@ nav a:not(.nav-accent):hover::after {
   gap: 24px;
 }
 
-/* ==========================================================================
-   CARDS
-   ========================================================================== */
 .card {
   overflow: hidden;
   border: 1px solid var(--border-card);
@@ -632,9 +615,6 @@ nav a:not(.nav-accent):hover::after {
   font-size: 0.85rem;
 }
 
-/* ==========================================================================
-   PROCESS BLOCK
-   ========================================================================== */
 .process {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -685,9 +665,6 @@ nav a:not(.nav-accent):hover::after {
   line-height: 1.6;
 }
 
-/* ==========================================================================
-   CATALOG & FILTERS
-   ========================================================================== */
 .page-title {
   padding-top: 72px;
   padding-bottom: 44px;
@@ -906,7 +883,6 @@ nav a:not(.nav-accent):hover::after {
   box-shadow: 0 0 0 3px rgba(90, 13, 32, 0.12);
 }
 
-/* Price Filter & Range Slider */
 .price-inputs-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1023,9 +999,6 @@ nav a:not(.nav-accent):hover::after {
   padding: 30px 0;
 }
 
-/* ==========================================================================
-   DETAIL PAGE (CLEAN ARCHITECTURE & FRAMELESS PRESENTATION)
-   ========================================================================== */
 .detail-container {
   max-width: 1160px;
   margin: 0 auto;
@@ -1088,7 +1061,6 @@ nav a:not(.nav-accent):hover::after {
   font-weight: 600;
 }
 
-/* Вітрина: Зображення без рамок + Інформація */
 .detail-showcase {
   display: grid;
   grid-template-columns: 1fr 1.1fr;
@@ -1097,7 +1069,6 @@ nav a:not(.nav-accent):hover::after {
   margin-bottom: 72px;
 }
 
-/* Зображення гітари БЕЗ РАМОК, БЕЗ ФОНОВОГО БЛОКУ */
 .detail-visual-clean {
   display: flex;
   align-items: center;
@@ -1121,7 +1092,6 @@ nav a:not(.nav-accent):hover::after {
   filter: drop-shadow(0 22px 32px rgba(45, 12, 18, 0.16));
 }
 
-/* Інформаційна колонка */
 .detail-info-pane {
   display: flex;
   flex-direction: column;
@@ -1239,7 +1209,6 @@ nav a:not(.nav-accent):hover::after {
   color: var(--text-subtle);
 }
 
-/* Специфікація */
 .detail-specs-box {
   background: var(--bg-surface);
   border: 1px solid var(--border-card);
@@ -1292,7 +1261,6 @@ nav a:not(.nav-accent):hover::after {
   text-align: right;
 }
 
-/* Панель дій */
 .detail-actions-panel {
   display: flex;
   flex-direction: column;
@@ -1351,7 +1319,6 @@ nav a:not(.nav-accent):hover::after {
   text-align: center;
 }
 
-/* Блок схожих товарів */
 .detail-similar-block {
   margin-top: 48px;
   padding-top: 48px;
@@ -1359,9 +1326,6 @@ nav a:not(.nav-accent):hover::after {
   margin-bottom: 60px;
 }
 
-/* ==========================================================================
-   ABOUT PAGE (CLEAN MINIMALIST LAYOUT)
-   ========================================================================== */
 .about-container {
   max-width: 1160px;
   margin: 0 auto 80px;
@@ -1387,7 +1351,6 @@ nav a:not(.nav-accent):hover::after {
   margin-bottom: 14px;
 }
 
-/* 1. Головний блок */
 .about-hero-card {
   background: radial-gradient(circle at 15% 20%, #460c1b 0%, var(--wine-dark) 88%);
   border: 1px solid rgba(223, 205, 199, 0.15);
@@ -1454,7 +1417,6 @@ nav a:not(.nav-accent):hover::after {
   color: #ffffff;
 }
 
-/* Статистичні показники */
 .hero-stats-strip {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1498,7 +1460,6 @@ nav a:not(.nav-accent):hover::after {
   margin: 0;
 }
 
-/* 2. Принципи платформи (4 картки) */
 .principles-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1550,7 +1511,6 @@ nav a:not(.nav-accent):hover::after {
   margin: 0;
 }
 
-/* 3. Дві картки: СППР та Конфігуратор */
 .mission-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1594,7 +1554,6 @@ nav a:not(.nav-accent):hover::after {
   margin-top: auto;
 }
 
-/* 4. FAQ */
 .faq-accordion {
   display: flex;
   flex-direction: column;
@@ -1660,7 +1619,6 @@ nav a:not(.nav-accent):hover::after {
   margin: 0;
 }
 
-/* Адаптивність */
 @media (max-width: 960px) {
   .hero-stats-strip {
     grid-template-columns: repeat(2, 1fr);
@@ -1688,9 +1646,6 @@ nav a:not(.nav-accent):hover::after {
   }
 }
 
-/* ==========================================================================
-   FEEDBACK PAGE & FORMS
-   ========================================================================== */
 .feedback-page {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1747,9 +1702,6 @@ nav a:not(.nav-accent):hover::after {
   font-weight: 500;
 }
 
-/* ==========================================================================
-   NAV CART BADGE & SECONDARY BUTTON
-   ========================================================================== */
 .nav-cart {
   display: inline-flex;
   align-items: center;
@@ -1770,9 +1722,6 @@ nav a:not(.nav-accent):hover::after {
   line-height: 1;
 }
 
-/* ==========================================================================
-   CONFIGURATOR
-   ========================================================================== */
 .configurator,
 .cart-layout {
   max-width: 1160px;
@@ -1793,7 +1742,6 @@ nav a:not(.nav-accent):hover::after {
   box-shadow: var(--shadow-md);
 }
 
-/* Селектор категорії інструмента */
 .type-selector-group {
   margin-bottom: 24px;
   padding-bottom: 22px;
@@ -1978,9 +1926,6 @@ nav a:not(.nav-accent):hover::after {
   margin-bottom: 16px;
 }
 
-/* ==========================================================================
-   CART
-   ========================================================================== */
 .cart-items {
   display: flex;
   flex-direction: column;
@@ -2146,7 +2091,6 @@ nav a:not(.nav-accent):hover::after {
   margin: 0 auto 26px;
 }
 
-
 footer {
   background: radial-gradient(circle at 15% 0%, #3a0815 0%, var(--wine-dark) 70%);
   color: #d1b8bc;
@@ -2261,18 +2205,12 @@ footer p {
   color: var(--gold-light);
 }
 
-/* ==========================================================================
-   RESPONSIVE DESIGN (MOBILE & TABLET)
-   ========================================================================== */
-
-/* Екрани без бічних полів (до 1200px) */
 @media (max-width: 1200px) {
   body {
     background-image: none;
   }
 }
 
-/* Планшети (до 960px) */
 @media (max-width: 960px) {
   .cards {
     grid-template-columns: repeat(2, 1fr);
@@ -2303,9 +2241,8 @@ footer p {
   }
 }
 
-/* Мобільні та компактні екрани (до 768px) */
 @media (max-width: 768px) {
-  /* Шапка із заокругленням як на десктопній версії */
+  
   .site-header {
     position: sticky;
     top: 10px;
@@ -2357,7 +2294,7 @@ footer p {
     display: none !important;
   }
 
-  /* Витончена кнопка-бургер */
+  
   .nav-toggle {
     display: flex;
     flex-direction: column;
@@ -2406,7 +2343,7 @@ footer p {
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  /* Класичне випадаюче меню навігації */
+  
   .site-nav {
     position: absolute;
     top: calc(100% + 8px);
@@ -2488,7 +2425,7 @@ footer p {
     letter-spacing: -0.025em;
   }
 
-  /* Чистий Hero-блок як окрема плаваюча картка */
+  
   .hero {
     grid-template-columns: 1fr;
     margin: 18px 16px 36px;
@@ -2540,7 +2477,7 @@ footer p {
     display: none;
   }
 
-  /* Сітки сторінок */
+  
   .cards,
   .catalog-layout,
   .detail,
@@ -2572,7 +2509,7 @@ footer p {
     font-size: 2rem;
   }
 
-  /* Кроки процесу */
+  
   .process {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -2584,7 +2521,7 @@ footer p {
     padding: 28px 22px;
   }
 
-  /* Запобігання автозуму на iOS (16px для інпутів) */
+  
   input[type="text"],
   input[type="email"],
   input[type="search"],
@@ -2594,7 +2531,7 @@ footer p {
     font-size: 16px !important;
   }
 
-  /* Конфігуратор */
+  
   .config-grid {
     grid-template-columns: 1fr;
     gap: 0;
@@ -2609,7 +2546,7 @@ footer p {
     padding: 24px 20px;
   }
 
-  /* Кошик */
+  
   .cart-item {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -2636,7 +2573,7 @@ footer p {
     width: 70px;
   }
 
-  /* Деталі гітари */
+  
   .detail-container {
     padding-top: 16px;
     padding-bottom: 56px;
@@ -2654,7 +2591,7 @@ footer p {
     flex: 1 1 100%;
   }
 
-  /* Форма зворотного зв'язку */
+  
   .feedback-page {
     padding-top: 36px;
     padding-bottom: 56px;
@@ -2665,7 +2602,6 @@ footer p {
   }
 }
 
-/* Компактні смартфони (до 520px) */
 @media (max-width: 520px) {
   .site-header {
     padding: 12px 16px;
@@ -2715,9 +2651,6 @@ footer p {
   }
 }
 
-/* ==========================================================================
-   DSS (СППР) MINI-AGENT FLOATING WIDGET
-   ========================================================================== */
 .dss-widget {
   position: fixed;
   right: 28px;
@@ -2728,7 +2661,6 @@ footer p {
   align-items: flex-end;
 }
 
-/* Кругла плаваюча кнопка СППР */
 .dss-trigger {
   position: relative;
   width: 48px;
@@ -2771,7 +2703,6 @@ footer p {
   border: 2px solid var(--bg-surface);
 }
 
-/* Вікно помічника СППР */
 .dss-modal {
   position: fixed;
   right: 28px;
@@ -2802,7 +2733,6 @@ footer p {
   transform: translateY(0) scale(1);
 }
 
-/* Шапка модального вікна (суто бордовий навбар) */
 .dss-header {
   display: flex;
   align-items: center;
@@ -2832,7 +2762,6 @@ footer p {
   transform: scale(1.08);
 }
 
-/* Тіло діалогу СППР */
 .dss-body {
   flex: 1;
   padding: 22px 20px;
@@ -2908,7 +2837,6 @@ footer p {
   transform: translateX(4px);
 }
 
-/* Екран очікування / обробки */
 .dss-loading {
   display: flex;
   flex-direction: column;
@@ -2928,7 +2856,6 @@ footer p {
   animation: dssSpin 0.7s linear infinite;
 }
 
-/* Екран результату СППР */
 .dss-result-card {
   display: block;
   text-decoration: none;
@@ -3024,7 +2951,6 @@ footer p {
   to { transform: rotate(360deg); }
 }
 
-/* Адаптація для маленьких екранів */
 @media (max-width: 520px) {
   .dss-widget {
     right: 18px;
@@ -3039,11 +2965,6 @@ footer p {
   }
 }
 
-/* ==========================================================================
-   USER AUTHENTICATION & PROFILE MENU
-   ========================================================================== */
-
-/* Кнопка відкриття модалки входу */
 .nav-auth-btn {
   display: inline-flex;
   align-items: center;
@@ -3086,7 +3007,6 @@ footer p {
   margin-right: 6px;
 }
 
-/* User Profile Badge (Logged In) */
 .user-nav-item {
   position: relative;
   display: inline-flex;
@@ -3190,7 +3110,6 @@ footer p {
   font-size: 0.95rem !important;
 }
 
-
 @media (max-width: 768px) {
   .desktop-only-user,
   .desktop-only-auth {
@@ -3198,7 +3117,6 @@ footer p {
   }
 }
 
-/* Dropdown Menu */
 .user-dropdown-popover {
   position: absolute;
   top: calc(100% + 8px);
@@ -3284,9 +3202,6 @@ footer p {
   color: #a31c1c !important;
 }
 
-/* ==========================================================================
-   AUTH MODAL (Вхід / Реєстрація)
-   ========================================================================== */
 .auth-modal-overlay {
   position: fixed;
   inset: 0;
@@ -3472,9 +3387,6 @@ footer p {
   padding: 13px 20px;
 }
 
-/* ==========================================================================
-   Pagination & Reviews Styling (B4.1, B6.1, B6.3)
-   ========================================================================== */
 .catalog-pagination {
   margin-top: 32px;
   display: flex;
@@ -3589,9 +3501,6 @@ footer p {
   padding: 16px 0;
 }
 
-/* ==========================================================================
-   Review Form & Edit Page Layout (B6.1, B7.2, B7.3)
-   ========================================================================== */
 .review-page-layout {
   max-width: 1160px;
   margin: 0 auto;
@@ -3782,9 +3691,6 @@ footer p {
   }
 }
 
-/* ==========================================================================
-   BOOTSTRAP COMPONENTS ADAPTATION TO WARM MILK & WINE PALETTE (B4.2)
-   ========================================================================== */
 .table {
   color: var(--text-main);
   border-color: var(--border-soft);
@@ -3870,11 +3776,6 @@ footer p {
   color: var(--text-main);
 }
 
-
-
-/* ==========================================================================
-   Pagination & Reviews Styling (B4.1, B6.1, B6.3)
-   ========================================================================== */
 .catalog-pagination {
   margin-top: 32px;
   display: flex;
@@ -3989,9 +3890,6 @@ footer p {
   padding: 16px 0;
 }
 
-/* ==========================================================================
-   Review Form & Edit Page Layout (B6.1, B7.2, B7.3)
-   ========================================================================== */
 .review-page-layout {
   max-width: 1160px;
   margin: 0 auto;
@@ -4182,9 +4080,6 @@ footer p {
   }
 }
 
-/* ==========================================================================
-   BOOTSTRAP COMPONENTS ADAPTATION TO WARM MILK & WINE PALETTE (B4.2)
-   ========================================================================== */
 .table {
   color: var(--text-main);
   border-color: var(--border-soft);
@@ -4269,5 +4164,3 @@ footer p {
   background-color: #ffffff;
   color: var(--text-main);
 }
-
-

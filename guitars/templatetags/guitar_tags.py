@@ -8,7 +8,6 @@ register = template.Library()
 
 @register.simple_tag
 def format_uah(price):
-    """Format a numeric price with space thousand separators and ₴ symbol."""
     try:
         val = int(round(float(price)))
         return f"{val:,}".replace(",", " ") + " ₴"
@@ -18,7 +17,6 @@ def format_uah(price):
 
 @register.simple_tag
 def render_stars(rating, max_stars=5):
-    """Render a star rating string (e.g., ★★★★☆)."""
     try:
         val = int(rating)
     except (ValueError, TypeError):
@@ -31,7 +29,6 @@ def render_stars(rating, max_stars=5):
 
 @register.simple_tag(takes_context=True)
 def get_cart_count(context):
-    """Calculate the number of items in the cart for the current session."""
     request = context.get("request")
     if not request or not request.session.session_key:
         return 0

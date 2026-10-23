@@ -1,6 +1,3 @@
-"""Constants and configuration dictionaries for guitar customizer and DSS."""
-
-# Base prices for custom instrument crafting
 BASE_CRAFT_PRICE = 18500
 BASE_CRAFT_PRICES = {
     "electric": 18500,
@@ -8,7 +5,6 @@ BASE_CRAFT_PRICES = {
     "acoustic": 17000,
 }
 
-# Configuration options per instrument type: (value, label, surcharge)
 CONFIG_OPTIONS = {
     "electric": {
         "body_shape": [
@@ -117,7 +113,6 @@ CONFIG_OPTIONS = {
     },
 }
 
-# Derived choices and surcharges for models & forms
 ALL_CHOICES = {
     "body_shape": [],
     "wood": [],
@@ -156,7 +151,6 @@ for _itype, _fields in CONFIG_OPTIONS.items():
             ALL_SURCHARGES[_f][_val] = _surcharge
 
 
-# Decision Support System (DSS / СППР) Maps
 DSS_GENRE_TYPE_MAP = {
     "rock": "electric",
     "metal": "electric",

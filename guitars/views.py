@@ -17,7 +17,6 @@ from .models import Guitar, GuitarOrder, Review
 
 
 def _session_key(request):
-    """Return the visitor's session key, ensuring the session is saved in the store."""
     if not request.session.session_key:
         request.session.save()
     return request.session.session_key
@@ -34,7 +33,6 @@ def home(request):
 
 
 class GuitarListView(ListView):
-    """Catalog of guitars with search, type filter, price range slider, sorting, and pagination (B6.1, B6.3, B6.4)."""
     model = Guitar
     template_name = "guitars/catalog.html"
     context_object_name = "guitars"
@@ -111,7 +109,6 @@ class GuitarListView(ListView):
 
 
 class GuitarDetailView(DetailView):
-    """Detail view for a single guitar with order handling and similar models (B6.1, B6.4, B6.5)."""
     model = Guitar
     template_name = "guitars/detail.html"
     context_object_name = "guitar"
@@ -174,7 +171,6 @@ def configurator(request):
 
     return render(request, "guitars/configurator.html", {
         "form": form,
-        # Дані для живого підрахунку ціни та динамічних списків на сторінці
         "price_data": {
             "base_craft": {str(k): float(v) for k, v in GuitarOrder.BASE_CRAFT_PRICES.items()},
             "config_options": GuitarOrder.CONFIG_OPTIONS,
@@ -228,7 +224,6 @@ def cart_checkout(request):
             messages.warning(request, "Ваш кошик порожній.")
             return redirect("guitars:cart")
 
-        # Перевірка чи всі обрані каталожні моделі досі доступні для замовлення
         unavailable = [item.guitar.name for item in items if item.guitar and not item.guitar.is_available]
         if unavailable:
             messages.error(
@@ -244,7 +239,6 @@ def cart_checkout(request):
 
 
 def dss_recommend(request):
-    """Decision Support System (СППР) recommendation engine for guitars."""
     try:
         genre = (request.GET.get("genre") or "rock").strip().lower()
         shape = (request.GET.get("shape") or "any").strip().lower()
@@ -312,7 +306,6 @@ def dss_recommend(request):
 
 @require_POST
 def auth_logout(request):
-    """Logout view, strictly restricted to POST (B7.1)."""
     next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or "/"
     if request.user.is_authenticated:
         logout(request)
@@ -321,7 +314,6 @@ def auth_logout(request):
 
 
 class UserRegisterView(CreateView):
-    """User registration based on UserCreationForm (B7.1)."""
     form_class = UserCreationForm
     template_name = "guitars/register.html"
     success_url = reverse_lazy("guitars:home")
@@ -334,7 +326,6 @@ class UserRegisterView(CreateView):
 
 
 class ReviewCreateView(LoginRequiredMixin, CreateView):
-    """Create a review for a guitar; assigns author in form_valid (B6.1, B7.2, B7.3)."""
     model = Review
     form_class = ReviewForm
     template_name = "guitars/review_form.html"
@@ -359,7 +350,6 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
 
 
 class ReviewUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    """Update a review; only allowed for the review owner or staff (B6.1, B7.3)."""
     model = Review
     form_class = ReviewForm
     template_name = "guitars/review_form.html"
@@ -382,7 +372,6 @@ class ReviewUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    """Delete a review; only allowed for the review owner or staff (B6.1, B7.3)."""
     model = Review
     template_name = "guitars/review_confirm_delete.html"
 
@@ -399,7 +388,6 @@ class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 class StaffOrdersListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
-    """Privileged orders management view for staff users only (B7.4, B7.5)."""
     model = GuitarOrder
     template_name = "guitars/staff_orders.html"
     context_object_name = "orders"

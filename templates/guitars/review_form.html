@@ -12,7 +12,6 @@
   </nav>
 
   <div class="review-page-grid">
-    <!-- Ліва колонка: Інформація та прев'ю гітари -->
     <div class="review-page-sidebar">
       <div>
         <p class="eyebrow">{% if object %}Оновлення вражень{% else %}Ваш відгук{% endif %}</p>
@@ -49,7 +48,6 @@
       </div>
     </div>
 
-    <!-- Права колонка: Форма редагування / створення -->
     <div class="review-form-card">
       <form method="post" novalidate>
         {% csrf_token %}

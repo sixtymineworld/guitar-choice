@@ -4,7 +4,6 @@ from guitars.models import Guitar
 
 
 SAMPLE_GUITARS = [
-    # --- Електрогітари (Electric) ---
     {
         "name": "Player II Stratocaster",
         "brand": "Fender",
@@ -72,7 +71,6 @@ SAMPLE_GUITARS = [
         "description": "Офіційна репліка культового Les Paul від дочірнього бренду Gibson. Оснащена висококласними звукознімачами Epiphone ProBucker із котушками з нікель-срібла, потенціометрами CTS та вінтажним округлим профілем грифу 50s Rounded Medium C.",
     },
 
-    # --- Акустичні гітари (Acoustic) ---
     {
         "name": "FG800M",
         "brand": "Yamaha",
@@ -129,7 +127,6 @@ SAMPLE_GUITARS = [
         "description": "Універсальний електроакустичний інструмент з фірмовою формою Grand Auditorium і зручним венеціанським вирізом (cutaway). Ідеальний баланс між пальцевою технікою (fingerstyle) та грою медіатором. Оснащений фірмовою електронікою Expression System 2.",
     },
 
-    # --- Бас-гітари (Bass) ---
     {
         "name": "Player Precision Bass",
         "brand": "Fender",
@@ -186,7 +183,6 @@ SAMPLE_GUITARS = [
         "description": "Зразковий універсальний бас для початківців і репетицій. Конфігурація датчиків P/J (спліт-сингл Precision біля грифа і сингл Jazz біля бриджа) дає доступ до всього спектру сучасних басових тембрів за доступну ціну.",
     },
 
-    # --- Класичні гітари (Classical) ---
     {
         "name": "C40",
         "brand": "Yamaha",
@@ -245,7 +241,6 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        # Видаляємо тестові записи
         deleted_count, _ = Guitar.objects.filter(name__iexact="test").delete()
         if deleted_count:
             self.stdout.write(self.style.WARNING(f"Видалено тестових записів: {deleted_count}"))

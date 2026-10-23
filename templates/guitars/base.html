@@ -8,9 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,700&family=Plus+Jakarta+Sans:wght@600;700&family=Syne:wght@700;800&family=Righteous&family=Kaushan+Script&family=Cinzel:wght@700&display=swap" rel="stylesheet">
-  <!-- CSS-фреймворк Bootstrap 5 (вимога В4.2) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <!-- Власний CSS з адаптованою теплою молочною палітрою -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}?v=56.0">
   {% block extra_head %}{% endblock %}
 </head>
@@ -136,7 +134,6 @@
       <p><a href="{% url 'guitars:about' %}">Умови сервісу</a> · <a href="{% url 'guitars:feedback' %}">Підтримка</a></p>
     </div>
   </footer>
-  <!-- СППР Міні-Агент Підбору Гітари -->
   <div class="dss-widget">
     <button class="dss-trigger" id="dss-trigger" type="button" aria-label="Швидкий підбір інструмента">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffd166" stroke="#ffd166" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -150,7 +147,6 @@
       <button class="dss-close" id="dss-close" type="button" aria-label="Закрити">✕</button>
     </div>
     <div class="dss-body">
-      <!-- Крок 1: Музичний стиль -->
       <div class="dss-step is-active" id="dss-step-1">
         <span class="dss-progress">Крок 1 з 3</span>
         <div class="dss-msg">
@@ -166,7 +162,6 @@
         </div>
       </div>
 
-      <!-- Крок 2: Форма / тип гітари -->
       <div class="dss-step" id="dss-step-2">
         <span class="dss-progress">Крок 2 з 3</span>
         <div class="dss-msg">
@@ -181,7 +176,6 @@
         </div>
       </div>
 
-      <!-- Крок 3: Бюджет -->
       <div class="dss-step" id="dss-step-3">
         <span class="dss-progress">Крок 3 з 3</span>
         <div class="dss-msg">
@@ -195,7 +189,6 @@
         </div>
       </div>
 
-      <!-- Завантаження -->
       <div class="dss-step" id="dss-step-loading">
         <div class="dss-loading">
           <div class="dss-spinner"></div>
@@ -203,7 +196,6 @@
         </div>
       </div>
 
-      <!-- Результат підбору -->
       <div class="dss-step" id="dss-step-result">
         <a class="dss-result-card" id="dss-res-card-link" href="#" title="Перейти до товару">
           <span class="dss-result-badge">Рекомендована модель</span>
@@ -220,12 +212,8 @@
     </div>
   </div>
 
-  <!-- Модальне вікно входу / реєстрації видалено: використовується чистий LoginView та UserRegisterView -->
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-
-    // ===== Навбар =====
     const header = document.querySelector('.site-header');
     const navToggle = document.querySelector('.nav-toggle');
     const siteNav = document.querySelector('.site-nav');
@@ -247,9 +235,9 @@
         }
 
         if (now <= 60 || now < lastScroll - 4) {
-          header.classList.remove('is-hidden'); // скрол вгору
+          header.classList.remove('is-hidden');
         } else if (now > lastScroll + 4 && now > 80) {
-          header.classList.add('is-hidden'); // скрол вниз
+          header.classList.add('is-hidden');
           closeMenu();
         }
 
@@ -257,7 +245,6 @@
       });
     }
 
-    // ===== Мобільне меню =====
     if (navToggle && siteNav) {
       navToggle.addEventListener('click', () => {
         navToggle.classList.toggle('is-active');
@@ -271,7 +258,6 @@
       });
     }
 
-    // ===== СППР =====
     const dssModal = document.querySelector('#dss-modal');
     const dssAnswers = { genre: 'rock', shape: 'any', budget: 'any' };
 
@@ -345,7 +331,6 @@
         dssRestart.addEventListener('click', () => showStep('#dss-step-1'));
       }
 
-      // Кнопки виклику СППР з будь-якої сторінки
       document.querySelectorAll('.open-dss-modal').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -353,7 +338,6 @@
         });
       });
 
-      // Вибір варіантів
       document.querySelectorAll('.dss-opt-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const field = btn.getAttribute('data-field');
@@ -367,7 +351,6 @@
       });
     }
 
-    // ===== Меню користувача (Десктоп + Мобільне) =====
     const setupUserMenu = (btnId, menuId) => {
       const btn = document.getElementById(btnId);
       const menu = document.getElementById(menuId);
