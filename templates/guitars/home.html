@@ -34,7 +34,7 @@
   </div>
 
   <div class="featured-carousel-wrapper">
-    {% if featured|length > 4 %}
+    {% if featured|length > 2 %}
       <button class="carousel-side-btn carousel-side-prev" id="featured-prev-btn" type="button" aria-label="Попередні моделі">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <polyline points="15 18 9 12 15 6"></polyline>
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    {% if featured|length > 4 %}
+    {% if featured|length > 2 %}
       <button class="carousel-side-btn carousel-side-next" id="featured-next-btn" type="button" aria-label="Наступні моделі">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <polyline points="9 18 15 12 9 6"></polyline>
@@ -64,7 +64,7 @@
   </div>
 </section>
 
-{% if featured|length > 4 %}
+{% if featured|length > 2 %}
 <script>
 (function() {
   const viewport = document.getElementById('featured-viewport');
@@ -75,14 +75,22 @@
 
   function updateButtons() {
     const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+    if (maxScroll <= 5) {
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+      return;
+    }
+    prevBtn.style.display = '';
+    nextBtn.style.display = '';
     prevBtn.classList.toggle('is-disabled', viewport.scrollLeft <= 5);
     nextBtn.classList.toggle('is-disabled', viewport.scrollLeft >= maxScroll - 5);
   }
 
   function getStep() {
     const item = viewport.querySelector('.featured-card-item');
-    if (!item) return 280;
-    const gap = 20;
+    if (!item) return 200;
+    const track = document.getElementById('featured-track');
+    const gap = track ? (parseFloat(window.getComputedStyle(track).gap) || 12) : 12;
     return item.offsetWidth + gap;
   }
 

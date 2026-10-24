@@ -73,8 +73,11 @@
   {% else %}
     <div class="cart-empty">
       <h2>Кошик порожній</h2>
-      <p class="lead">Створіть власну конфігурацію гітари — і вона з’явиться тут.</p>
-      <a class="button" href="{% url 'guitars:configurator' %}">До конфігуратора <span>→</span></a>
+      <p class="lead">Створіть власну конфігурацію гітари або оберіть модель у каталозі — і вона з’явиться тут.</p>
+      <div class="cart-empty-actions">
+        <a class="button" href="{% url 'guitars:catalog' %}">До каталогу <span>→</span></a>
+        <a class="button button-ghost" href="{% url 'guitars:configurator' %}">Кастом-майстерня</a>
+      </div>
     </div>
   {% endif %}
 </section>

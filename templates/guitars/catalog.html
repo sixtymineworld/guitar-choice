@@ -8,7 +8,12 @@
   <p>Використовуйте пошук і фільтр, щоб швидше знайти потрібну модель.</p>
 </section>
 <section class="catalog-layout">
+  <div class="filters-backdrop" id="filters-backdrop"></div>
   <form class="filters" id="catalog-filter-form" method="get">
+    <div class="filters-drawer-header">
+      <span class="filters-drawer-title">Фільтри товарів</span>
+      <button type="button" class="filters-close-btn" id="close-filter-btn" aria-label="Закрити фільтри">✕</button>
+    </div>
     <div class="filter-group">
       <label for="catalog-sort" class="filter-group-title">Сортування</label>
       <select id="catalog-sort" name="sort" onchange="this.form.submit()">
@@ -86,16 +91,40 @@
 
   <div class="catalog-content">
     <div class="catalog-toolbar">
-      <span class="catalog-count-badge">
-        Знайдено моделей: <strong>{% if paginator %}{{ paginator.count }}{% else %}{{ guitars|length }}{% endif %}</strong>
-      </span>
-      <div class="catalog-toolbar-sort">
-        <label for="catalog-top-sort" class="sort-label">Сортування:</label>
-        <select id="catalog-top-sort" onchange="syncTopSort(this.value)">
-          <option value="" {% if not current_sort %}selected{% endif %}>За замовчуванням</option>
-          <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Спочатку дешевші</option>
-          <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Спочатку дорожчі</option>
-        </select>
+      <div class="catalog-toolbar-top">
+        <span class="catalog-count-badge">
+          Знайдено моделей: <strong>{% if paginator %}{{ paginator.count }}{% else %}{{ guitars|length }}{% endif %}</strong>
+        </span>
+        {% if query or selected_types or selected_min_price or selected_max_price or current_sort or in_stock %}
+          <a class="catalog-toolbar-reset" href="{% url 'guitars:catalog' %}">Скинути всі</a>
+        {% endif %}
+      </div>
+      <div class="catalog-toolbar-controls">
+        <button type="button" class="mobile-filter-toggle-btn" id="open-filter-btn" aria-label="Відкрити фільтри">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line>
+            <line x1="9" y1="8" x2="15" y2="8"></line>
+            <line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
+          <span>Фільтри</span>
+          {% if selected_types or selected_min_price or selected_max_price or in_stock %}
+            <span class="active-filter-dot"></span>
+          {% endif %}
+        </button>
+        <div class="catalog-toolbar-sort">
+          <label for="catalog-top-sort" class="sort-label">Сортування:</label>
+          <select id="catalog-top-sort" onchange="syncTopSort(this.value)">
+            <option value="" {% if not current_sort %}selected{% endif %}>За замовчуванням</option>
+            <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Спочатку дешевші</option>
+            <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Спочатку дорожчі</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -137,6 +166,30 @@
         form.submit();
       }
     };
+
+    const openFilterBtn = document.getElementById('open-filter-btn');
+    const closeFilterBtn = document.getElementById('close-filter-btn');
+    const filterBackdrop = document.getElementById('filters-backdrop');
+
+    function openFilters() {
+      if (form && filterBackdrop) {
+        form.classList.add('is-open');
+        filterBackdrop.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeFilters() {
+      if (form && filterBackdrop) {
+        form.classList.remove('is-open');
+        filterBackdrop.classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    if (openFilterBtn) openFilterBtn.addEventListener('click', openFilters);
+    if (closeFilterBtn) closeFilterBtn.addEventListener('click', closeFilters);
+    if (filterBackdrop) filterBackdrop.addEventListener('click', closeFilters);
   })();
 </script>
 {% endblock %}

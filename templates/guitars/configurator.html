@@ -42,7 +42,7 @@
       {% endfor %}
     </div>
 
-    <button class="button" type="submit">Створити замовлення <span>→</span></button>
+    <button class="button config-desktop-submit-btn" type="submit">Створити замовлення <span>→</span></button>
   </form>
 
   <aside class="config-summary">
@@ -59,6 +59,16 @@
   </aside>
 </section>
 
+<div class="config-mobile-sticky-bar" id="config-mobile-bar">
+  <div class="config-mobile-bar-info">
+    <span class="config-mobile-bar-label">Разом</span>
+    <strong class="config-mobile-bar-total" id="sticky-sum-total">18 500 грн</strong>
+  </div>
+  <button class="button button-mobile-submit" type="button" onclick="document.getElementById('config-form').requestSubmit();">
+    Створити замовлення <span>→</span>
+  </button>
+</div>
+
 {{ price_data|json_script:"price-data" }}
 <script>
   (function () {
@@ -71,6 +81,7 @@
     const optionsPriceEl = document.querySelector("#sum-options");
     const qtyEl = document.querySelector("#sum-qty");
     const totalEl = document.querySelector("#sum-total");
+    const stickyTotalEl = document.querySelector("#sticky-sum-total");
 
     function formatUAH(num) {
       return Math.round(num).toLocaleString("uk-UA") + " грн";
@@ -125,7 +136,9 @@
       basePriceEl.textContent = formatUAH(basePrice);
       optionsPriceEl.textContent = formatUAH(optionsTotal);
       qtyEl.textContent = quantity;
-      totalEl.textContent = formatUAH((basePrice + optionsTotal) * quantity);
+      const finalTotalFormatted = formatUAH((basePrice + optionsTotal) * quantity);
+      totalEl.textContent = finalTotalFormatted;
+      if (stickyTotalEl) stickyTotalEl.textContent = finalTotalFormatted;
     }
 
     typeTabs.forEach(tab => {
