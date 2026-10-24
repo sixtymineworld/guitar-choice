@@ -12,7 +12,7 @@
     <p class="muted">{{ guitar.brand }}{% if guitar.material %} · {{ guitar.material }}{% endif %}</p>
     <h3>{{ guitar.name }}</h3>
     <p>{% format_uah guitar.price %}</p>
-    <a href="{{ guitar.get_absolute_url }}">Переглянути модель →</a>
+    <a href="{{ guitar.get_absolute_url }}" class="stretched-link">Переглянути модель →</a>
   </div>
 </article>
 

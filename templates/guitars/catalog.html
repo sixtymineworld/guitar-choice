@@ -9,11 +9,6 @@
 </section>
 <section class="catalog-layout">
   <form class="filters" id="catalog-filter-form" method="get">
-    <div class="filter-field">
-      <label for="catalog-search" class="filter-label">Пошук</label>
-      <input id="catalog-search" type="search" name="q" value="{{ query }}" placeholder="Бренд, модель або матеріал">
-    </div>
-
     <div class="filter-group">
       <label for="catalog-sort" class="filter-group-title">Сортування</label>
       <select id="catalog-sort" name="sort" onchange="this.form.submit()">
@@ -92,7 +87,7 @@
   <div class="catalog-content">
     <div class="catalog-toolbar">
       <span class="catalog-count-badge">
-        Знайдено моделей: <strong>{{ paginator.count|default:guitars|length }}</strong>
+        Знайдено моделей: <strong>{% if paginator %}{{ paginator.count }}{% else %}{{ guitars|length }}{% endif %}</strong>
       </span>
       <div class="catalog-toolbar-sort">
         <label for="catalog-top-sort" class="sort-label">Сортування:</label>

@@ -26,7 +26,8 @@ def _cart_items(request):
 
 
 def home(request):
-    return render(request, "guitars/home.html", {"featured": Guitar.objects.filter(is_available=True)[:3]})
+    featured = list(Guitar.objects.filter(is_available=True)[:6])
+    return render(request, "guitars/home.html", {"featured": featured})
 
 
 class GuitarListView(ListView):
