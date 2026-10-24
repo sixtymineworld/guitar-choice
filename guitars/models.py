@@ -23,6 +23,7 @@ class Guitar(models.Model):
     name = models.CharField("назва", max_length=120)
     brand = models.CharField("бренд", max_length=80)
     guitar_type = models.CharField("тип", max_length=20, choices=GuitarType.choices)
+    color = models.CharField("колір", max_length=80)
     price = models.DecimalField("ціна, грн", max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     description = models.TextField("опис")
     material = models.CharField("матеріал корпусу", max_length=100)

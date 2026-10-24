@@ -8,9 +8,9 @@ admin.site.index_title = "Керування каталогом, кастом-з
 
 @admin.register(Guitar)
 class GuitarAdmin(admin.ModelAdmin):
-    list_display = ("name", "brand", "guitar_type", "price", "is_available")
-    list_filter = ("guitar_type", "is_available", "brand")
-    search_fields = ("name", "brand", "material")
+    list_display = ("name", "brand", "guitar_type", "color", "price", "is_available")
+    list_filter = ("guitar_type", "is_available", "brand", "color")
+    search_fields = ("name", "brand", "material", "color")
 
 
 @admin.register(Feedback)

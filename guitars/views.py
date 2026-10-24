@@ -47,7 +47,7 @@ class GuitarListView(ListView):
         in_stock = self.request.GET.get("in_stock", "").strip()
 
         if query:
-            qs = qs.filter(Q(name__icontains=query) | Q(brand__icontains=query) | Q(material__icontains=query))
+            qs = qs.filter(Q(name__icontains=query) | Q(brand__icontains=query) | Q(material__icontains=query) | Q(color__icontains=query))
         if valid_types:
             qs = qs.filter(guitar_type__in=valid_types)
         if in_stock == "1":
@@ -362,6 +362,7 @@ def dss_recommend(request):
                 "brand": selected_guitar.brand,
                 "type_display": selected_guitar.get_guitar_type_display(),
                 "price": float(selected_guitar.price),
+                "color": selected_guitar.color,
                 "material": selected_guitar.material,
                 "description": selected_guitar.description,
                 "image_url": selected_guitar.image_url,

@@ -32,7 +32,7 @@
     <span>{{ guitar.get_guitar_type_display }}</span>
   </div>
   <div class="card-body">
-    <p class="muted">{{ guitar.brand }}{% if guitar.material %} · {{ guitar.material }}{% endif %}</p>
+    <p class="muted">{{ guitar.brand }}{% if guitar.color %} · {{ guitar.color }}{% elif guitar.material %} · {{ guitar.material }}{% endif %}</p>
     <h3>{{ guitar.name }}</h3>
     <p>{% format_uah guitar.price %}</p>
     <a href="{{ guitar.get_absolute_url }}" class="stretched-link">Переглянути модель →</a>
