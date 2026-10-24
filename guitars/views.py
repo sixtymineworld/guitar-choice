@@ -43,11 +43,14 @@ class GuitarListView(ListView):
         min_price = self.request.GET.get("min_price", "").strip()
         max_price = self.request.GET.get("max_price", "").strip()
         sort = self.request.GET.get("sort", "").strip()
+        in_stock = self.request.GET.get("in_stock", "").strip()
 
         if query:
             qs = qs.filter(Q(name__icontains=query) | Q(brand__icontains=query) | Q(material__icontains=query))
         if valid_types:
             qs = qs.filter(guitar_type__in=valid_types)
+        if in_stock == "1":
+            qs = qs.filter(is_available=True)
         if min_price:
             try:
                 min_val = Decimal(min_price)
@@ -78,6 +81,7 @@ class GuitarListView(ListView):
         min_price = self.request.GET.get("min_price", "").strip()
         max_price = self.request.GET.get("max_price", "").strip()
         sort = self.request.GET.get("sort", "").strip()
+        in_stock = self.request.GET.get("in_stock", "").strip()
 
         counts_qs = Guitar.objects.values("guitar_type").annotate(total=Count("id"))
         counts_dict = {item["guitar_type"]: item["total"] for item in counts_qs}
@@ -102,6 +106,7 @@ class GuitarListView(ListView):
         context["selected_min_price"] = min_price
         context["selected_max_price"] = max_price
         context["current_sort"] = sort
+        context["in_stock"] = in_stock
         return context
 
 

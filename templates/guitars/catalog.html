@@ -76,8 +76,15 @@
       </div>
     </div>
 
+    <div class="filter-group">
+      <label class="filter-checkbox-item" style="padding: 4px 10px;">
+        <input type="checkbox" name="in_stock" value="1" {% if in_stock == '1' %}checked{% endif %} onchange="this.form.submit()">
+        <span class="checkbox-name">Тільки в наявності</span>
+      </label>
+    </div>
+
     <button class="button" type="submit">Застосувати</button>
-    {% if query or selected_types or selected_min_price or selected_max_price or current_sort %}
+    {% if query or selected_types or selected_min_price or selected_max_price or current_sort or in_stock %}
       <a class="filter-reset-link" href="{% url 'guitars:catalog' %}">✕ Очистити фільтри</a>
     {% endif %}
   </form>

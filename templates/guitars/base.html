@@ -16,6 +16,16 @@
   {% get_cart_count as cart_count %}
   <header class="site-header">
     <a class="logo" href="{% url 'guitars:home' %}">GuitarChoice</a>
+    <form class="nav-search-form nav-search-desktop" action="{% url 'guitars:catalog' %}" method="get" role="search">
+      <input type="search" name="q" value="{{ query|default:'' }}" placeholder="Пошук гітар у наявності..." aria-label="Пошук гітар у наявності">
+      <input type="hidden" name="in_stock" value="1">
+      <button type="submit" aria-label="Знайти">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </form>
     <div class="header-actions">
       {% if user.is_authenticated %}
         <div class="mobile-user-wrap">
@@ -57,6 +67,16 @@
       </button>
     </div>
     <nav class="site-nav" aria-label="Основна навігація">
+      <form class="nav-search-form nav-search-mobile" action="{% url 'guitars:catalog' %}" method="get" role="search">
+        <input type="search" name="q" value="{{ query|default:'' }}" placeholder="Пошук гітар у наявності..." aria-label="Пошук гітар у наявності">
+        <input type="hidden" name="in_stock" value="1">
+        <button type="submit" aria-label="Знайти">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </form>
       <a href="{% url 'guitars:home' %}">Головна</a>
       <a href="{% url 'guitars:catalog' %}">Каталог</a>
       <a href="{% url 'guitars:configurator' %}">Конфігуратор</a>

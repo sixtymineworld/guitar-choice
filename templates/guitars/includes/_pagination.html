@@ -2,7 +2,7 @@
   <nav class="catalog-pagination" aria-label="Навігація по сторінках каталогу">
     <div class="pagination-controls">
       {% if page_obj.has_previous %}
-        <a class="pagination-btn" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% for t in selected_types %}&type={{ t }}{% endfor %}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if selected_min_price %}&min_price={{ selected_min_price }}{% endif %}{% if selected_max_price %}&max_price={{ selected_max_price }}{% endif %}">
+        <a class="pagination-btn" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% for t in selected_types %}&type={{ t }}{% endfor %}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if selected_min_price %}&min_price={{ selected_min_price }}{% endif %}{% if selected_max_price %}&max_price={{ selected_max_price }}{% endif %}{% if in_stock %}&in_stock={{ in_stock }}{% endif %}">
           ← Попередня
         </a>
       {% endif %}
@@ -12,7 +12,7 @@
       </span>
 
       {% if page_obj.has_next %}
-        <a class="pagination-btn" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% for t in selected_types %}&type={{ t }}{% endfor %}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if selected_min_price %}&min_price={{ selected_min_price }}{% endif %}{% if selected_max_price %}&max_price={{ selected_max_price }}{% endif %}">
+        <a class="pagination-btn" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% for t in selected_types %}&type={{ t }}{% endfor %}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if selected_min_price %}&min_price={{ selected_min_price }}{% endif %}{% if selected_max_price %}&max_price={{ selected_max_price }}{% endif %}{% if in_stock %}&in_stock={{ in_stock }}{% endif %}">
           Наступна →
         </a>
       {% endif %}
