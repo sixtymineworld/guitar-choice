@@ -30,11 +30,11 @@ def render_stars(rating, max_stars=5):
 @register.simple_tag(takes_context=True)
 def get_cart_count(context):
     request = context.get("request")
-    if not request or not request.session.session_key:
+    if not request or not request.user.is_authenticated:
         return 0
     from guitars.models import GuitarOrder
 
     total = GuitarOrder.objects.filter(
-        session_key=request.session.session_key, status=GuitarOrder.Status.CART
+        user=request.user, status=GuitarOrder.Status.CART
     ).aggregate(total=Sum("quantity"))["total"]
     return total or 0

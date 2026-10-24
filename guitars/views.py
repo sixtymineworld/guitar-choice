@@ -1,6 +1,7 @@
 from decimal import Decimal, InvalidOperation
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
@@ -16,15 +17,11 @@ from .forms import CartQuantityForm, CatalogSearchForm, FeedbackForm, GuitarConf
 from .models import Guitar, GuitarOrder, Review
 
 
-def _session_key(request):
-    if not request.session.session_key:
-        request.session.save()
-    return request.session.session_key
-
-
 def _cart_items(request):
+    if not request.user.is_authenticated:
+        return GuitarOrder.objects.none()
     return GuitarOrder.objects.filter(
-        session_key=_session_key(request), status=GuitarOrder.Status.CART
+        user=request.user, status=GuitarOrder.Status.CART
     ).select_related("guitar")
 
 
@@ -126,12 +123,16 @@ class GuitarDetailView(DetailView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+        if not request.user.is_authenticated:
+            messages.info(request, "Будь ласка, увійдіть або зареєструйтесь, щоб додати інструмент до кошика.")
+            return redirect(f"{reverse_lazy('guitars:login')}?next={self.object.get_absolute_url()}")
+
         if not self.object.is_available:
             messages.warning(request, f"Модель «{self.object.brand} {self.object.name}» наразі очікується на складі.")
             return redirect("guitars:guitar_detail", pk=self.object.pk)
 
         GuitarOrder.objects.create(
-            session_key=_session_key(request),
+            user=request.user,
             guitar=self.object,
             status=GuitarOrder.Status.CART,
             quantity=1,
@@ -159,9 +160,13 @@ def feedback(request):
 def configurator(request):
     form = GuitarConfigForm(request.POST or None)
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.info(request, "Будь ласка, увійдіть або зареєструйтесь, щоб додати кастомну гітару до кошика.")
+            return redirect(f"{reverse_lazy('guitars:login')}?next={reverse_lazy('guitars:configurator')}")
+
         if form.is_valid():
             order = form.save(commit=False)
-            order.session_key = _session_key(request)
+            order.user = request.user
             order.status = GuitarOrder.Status.CART
             order.save()
             messages.success(request, f"Кастомну конфігурацію «{order.get_instrument_type_display()} ({order.get_body_shape_display()})» додано до кошика.")
@@ -180,6 +185,7 @@ def configurator(request):
     })
 
 
+@login_required
 def cart(request):
     items = list(_cart_items(request))
     return render(request, "guitars/cart.html", {
@@ -190,10 +196,11 @@ def cart(request):
 
 
 @require_POST
+@login_required
 def cart_update(request, pk):
     item = _cart_items(request).filter(pk=pk).first()
     if not item:
-        messages.error(request, "Позицію не знайдено або термін дії сесії закінчився.")
+        messages.error(request, "Позицію не знайдено.")
         return redirect("guitars:cart")
     form = CartQuantityForm(request.POST)
     if form.is_valid():
@@ -206,6 +213,7 @@ def cart_update(request, pk):
 
 
 @require_POST
+@login_required
 def cart_remove(request, pk):
     item = _cart_items(request).filter(pk=pk).first()
     if not item:
@@ -217,6 +225,7 @@ def cart_remove(request, pk):
 
 
 @require_POST
+@login_required
 def cart_checkout(request):
     with transaction.atomic():
         items = list(_cart_items(request).select_for_update())

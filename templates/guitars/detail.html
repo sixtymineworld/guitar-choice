@@ -5,13 +5,13 @@
 {% block content %}
 <div class="detail-container">
   <nav class="detail-nav" aria-label="Навігація">
-    <a class="detail-back-link" href="{% url 'guitars:catalog' %}">
+    <a class="detail-back-link" href="{% url 'guitars:catalog' %}" onclick="if (document.referrer && document.referrer.includes('/catalog')) { history.back(); return false; }">
       <span class="back-arrow">←</span> Назад до каталогу
     </a>
     <div class="detail-breadcrumbs">
       <a href="{% url 'guitars:home' %}">Головна</a>
       <span class="crumb-sep">/</span>
-      <a href="{% url 'guitars:catalog' %}">Каталог</a>
+      <a href="{% url 'guitars:catalog' %}" onclick="if (document.referrer && document.referrer.includes('/catalog')) { history.back(); return false; }">Каталог</a>
       <span class="crumb-sep">/</span>
       <span class="crumb-current">{{ guitar.brand }} {{ guitar.name }}</span>
     </div>

@@ -80,6 +80,14 @@ class GuitarOrder(models.Model):
     TYPE_SURCHARGES = TYPE_SURCHARGES
     SURCHARGES = ALL_SURCHARGES
 
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="orders",
+        verbose_name="користувач",
+    )
     guitar = models.ForeignKey(
         Guitar,
         verbose_name="базова модель",
@@ -106,7 +114,7 @@ class GuitarOrder(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(20)],
     )
     unit_price = models.DecimalField("ціна за одиницю, грн", max_digits=10, decimal_places=2, editable=False)
-    session_key = models.CharField("сесія", max_length=40, db_index=True)
+    session_key = models.CharField("сесія", max_length=40, blank=True, default="", db_index=True)
     status = models.CharField("статус", max_length=20, choices=Status.choices, default=Status.CART)
     created_at = models.DateTimeField("створено", auto_now_add=True)
 
