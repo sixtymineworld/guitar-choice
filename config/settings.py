@@ -61,11 +61,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "mysql.connector.django",
-        "NAME": os.getenv("MYSQL_DATABASE", "guitar_choice"),
-        "USER": os.getenv("MYSQL_USER", "guitar_user"),
-        "PASSWORD": os.getenv("MYSQL_PASSWORD", ""),
-        "HOST": os.getenv("MYSQL_HOST", "127.0.0.1"),
-        "PORT": int(os.getenv("MYSQL_PORT", "3306")),
+        "NAME": os.getenv("MYSQL_DATABASE") or os.getenv("DB_NAME", "guitar_choice"),
+        "USER": os.getenv("MYSQL_USER") or os.getenv("DB_USER", "guitar_user"),
+        "PASSWORD": os.getenv("MYSQL_PASSWORD") or os.getenv("DB_PASSWORD", ""),
+        "HOST": os.getenv("MYSQL_HOST") or os.getenv("DB_HOST", "127.0.0.1"),
+        "PORT": int(os.getenv("MYSQL_PORT") or os.getenv("DB_PORT", "3306")),
         "OPTIONS": {
             "charset": "utf8mb4",
             "autocommit": True,

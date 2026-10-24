@@ -1,4 +1,3 @@
-from decimal import Decimal
 from django import template
 from django.db.models import Sum
 from django.utils.safestring import mark_safe

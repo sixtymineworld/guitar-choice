@@ -79,7 +79,6 @@ class GuitarOrder(models.Model):
     ALL_CHOICES = ALL_CHOICES
     ALL_SURCHARGES = ALL_SURCHARGES
     TYPE_SURCHARGES = TYPE_SURCHARGES
-    SURCHARGES = ALL_SURCHARGES
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

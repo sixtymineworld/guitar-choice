@@ -1,10 +1,9 @@
 from decimal import Decimal, InvalidOperation
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.models import User
 from django.db import transaction
 from django.db.models import Count, Max, Min, Q
 from django.http import JsonResponse
@@ -13,7 +12,7 @@ from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from .constants import DSS_GENRE_NAMES, DSS_GENRE_TYPE_MAP
-from .forms import CartQuantityForm, CatalogSearchForm, FeedbackForm, GuitarConfigForm, ReviewForm
+from .forms import CartQuantityForm, FeedbackForm, GuitarConfigForm, ReviewForm
 from .models import Favorite, Guitar, GuitarOrder, Review
 
 
