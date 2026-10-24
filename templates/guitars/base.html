@@ -373,6 +373,80 @@
     setupUserMenu('user-badge-toggle', 'user-dropdown-menu');
     setupUserMenu('mobile-user-toggle', 'mobile-user-menu');
 
+    let currentAudio = null;
+    let activeAudioBtn = null;
+
+    const resetAudioBtn = (targetBtn) => {
+      if (!targetBtn) return;
+      targetBtn.classList.remove('is-playing');
+      const p = targetBtn.querySelector('.audio-play-icon');
+      const pa = targetBtn.querySelector('.audio-pause-icon');
+      const txt = targetBtn.querySelector('.audio-btn-text');
+      if (p) p.style.display = 'inline-block';
+      if (pa) pa.style.display = 'none';
+      if (txt) {
+        if (targetBtn.classList.contains('detail-audio-btn')) {
+          txt.textContent = 'Послухати гітару';
+        } else {
+          txt.textContent = 'Звук';
+        }
+      }
+    };
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.detail-audio-btn, .card-audio-btn');
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      const audioSrc = btn.getAttribute('data-audio');
+      if (!audioSrc) return;
+
+      const playIcon = btn.querySelector('.audio-play-icon');
+      const pauseIcon = btn.querySelector('.audio-pause-icon');
+      const label = btn.querySelector('.audio-btn-text');
+
+      if (activeAudioBtn === btn && currentAudio && !currentAudio.paused) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        resetAudioBtn(btn);
+        currentAudio = null;
+        activeAudioBtn = null;
+        return;
+      }
+
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        resetAudioBtn(activeAudioBtn);
+      }
+
+      currentAudio = new Audio(audioSrc);
+      activeAudioBtn = btn;
+      btn.classList.add('is-playing');
+      if (playIcon) playIcon.style.display = 'none';
+      if (pauseIcon) pauseIcon.style.display = 'inline-block';
+      if (label) {
+        if (btn.classList.contains('detail-audio-btn')) {
+          label.textContent = 'Зупинити';
+        } else {
+          label.textContent = 'Пауза';
+        }
+      }
+
+      currentAudio.play().catch(() => {
+        resetAudioBtn(btn);
+        currentAudio = null;
+        activeAudioBtn = null;
+      });
+
+      currentAudio.addEventListener('ended', () => {
+        resetAudioBtn(btn);
+        currentAudio = null;
+        activeAudioBtn = null;
+      });
+    });
+
   });
   </script>
 </body>

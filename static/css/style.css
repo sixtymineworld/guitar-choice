@@ -590,6 +590,73 @@ nav a:not(.nav-accent):hover::after {
   box-shadow: none;
 }
 
+.card-audio-btn {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-soft);
+  color: var(--wine);
+  font-size: 0.74rem;
+  font-weight: 700;
+  border: 1px solid var(--border-soft);
+  cursor: pointer;
+  line-height: 1.2;
+  transition: all 0.2s ease;
+}
+
+.card-audio-btn:hover {
+  background: var(--wine);
+  color: #ffffff;
+  border-color: var(--wine);
+  box-shadow: 0 2px 6px rgba(90, 13, 32, 0.2);
+}
+
+.card-audio-btn.is-playing {
+  background: var(--wine);
+  color: #ffffff;
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(90, 13, 32, 0.25);
+  animation: pulse-audio 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse-audio {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.detail-audio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-soft);
+  color: var(--wine-dark);
+  font-size: 0.88rem;
+  font-weight: 700;
+  border: 1px solid var(--border-soft);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.detail-audio-btn:hover {
+  background: var(--wine);
+  color: #ffffff;
+  border-color: var(--wine);
+}
+
+.detail-audio-btn.is-playing {
+  background: var(--wine);
+  color: #ffffff;
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(90, 13, 32, 0.25);
+}
+
 .card-body {
   padding: 24px;
   display: flex;
@@ -1137,7 +1204,7 @@ nav a:not(.nav-accent):hover::after {
 
 .detail-price-status-bar {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;

@@ -42,6 +42,10 @@ class Guitar(models.Model):
     def get_absolute_url(self):
         return reverse("guitars:guitar_detail", kwargs={"pk": self.pk})
 
+    def get_sample_audio_url(self):
+        from django.templatetags.static import static
+        return static(f"media/{self.guitar_type}.mp3")
+
 
 class Feedback(models.Model):
     name = models.CharField("ім'я", max_length=80)
