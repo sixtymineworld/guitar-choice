@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Feedback, Guitar, GuitarOrder, Review
+from .models import Favorite, Feedback, Guitar, GuitarOrder, Review
 
 admin.site.site_header = "GuitarChoice — Панель адміністратора"
 admin.site.site_title = "GuitarChoice Admin"
@@ -39,5 +39,14 @@ class ReviewAdmin(admin.ModelAdmin):
     list_filter = ("rating", "created_at")
     search_fields = ("guitar__name", "user__username", "comment")
     readonly_fields = ("created_at", "updated_at")
+    list_select_related = ("guitar", "user")
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ("guitar", "user", "created_at")
+    list_filter = ("created_at",)
+    search_fields = ("guitar__name", "user__username")
+    readonly_fields = ("created_at",)
     list_select_related = ("guitar", "user")
 

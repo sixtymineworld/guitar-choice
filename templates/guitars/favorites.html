@@ -1,0 +1,55 @@
+{% extends 'guitars/base.html' %}
+{% load static guitar_tags %}
+{% block title %}Вподобані гітари — GuitarChoice{% endblock %}
+{% block content %}
+<section class="page-title">
+  <p class="eyebrow">Обране</p>
+  <h1>Вподобані гітари</h1>
+  <p>Зберігайте моделі, які вам до вподоби, щоб швидко повернутися до них у будь-який момент.</p>
+</section>
+
+<section class="favorites-layout">
+  {% if is_anonymous %}
+    <div class="favorites-empty">
+      <div class="favorites-empty-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      </div>
+      <h2>Увійдіть для перегляду обраного</h2>
+      <p class="lead">Список вподобаних інструментів прив'язується до вашого особистого акаунта. Будь ласка, увійдіть або зареєструйтесь.</p>
+      <div class="favorites-empty-actions">
+        <a class="button" href="{% url 'guitars:login' %}?next={% url 'guitars:favorites' %}">Увійти в акаунт <span>→</span></a>
+        <a class="button button-ghost" href="{% url 'guitars:register' %}?next={% url 'guitars:favorites' %}">Створити акаунт</a>
+      </div>
+    </div>
+  {% elif guitars %}
+    <div class="favorites-toolbar">
+      <p class="favorites-count-badge">
+        Збережено моделей: <strong>{{ favorites_count }}</strong>
+      </p>
+      <a href="{% url 'guitars:catalog' %}" class="favorites-browse-link">+ До каталогу</a>
+    </div>
+
+    <div class="cards favorites-cards" id="favorites-grid">
+      {% for guitar in guitars %}
+        {% include "guitars/includes/_guitar_card.html" with guitar=guitar %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="favorites-empty">
+      <div class="favorites-empty-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      </div>
+      <h2>Ваш список обраного порожній</h2>
+      <p class="lead">Натискайте на сердечко біля будь-якої гітари в каталозі чи на сторінці моделі, щоб зберегти її тут.</p>
+      <div class="favorites-empty-actions">
+        <a class="button" href="{% url 'guitars:catalog' %}">Перейти до каталогу <span>→</span></a>
+        <a class="button button-ghost" href="{% url 'guitars:configurator' %}">Кастом-майстерня</a>
+      </div>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

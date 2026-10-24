@@ -180,3 +180,28 @@ class Review(models.Model):
     def get_absolute_url(self):
         return reverse("guitars:guitar_detail", kwargs={"pk": self.guitar_id})
 
+
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="favorites",
+        verbose_name="користувач",
+    )
+    guitar = models.ForeignKey(
+        Guitar,
+        on_delete=models.CASCADE,
+        related_name="favorites",
+        verbose_name="гітара",
+    )
+    created_at = models.DateTimeField("додано", auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        unique_together = ("user", "guitar")
+        verbose_name = "вподобана гітара"
+        verbose_name_plural = "вподобані гітари"
+
+    def __str__(self):
+        return f"{self.user} -> {self.guitar}"
+

@@ -1,6 +1,29 @@
 {% load static guitar_tags %}
-<article class="card">
+{% get_user_favorite_ids as user_fav_ids %}
+<article class="card" data-guitar-id="{{ guitar.id }}">
   <div class="card-visual">
+    {% if user.is_authenticated %}
+      <button type="button"
+              class="card-favorite-btn favorite-toggle-btn {% if guitar.id in user_fav_ids %}is-active{% endif %}"
+              data-guitar-id="{{ guitar.id }}"
+              data-url="{% url 'guitars:favorite_toggle' guitar.id %}"
+              aria-label="Вподобати {{ guitar.name }}"
+              title="{% if guitar.id in user_fav_ids %}Видалити з вподобаних{% else %}Додати до вподобаних{% endif %}">
+        <svg class="heart-icon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      </button>
+    {% else %}
+      <a href="{% url 'guitars:login' %}?next={{ request.get_full_path|urlencode }}"
+         class="card-favorite-btn"
+         aria-label="Увійдіть, щоб додати в обране"
+         title="Увійдіть, щоб додати в обране">
+        <svg class="heart-icon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      </a>
+    {% endif %}
+
     {% if guitar.image_url %}
       <img src="{{ guitar.image_url }}" alt="{{ guitar.name }}" loading="lazy" onerror="this.onerror=null;this.src='{% static 'images/my_guitar.png' %}';">
     {% else %}

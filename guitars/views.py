@@ -14,7 +14,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from .constants import DSS_GENRE_NAMES, DSS_GENRE_TYPE_MAP
 from .forms import CartQuantityForm, CatalogSearchForm, FeedbackForm, GuitarConfigForm, ReviewForm
-from .models import Guitar, GuitarOrder, Review
+from .models import Favorite, Guitar, GuitarOrder, Review
 
 
 def _cart_items(request):
@@ -125,6 +125,12 @@ class GuitarDetailView(DetailView):
             excluded_ids = [guitar.pk] + [g.pk for g in similar]
             similar.extend(list(Guitar.objects.exclude(pk__in=excluded_ids)[:needed]))
         context["similar_guitars"] = similar
+        if self.request.user.is_authenticated:
+            context["is_favorite"] = Favorite.objects.filter(
+                user=self.request.user, guitar=guitar
+            ).exists()
+        else:
+            context["is_favorite"] = False
         return context
 
     def post(self, request, *args, **kwargs):
@@ -251,6 +257,60 @@ def cart_checkout(request):
         GuitarOrder.objects.filter(pk__in=item_ids).update(status=GuitarOrder.Status.PLACED)
         messages.success(request, f"Замовлення успішно оформлено ({len(items)} поз.)! Ми зв’яжемося з вами для підтвердження.")
         return redirect("guitars:cart")
+
+
+def favorites_list(request):
+    if not request.user.is_authenticated:
+        return render(request, "guitars/favorites.html", {
+            "guitars": [],
+            "favorites_count": 0,
+            "is_anonymous": True,
+        })
+
+    favorites = Favorite.objects.filter(user=request.user).select_related("guitar")
+    guitars = [fav.guitar for fav in favorites]
+    return render(request, "guitars/favorites.html", {
+        "guitars": guitars,
+        "favorites_count": len(guitars),
+        "is_anonymous": False,
+    })
+
+
+def favorite_toggle(request, pk):
+    guitar = get_object_or_404(Guitar, pk=pk)
+    if not request.user.is_authenticated:
+        if request.headers.get("x-requested-with") == "XMLHttpRequest" or request.GET.get("format") == "json":
+            return JsonResponse({
+                "status": "unauthorized",
+                "login_url": f"{reverse_lazy('guitars:login')}?next={guitar.get_absolute_url()}",
+                "message": "Увійдіть в акаунт, щоб додавати гітари до обраного.",
+            }, status=401)
+        messages.info(request, "Будь ласка, увійдіть, щоб додавати інструменти до вподобаних.")
+        return redirect(f"{reverse_lazy('guitars:login')}?next={guitar.get_absolute_url()}")
+
+    fav, created = Favorite.objects.get_or_create(user=request.user, guitar=guitar)
+    if not created:
+        fav.delete()
+        is_favorite = False
+        action_msg = f"Модель «{guitar.brand} {guitar.name}» видалено з вподобаних."
+    else:
+        is_favorite = True
+        action_msg = f"Модель «{guitar.brand} {guitar.name}» додано до вподобаних!"
+
+    count = Favorite.objects.filter(user=request.user).count()
+
+    if request.headers.get("x-requested-with") == "XMLHttpRequest" or request.GET.get("format") == "json" or request.POST.get("format") == "json":
+        return JsonResponse({
+            "status": "ok",
+            "is_favorite": is_favorite,
+            "favorites_count": count,
+            "guitar_id": guitar.pk,
+            "message": action_msg,
+        })
+
+    messages.success(request, action_msg)
+    next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or guitar.get_absolute_url()
+    return redirect(next_url)
 
 
 def dss_recommend(request):

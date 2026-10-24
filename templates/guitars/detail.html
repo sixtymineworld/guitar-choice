@@ -60,6 +60,30 @@
             Очікується
           </div>
         {% endif %}
+
+        {% if user.is_authenticated %}
+          <button type="button"
+                  class="detail-favorite-btn favorite-toggle-btn {% if is_favorite %}is-active{% endif %}"
+                  data-guitar-id="{{ guitar.id }}"
+                  data-url="{% url 'guitars:favorite_toggle' guitar.id %}"
+                  aria-label="Вподобати {{ guitar.name }}"
+                  title="{% if is_favorite %}Видалити з вподобаних{% else %}Додати до вподобаних{% endif %}">
+            <svg class="heart-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <span class="favorite-btn-text">{% if is_favorite %}В обраному{% else %}В обране{% endif %}</span>
+          </button>
+        {% else %}
+          <a href="{% url 'guitars:login' %}?next={{ request.get_full_path|urlencode }}"
+             class="detail-favorite-btn"
+             aria-label="Увійдіть, щоб додати в обране"
+             title="Увійдіть, щоб додати в обране">
+            <svg class="heart-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <span class="favorite-btn-text">В обране</span>
+          </a>
+        {% endif %}
       </div>
 
       <div class="detail-desc-block">
