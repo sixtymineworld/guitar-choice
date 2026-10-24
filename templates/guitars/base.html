@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,700&family=Plus+Jakarta+Sans:wght@600;700&family=Syne:wght@700;800&family=Righteous&family=Kaushan+Script&family=Cinzel:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=70.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=74.0">
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -182,23 +182,28 @@
     </div>
   </footer>
   <div class="dss-widget">
-    <button class="dss-trigger" id="dss-trigger" type="button" aria-label="Швидкий підбір інструмента">
+    <button class="dss-trigger" id="dss-trigger" type="button" aria-label="Швидкий підбір" title="Швидкий підбір гітари">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffd166" stroke="#ffd166" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
       </svg>
     </button>
   </div>
 
-  <div class="dss-modal" id="dss-modal" aria-hidden="true">
-    <div class="dss-header">
+  <div class="dss-backdrop" id="dss-backdrop"></div>
+
+  <div class="dss-modal" id="dss-modal" role="dialog" aria-modal="true" aria-labelledby="dss-q-1" aria-hidden="true">
+    <div class="dss-top-bar">
+      <div class="dss-top-left">
+        <button type="button" class="dss-back-btn" id="dss-back-btn" aria-label="Назад" style="display:none;">← Назад</button>
+        <span class="dss-step-badge" id="dss-step-badge">Крок 1 з 3</span>
+      </div>
       <button class="dss-close" id="dss-close" type="button" aria-label="Закрити">✕</button>
     </div>
+
     <div class="dss-body">
+      <!-- Step 1: Genre -->
       <div class="dss-step is-active" id="dss-step-1">
-        <span class="dss-progress">Крок 1 з 3</span>
-        <div class="dss-msg">
-          <strong>Який музичний стиль вам найближчий?</strong>
-        </div>
+        <h3 class="dss-question" id="dss-q-1">Який музичний стиль вам найближчий?</h3>
         <div class="dss-options">
           <button class="dss-opt-btn" type="button" data-field="genre" data-val="rock">Рок / Альтернатива</button>
           <button class="dss-opt-btn" type="button" data-field="genre" data-val="metal">Метал / Важкий рок</button>
@@ -209,51 +214,57 @@
         </div>
       </div>
 
+      <!-- Step 2: Shape/Type -->
       <div class="dss-step" id="dss-step-2">
-        <span class="dss-progress">Крок 2 з 3</span>
-        <div class="dss-msg">
-          <strong>Якій формі чи типу гітари надаєте перевагу?</strong>
-        </div>
+        <h3 class="dss-question">Якій формі чи типу гітари надаєте перевагу?</h3>
         <div class="dss-options">
-          <button class="dss-opt-btn" type="button" data-field="shape" data-val="electric">Електрогітара (Strat / Solid)</button>
-          <button class="dss-opt-btn" type="button" data-field="shape" data-val="acoustic">Акустична (Дредноут / Вестерн)</button>
+          <button class="dss-opt-btn" type="button" data-field="shape" data-val="electric">Електрогітара</button>
+          <button class="dss-opt-btn" type="button" data-field="shape" data-val="acoustic">Акустична гітара</button>
           <button class="dss-opt-btn" type="button" data-field="shape" data-val="bass">Бас-гітара</button>
-          <button class="dss-opt-btn" type="button" data-field="shape" data-val="classical">Класична з нейлоном</button>
+          <button class="dss-opt-btn" type="button" data-field="shape" data-val="classical">Класична гітара</button>
           <button class="dss-opt-btn" type="button" data-field="shape" data-val="any">Довіряю вибору системи</button>
         </div>
       </div>
 
+      <!-- Step 3: Budget -->
       <div class="dss-step" id="dss-step-3">
-        <span class="dss-progress">Крок 3 з 3</span>
-        <div class="dss-msg">
-          <strong>Який орієнтовний бюджет розглядаєте?</strong>
-        </div>
+        <h3 class="dss-question">Який орієнтовний бюджет розглядаєте?</h3>
         <div class="dss-options">
-          <button class="dss-opt-btn" type="button" data-field="budget" data-val="low">До 15 000 грн (Стартовий)</button>
-          <button class="dss-opt-btn" type="button" data-field="budget" data-val="mid">15 000 – 30 000 грн (Оптимальний)</button>
-          <button class="dss-opt-btn" type="button" data-field="budget" data-val="high">Від 30 000 грн (Преміум)</button>
+          <button class="dss-opt-btn" type="button" data-field="budget" data-val="low">До 15 000 грн</button>
+          <button class="dss-opt-btn" type="button" data-field="budget" data-val="mid">15 000 – 30 000 грн</button>
+          <button class="dss-opt-btn" type="button" data-field="budget" data-val="high">Від 30 000 грн</button>
           <button class="dss-opt-btn" type="button" data-field="budget" data-val="any">Будь-який відповідний</button>
         </div>
       </div>
 
+      <!-- Step Loading -->
       <div class="dss-step" id="dss-step-loading">
         <div class="dss-loading">
           <div class="dss-spinner"></div>
-          <p><strong>Аналіз каталогу гітар</strong><br><small class="muted">Оцінка характеристик, матеріалів та цін...</small></p>
+          <p class="dss-loading-text">Аналіз каталогу гітар...</p>
         </div>
       </div>
 
+      <!-- Step Result -->
       <div class="dss-step" id="dss-step-result">
-        <a class="dss-result-card" id="dss-res-card-link" href="#" title="Перейти до товару">
-          <span class="dss-result-badge">Рекомендована модель</span>
-          <h4 class="dss-result-title" id="dss-res-title">Fender Player II Stratocaster</h4>
-          <p class="dss-result-price" id="dss-res-price">38 900 грн</p>
-          <p class="dss-result-reason" id="dss-res-reason"></p>
+        <h3 class="dss-result-heading">Рекомендована гітара</h3>
+        <a class="dss-product-card" id="dss-res-card-link" href="#" title="Переглянути модель">
+          <div class="dss-product-visual">
+            <img id="dss-res-img" src="{% static 'images/my_guitar.png' %}" alt="Рекомендована гітара" onerror="this.onerror=null;this.src='{% static 'images/my_guitar.png' %}';">
+            <span class="dss-product-badge" id="dss-res-type">Гітара</span>
+          </div>
+          <div class="dss-product-body">
+            <p class="dss-product-brand" id="dss-res-brand"></p>
+            <h4 class="dss-product-title" id="dss-res-title"></h4>
+            <div class="dss-product-foot">
+              <span class="dss-product-price" id="dss-res-price"></span>
+              <span class="dss-product-cta">Переглянути →</span>
+            </div>
+          </div>
         </a>
+        <p class="dss-result-note" id="dss-res-reason"></p>
         <div class="dss-result-actions">
-          <a class="button" id="dss-res-config-btn" href="#">Зібрати в конфігураторі <span>→</span></a>
-          <a class="button button-ghost" id="dss-res-detail-btn" href="#">Деталі моделі</a>
-          <button class="dss-restart-btn" id="dss-restart" type="button">↻ Пройти підбір знову</button>
+          <button class="dss-restart-btn" id="dss-restart" type="button">↻ Підібрати іншу</button>
         </div>
       </div>
     </div>
@@ -306,35 +317,80 @@
     }
 
     const dssModal = document.querySelector('#dss-modal');
+    const dssBackdrop = document.querySelector('#dss-backdrop');
     const dssAnswers = { genre: 'rock', shape: 'any', budget: 'any' };
 
     const showStep = (id) => {
       document.querySelectorAll('.dss-step').forEach(step => {
         step.classList.remove('is-active');
       });
-      document.querySelector(id).classList.add('is-active');
+      const target = document.querySelector(id);
+      if (target) target.classList.add('is-active');
+
+      const backBtn = document.querySelector('#dss-back-btn');
+      const badge = document.querySelector('#dss-step-badge');
+
+      if (backBtn) {
+        if (id === '#dss-step-2') {
+          backBtn.style.display = 'inline-flex';
+          backBtn.setAttribute('data-back', '1');
+        } else if (id === '#dss-step-3') {
+          backBtn.style.display = 'inline-flex';
+          backBtn.setAttribute('data-back', '2');
+        } else {
+          backBtn.style.display = 'none';
+        }
+      }
+
+      if (badge) {
+        if (id === '#dss-step-1') {
+          badge.style.display = 'inline-block';
+          badge.textContent = 'Крок 1 з 3';
+        } else if (id === '#dss-step-2') {
+          badge.style.display = 'inline-block';
+          badge.textContent = 'Крок 2 з 3';
+        } else if (id === '#dss-step-3') {
+          badge.style.display = 'inline-block';
+          badge.textContent = 'Крок 3 з 3';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
     };
 
     const openDss = () => {
       showStep('#dss-step-1');
       dssModal.classList.add('is-open');
       dssModal.setAttribute('aria-hidden', 'false');
+      if (dssBackdrop) dssBackdrop.classList.add('is-open');
     };
 
     const closeDss = () => {
       dssModal.classList.remove('is-open');
       dssModal.setAttribute('aria-hidden', 'true');
+      if (dssBackdrop) dssBackdrop.classList.remove('is-open');
     };
 
     const showDssResult = (data) => {
       const g = data.guitar;
-      document.querySelector('#dss-res-title').textContent = `${g.brand} ${g.name}`;
-      document.querySelector('#dss-res-price').textContent = `${Math.round(g.price).toLocaleString('uk-UA')} грн`;
-      document.querySelector('#dss-res-reason').textContent = data.reason;
-      document.querySelector('#dss-res-config-btn').href = g.config_url;
-      document.querySelector('#dss-res-detail-btn').href = g.detail_url;
+      const titleEl = document.querySelector('#dss-res-title');
+      const brandEl = document.querySelector('#dss-res-brand');
+      const typeEl = document.querySelector('#dss-res-type');
+      const priceEl = document.querySelector('#dss-res-price');
+      const reasonEl = document.querySelector('#dss-res-reason');
       const cardLink = document.querySelector('#dss-res-card-link');
+      const resImg = document.querySelector('#dss-res-img');
+
+      if (titleEl) titleEl.textContent = g.name;
+      if (brandEl) brandEl.textContent = g.brand;
+      if (typeEl) typeEl.textContent = g.type_display || 'Гітара';
+      if (priceEl) priceEl.textContent = `${Math.round(g.price).toLocaleString('uk-UA')} грн`;
+      if (reasonEl) reasonEl.textContent = data.reason;
       if (cardLink) cardLink.href = g.detail_url;
+      if (resImg) {
+        resImg.src = g.image_url || '{% static "images/my_guitar.png" %}';
+        resImg.alt = `${g.brand} ${g.name}`;
+      }
       showStep('#dss-step-result');
     };
 
@@ -361,6 +417,7 @@
       const dssTrigger = document.querySelector('#dss-trigger');
       const dssClose = document.querySelector('#dss-close');
       const dssRestart = document.querySelector('#dss-restart');
+      const backBtn = document.querySelector('#dss-back-btn');
 
       if (dssTrigger) {
         dssTrigger.addEventListener('click', () => {
@@ -373,9 +430,29 @@
       }
 
       if (dssClose) dssClose.addEventListener('click', closeDss);
+      if (dssBackdrop) dssBackdrop.addEventListener('click', closeDss);
+
+      if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const backTo = backBtn.getAttribute('data-back');
+          if (backTo) showStep(`#dss-step-${backTo}`);
+        });
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && dssModal.classList.contains('is-open')) {
+          closeDss();
+        }
+      });
 
       if (dssRestart) {
-        dssRestart.addEventListener('click', () => showStep('#dss-step-1'));
+        dssRestart.addEventListener('click', () => {
+          dssAnswers.genre = 'rock';
+          dssAnswers.shape = 'any';
+          dssAnswers.budget = 'any';
+          showStep('#dss-step-1');
+        });
       }
 
       document.querySelectorAll('.open-dss-modal').forEach(btn => {

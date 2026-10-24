@@ -352,12 +352,7 @@ def dss_recommend(request):
             return JsonResponse({"success": False, "message": "Моделей не знайдено за вказаними критеріями."})
 
         genre_str = DSS_GENRE_NAMES.get(genre, genre.capitalize())
-        why = (
-            f"СППР проаналізував ваші критерії: напрямок «{genre_str}» та бюджетні орієнтири. "
-            f"Модель {selected_guitar.brand} {selected_guitar.name} ({selected_guitar.get_guitar_type_display()}) "
-            f"має найкращий баланс акустичних характеристик, матеріалу ({selected_guitar.material}) "
-            f"та цінової категорії для вашого стилю гри."
-        )
+        why = f"Найкращий вибір під стиль «{genre_str}» у вашому бюджеті."
 
         return JsonResponse({
             "success": True,
