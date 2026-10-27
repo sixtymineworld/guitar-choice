@@ -24,3 +24,20 @@ def _patched_quote_value(self, value: Any) -> Any:
 
 DatabaseSchemaEditor.quote_value = _patched_quote_value
 
+# Prevent compound inline foreign key definitions in a single ALTER TABLE
+# (ensures compatibility with distributed and cloud MySQL backends like TiDB)
+DatabaseSchemaEditor.sql_create_column_inline_fk = None
+
+_orig_skip_default = DatabaseSchemaEditor.skip_default
+
+
+def _patched_skip_default(self, field: Any) -> bool:
+    if getattr(field, "get_internal_type", lambda: "")() == "JSONField":
+        return True
+    return _orig_skip_default(self, field)
+
+
+DatabaseSchemaEditor.skip_default = _patched_skip_default
+
+
+
