@@ -2330,59 +2330,82 @@ nav a:not(.nav-accent):hover::after {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 14px 0 10px;
+  margin: 22px 0 16px;
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-family: var(--font-btn);
+  font-size: 0.74rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 .auth-oauth-divider::before,
 .auth-oauth-divider::after {
   content: "";
   flex: 1;
-  border-bottom: 1px solid var(--border-soft);
+  border-bottom: 1px solid #ebd7d1;
 }
 
 .auth-oauth-divider span {
-  padding: 0 12px;
+  padding: 0 14px;
 }
 
 .auth-oauth-form {
   width: 100%;
+  display: flex;
+  justify-content: center;
   margin: 0;
   padding: 0;
 }
 
 .button-google-oauth {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  justify-content: center !important;
+  text-align: center !important;
+  gap: 10px;
   width: 100%;
   height: 48px;
+  padding: 0 24px;
   background: #ffffff;
-  border: 1.5px solid var(--border-input);
-  border-radius: var(--radius-sm);
+  border: 1.5px solid #d4c5b3;
+  border-radius: 99px !important;
   color: var(--text-heading);
   font-family: var(--font-btn);
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.button-google-oauth .google-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: block;
 }
 
 .button-google-oauth:hover {
   background: #faf6f0;
   border-color: var(--wine);
   color: var(--wine);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(90, 13, 32, 0.1);
+  transform: translateY(-1px);
 }
 
-.button-google-oauth .google-icon {
-  flex-shrink: 0;
+.button-google-oauth:active {
+  background: #f5ebe1;
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.button-google-oauth:focus-visible {
+  outline: none;
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(90, 13, 32, 0.14);
 }
 
 .auth-card-footer {
